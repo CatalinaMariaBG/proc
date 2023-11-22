@@ -13,9 +13,10 @@ public class Tipus_font {
     }
 
     void setFont(PApplet processing){
-        this.fonts = new PFont[2];
+        this.fonts = new PFont[3];
         this.fonts[0] = processing.createFont("data/edition.TTF", midaTitol);
         this.fonts[1] = processing.createFont("data/Hack-Regular.ttf", midaTextNormal);
+        this.fonts[2] = processing.createFont("data/Vogue.ttf", midaSubtitol);
     }
 
     int getNumFonts(){
@@ -29,6 +30,8 @@ public class Tipus_font {
     PFont getFontTwo(){
         return this.fonts[1];
     }
+
+    PFont getFontThree(){return this.fonts[2];}
 
     PFont getFontChoose(int i){
         return this.fonts[i];
