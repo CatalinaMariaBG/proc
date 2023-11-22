@@ -11,7 +11,6 @@ public class ButtonInsertText {
     int weightBorder = 2;
 
    public String text = "";
-    int xText, yText;
     int textSize = 16;
 
     boolean selected = false;
@@ -39,8 +38,8 @@ public class ButtonInsertText {
         processing.fill(colorText);
         processing.textSize(textSize);
         //el primer per la x i el CENTER per la y
-        processing.textAlign(processing.LEFT, processing.CENTER);
-        processing.text(text, x + 5, y + height - textSize);
+        processing.textAlign(processing.CENTER);
+        processing.text(text, x - 150, y);
         processing.popStyle();
     }
 

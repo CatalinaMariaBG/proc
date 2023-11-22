@@ -39,13 +39,10 @@ public class ButtonWords {
         processing.pushStyle();
         if(!enabled){
             processing.fill(fillColorOff);
-            cursorArrowMode(processing);
         } else if(mouseIntoButton(processing)){
             processing.fill(fillColorOver);
-            cursorHandMode(processing);
         } else{
             processing.fill(fillColor);
-            cursorArrowMode(processing);
         }
 
         processing.strokeWeight(2);

@@ -84,6 +84,10 @@ public class Trivio003 extends PApplet {
         if(gui.screenActual == GUI.SCREEN.LOGIN){
             if(comprovaLogin()){
                 gui.screenActual = GUI.SCREEN.INICIAL;
+            } else if(gui.bName.mouseIntoTextRect(this)){
+                gui.bName.pressedTrue(this);
+            } else if(gui.bPassword.mouseIntoTextRect(this)){
+                gui.bPassword.pressedTrue(this);
             }
         } else if(gui.screenActual == GUI.SCREEN.INICIAL){
             if(gui.b1.mouseIntoButton(this)){
@@ -96,80 +100,90 @@ public class Trivio003 extends PApplet {
                 gui.screenActual = GUI.SCREEN.NEWBUILDING;
             } else if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-            } else if(menuOpen){
-                gui.drawLateralBar(this);
             }
         } else if(gui.screenActual == GUI.SCREEN.MYACCOUNT){
-            if(menuOpen){
-                gui.drawLateralBar(this);
-            } else if(gui.bAccount.mouseIntoButton(this)){
+             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
             }
         } else if(gui.screenActual == GUI.SCREEN.MAP){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-            } else if(menuOpen){
-                gui.drawLateralBar(this);
             }
         } else if(gui.screenActual == GUI.SCREEN.BUILDING){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-            } else if(menuOpen){
-                gui.drawLateralBar(this);
             }
         } else if(gui.screenActual == GUI.SCREEN.NEWBUILDING){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-            } else if(menuOpen){
-                gui.drawLateralBar(this);
             }
         } else if(gui.screenActual == GUI.SCREEN.CREATE){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-            } else if(menuOpen){
-                gui.drawLateralBar(this);
             }
         } else if(gui.screenActual == GUI.SCREEN.SAVECREATION){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-            } else if(menuOpen){
-                gui.drawLateralBar(this);
             }
         } else if(gui.screenActual == GUI.SCREEN.CREATEFULLSCREEN){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-            } else if(menuOpen){
-                gui.drawLateralBar(this);
             }
         } else if(gui.screenActual == GUI.SCREEN.ARCHIVE){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-            } else if(menuOpen){
-                gui.drawLateralBar(this);
             }
         }
 
-        gui.bName.pressedTrue(this);
-        gui.bPassword.pressedTrue(this);
-        isMenuOpen();
     }
+
+    /*public void mouseReleased(){
+       if(gui.screenActual == GUI.SCREEN.INICIAL){
+        if(isMenuOpen()){
+            gui.drawLateralBar(this);
+        }
+        } else if(gui.screenActual == GUI.SCREEN.MYACCOUNT){
+            if(isMenuOpen()){
+                gui.drawLateralBar(this);
+            }
+        } else if(gui.screenActual == GUI.SCREEN.MAP){
+          if(isMenuOpen()){
+                gui.drawLateralBar(this);
+            }
+        } else if(gui.screenActual == GUI.SCREEN.BUILDING){
+         if(isMenuOpen()){
+                gui.drawLateralBar(this);
+            }
+        } else if(gui.screenActual == GUI.SCREEN.NEWBUILDING){
+           if(isMenuOpen()){
+                gui.drawLateralBar(this);
+            }
+        } else if(gui.screenActual == GUI.SCREEN.CREATE){
+           if(isMenuOpen()){
+                gui.drawLateralBar(this);
+            }
+        } else if(gui.screenActual == GUI.SCREEN.SAVECREATION){
+          if(isMenuOpen()){
+                gui.drawLateralBar(this);
+            }
+        } else if(gui.screenActual == GUI.SCREEN.CREATEFULLSCREEN){
+           if(isMenuOpen()){
+                gui.drawLateralBar(this);
+            }
+        } else if(gui.screenActual == GUI.SCREEN.ARCHIVE){
+           if(isMenuOpen()){
+                gui.drawLateralBar(this);
+            }
+        }
+    }*/
 
 
     boolean comprovaLogin(){
         return(gui.bName.text.equals("joan") && gui.bPassword.text.equals("2803") && gui.bEnterAccount.mouseIntoButton(this));
     }
 
-    public void isMenuOpen(){
-        if(gui.bLogo.mouseIntoButton(this)){
-            menuOpen = !menuOpen;
-        }
-    }
-
     public void mouseDragged(){
         println("MOUSE DRAGGED");
     }
 
-    public void mouseReleased() {
-        println("MOUSE RELEASED");
-    }
 }

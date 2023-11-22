@@ -11,6 +11,8 @@ import botonsAPP.ButtonWords;
 import botonsAPP.ButtonPhotos;
 
 import botonsAPP.ButtonInsertText;
+
+import zonesAPP.Trivio003;
 //mesures: 1440, 900
 public class GUI {
 
@@ -26,6 +28,7 @@ public class GUI {
 
     public SCREEN screenActual;
 
+boolean menuOpen = false;
     public GUI(PApplet processing){
 
         screenActual = SCREEN.LOGIN;
@@ -47,12 +50,9 @@ public class GUI {
         b2.mouseIntoButton(processing);
         b3.mouseIntoButton(processing);
         b4.mouseIntoButton(processing);
-        bLogo.mouseIntoButton(processing);
         bEnterAccount.mouseIntoButton(processing);
         bPassword.mouseIntoTextRect(processing);
         bName.mouseIntoTextRect(processing);
-
-
     }
 
     // BOTONS
@@ -64,7 +64,7 @@ public class GUI {
         processing.pushStyle();
         processing.fill(0xFFDBD9D1);
         processing.rectMode(processing.CORNER);
-        processing.rect(0, 0, 2*Setup.logoW, processing.height, 10);
+        processing.rect(0, 0, 4*Setup.logoW, processing.height, 10);
         processing.popStyle();
     }
     public void drawAccount(PApplet processing){
@@ -164,6 +164,16 @@ processing.text(text, 1040, processing.height/2 + 150);
         processing.popStyle();
     }
 
+    public void drawLogo(PApplet processing){
+        processing.pushStyle();
+        processing.fill(0xFFF4562A);
+        processing.rectMode(processing.CORNER);
+        processing.rect(Setup.logoDistW, Setup.logoDistH, Setup.logoW, Setup.logoH);
+        processing.textAlign(processing.CENTER); processing.textSize(16); processing.fill(0);
+        processing.text("LOGO", Setup.logoDistW + Setup.logoW/2, Setup.logoDistH + Setup.logoH/2);
+        processing.popStyle();
+    }
+
     //PANTALLES
 
     public void drawInicial(PApplet processing){
@@ -180,6 +190,9 @@ processing.text(text, 1040, processing.height/2 + 150);
         b4.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, "Imatges");
         bLogo.display(processing);
+        if(isMenuOpen(processing)){
+            drawLateralBar(processing);
+        }
         processing.popStyle();
         //drawLinesInicial(processing);
     }
@@ -189,7 +202,7 @@ processing.text(text, 1040, processing.height/2 + 150);
         processing.background(0xFFDBD9D1);
         drawLines(processing);
         drawBanner(processing);
-        bLogo.display(processing);
+        drawLogo(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawNom(processing, "LOG IN");
         drawLoginPage(processing);
@@ -211,6 +224,9 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, "My Account");
         drawNom(processing, "MY ACCOUNT");
         drawLoginPage(processing);
+        if(isMenuOpen(processing)){
+            drawLateralBar(processing);
+        }
     }
 
     public void drawMap(PApplet processing){
@@ -223,6 +239,9 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "MAP");
         drawNom(processing, "MAP");
+        if(isMenuOpen(processing)){
+            drawLateralBar(processing);
+        }
     }
 
     public void drawBuilding(PApplet processing){
@@ -235,6 +254,9 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "BUILDING IMAGE");
         drawNom(processing, "BUILDING INFORMATION");
+        if(isMenuOpen(processing)){
+            drawLateralBar(processing);
+        }
     }
 
     public void drawNewBuilding(PApplet processing){
@@ -247,6 +269,9 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "BUILDING IMAGE");
         drawNom(processing, "NEW BUILDING");
+        if(isMenuOpen(processing)){
+            drawLateralBar(processing);
+        }
     }
 
     public void drawArchive(PApplet processing){
@@ -259,6 +284,9 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "ELEMENTS OF THE ARCHIVE");
         drawNom(processing, "ARCHIVE");
+        if(isMenuOpen(processing)){
+            drawLateralBar(processing);
+        }
     }
 
     public void drawCreate(PApplet processing){
@@ -272,6 +300,9 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawSecondMiddle(processing, "INSPIRATIONAL WALL");
         drawNom(processing, "CREATE");
         drawFullScreenSymbol(processing);
+        if(isMenuOpen(processing)){
+            drawLateralBar(processing);
+        }
     }
 
     public void drawSaveCreation(PApplet processing){
@@ -284,9 +315,20 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "PREVIEW OF THE INSPIRATIONAL WALL");
         drawNom(processing, "NEW INSPIRATIONAL WALL");
+        if(isMenuOpen(processing)){
+            drawLateralBar(processing);
+        }
     }
 
     public void createFullScreen(PApplet processing){
 
     }
+
+    public boolean isMenuOpen(PApplet processing){
+        if(bLogo.mouseIntoButton(processing) && processing.mousePressed){
+            menuOpen = !menuOpen;
+        }
+        return menuOpen;
+    }
+
 }
