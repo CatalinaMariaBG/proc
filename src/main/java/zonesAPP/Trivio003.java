@@ -82,9 +82,7 @@ public class Trivio003 extends PApplet {
     public void mousePressed(){
 
         if(gui.screenActual == GUI.SCREEN.LOGIN){
-            if(comprovaLogin()){
-                gui.screenActual = GUI.SCREEN.INICIAL;
-            } else if(gui.bName.mouseIntoTextRect(this)){
+           if(gui.bName.mouseIntoTextRect(this)){
                 gui.bName.pressedTrue(this);
             } else if(gui.bPassword.mouseIntoTextRect(this)){
                 gui.bPassword.pressedTrue(this);
@@ -135,55 +133,15 @@ public class Trivio003 extends PApplet {
             }
         }
 
-    }
-
-    /*public void mouseReleased(){
-       if(gui.screenActual == GUI.SCREEN.INICIAL){
-        if(isMenuOpen()){
-            gui.drawLateralBar(this);
-        }
-        } else if(gui.screenActual == GUI.SCREEN.MYACCOUNT){
-            if(isMenuOpen()){
-                gui.drawLateralBar(this);
-            }
-        } else if(gui.screenActual == GUI.SCREEN.MAP){
-          if(isMenuOpen()){
-                gui.drawLateralBar(this);
-            }
-        } else if(gui.screenActual == GUI.SCREEN.BUILDING){
-         if(isMenuOpen()){
-                gui.drawLateralBar(this);
-            }
-        } else if(gui.screenActual == GUI.SCREEN.NEWBUILDING){
-           if(isMenuOpen()){
-                gui.drawLateralBar(this);
-            }
-        } else if(gui.screenActual == GUI.SCREEN.CREATE){
-           if(isMenuOpen()){
-                gui.drawLateralBar(this);
-            }
-        } else if(gui.screenActual == GUI.SCREEN.SAVECREATION){
-          if(isMenuOpen()){
-                gui.drawLateralBar(this);
-            }
-        } else if(gui.screenActual == GUI.SCREEN.CREATEFULLSCREEN){
-           if(isMenuOpen()){
-                gui.drawLateralBar(this);
-            }
-        } else if(gui.screenActual == GUI.SCREEN.ARCHIVE){
-           if(isMenuOpen()){
-                gui.drawLateralBar(this);
+            if(gui.bLogo.mouseIntoButton(this)){
+                gui.menuOpen = !gui.menuOpen;
             }
         }
-    }*/
-
-
-    boolean comprovaLogin(){
-        return(gui.bName.text.equals("joan") && gui.bPassword.text.equals("2803") && gui.bEnterAccount.mouseIntoButton(this));
-    }
 
     public void mouseDragged(){
         println("MOUSE DRAGGED");
     }
 
-}
+
+    }
+

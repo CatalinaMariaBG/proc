@@ -190,7 +190,7 @@ processing.text(text, 1040, processing.height/2 + 150);
         b4.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, "Imatges");
         bLogo.display(processing);
-        if(isMenuOpen(processing)){
+        if(menuOpen){
             drawLateralBar(processing);
         }
         processing.popStyle();
@@ -224,7 +224,7 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, "My Account");
         drawNom(processing, "MY ACCOUNT");
         drawLoginPage(processing);
-        if(isMenuOpen(processing)){
+        if(menuOpen){
             drawLateralBar(processing);
         }
     }
@@ -239,7 +239,7 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "MAP");
         drawNom(processing, "MAP");
-        if(isMenuOpen(processing)){
+        if(menuOpen){
             drawLateralBar(processing);
         }
     }
@@ -254,7 +254,7 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "BUILDING IMAGE");
         drawNom(processing, "BUILDING INFORMATION");
-        if(isMenuOpen(processing)){
+        if(menuOpen){
             drawLateralBar(processing);
         }
     }
@@ -269,7 +269,7 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "BUILDING IMAGE");
         drawNom(processing, "NEW BUILDING");
-        if(isMenuOpen(processing)){
+        if(menuOpen){
             drawLateralBar(processing);
         }
     }
@@ -284,7 +284,7 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "ELEMENTS OF THE ARCHIVE");
         drawNom(processing, "ARCHIVE");
-        if(isMenuOpen(processing)){
+        if(menuOpen){
             drawLateralBar(processing);
         }
     }
@@ -300,7 +300,7 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawSecondMiddle(processing, "INSPIRATIONAL WALL");
         drawNom(processing, "CREATE");
         drawFullScreenSymbol(processing);
-        if(isMenuOpen(processing)){
+        if(menuOpen){
             drawLateralBar(processing);
         }
     }
@@ -315,7 +315,7 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "PREVIEW OF THE INSPIRATIONAL WALL");
         drawNom(processing, "NEW INSPIRATIONAL WALL");
-        if(isMenuOpen(processing)){
+        if(menuOpen){
             drawLateralBar(processing);
         }
     }
@@ -324,11 +324,6 @@ processing.text(text, 1040, processing.height/2 + 150);
 
     }
 
-    public boolean isMenuOpen(PApplet processing){
-        if(bLogo.mouseIntoButton(processing) && processing.mousePressed){
-            menuOpen = !menuOpen;
-        }
-        return menuOpen;
-    }
+
 
 }
