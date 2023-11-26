@@ -48,8 +48,9 @@ public class Trivio003 extends PApplet {
                 break;
         }
 
-        gui.bName.text = "USER NAME: ";
-        gui.bPassword.text = "PASSWORD: ";
+        //Botons TextField LogIn
+        /*gui.bName.text = "USER NAME: ";
+        gui.bPassword.text = "PASSWORD: ";*/
     }
 
     //Keyboard interaction
@@ -74,7 +75,7 @@ public class Trivio003 extends PApplet {
         }else if(key == '8'){
             gui.screenActual = GUI.SCREEN.ARCHIVE;
         }
-        gui.bName.keyPressed(key, keyCode);
+        gui.bName.keyPressed(key, (int) keyCode);
         gui.bPassword.keyPressed(key, keyCode);
     }
 
@@ -136,10 +137,25 @@ public class Trivio003 extends PApplet {
             if(gui.bLogo.mouseIntoButton(this)){
                 gui.menuOpen = !gui.menuOpen;
             }
+
+            cursorHandMode(this);
+            comprovaLogin();
+
+            gui.bName.pressedTrue(this);
         }
 
     public void mouseDragged(){
         println("MOUSE DRAGGED");
+    }
+
+    public void cursorHandMode(PApplet processing){
+        processing.cursor(processing.HAND);
+    }
+
+    public void comprovaLogin(){
+if(gui.bEnterAccount.mouseIntoButton(this)){
+    gui.screenActual = GUI.SCREEN.INICIAL;
+}
     }
 
 

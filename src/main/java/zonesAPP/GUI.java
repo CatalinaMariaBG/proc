@@ -32,17 +32,18 @@ boolean menuOpen = false;
     public GUI(PApplet processing){
 
         screenActual = SCREEN.LOGIN;
-//INICIAL
+
+        //INICIAL
         b1 = new ButtonWords(processing, "CREATE", 190, Setup.yButtonInicial, 180, 80, 10);
         b2 = new ButtonWords(processing, "MAP", 490, Setup.yButtonInicial, 180, 80, 10);
         b3 = new ButtonWords(processing , "ARCHIVE", 790, Setup.yButtonInicial, 180, 80, 10);
         b4 = new ButtonWords(processing, "NEW BUILDING", 1090, Setup.yButtonInicial, 180, 80, 10);
         bLogo = new ButtonWords(processing, "LOGO", Setup.logoDistW, Setup.logoDistH, Setup.logoW, Setup.logoH, 0);
                 bLogo.setFillColor(0xFFF4562A);
-        //bEnterAccount.setFillColor(0xFFF4562A);
-                bEnterAccount = new ButtonWords(processing, "ENTER", processing.width/2, processing.height/2 - 650, 300, 100, 10);
-                bName = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 50, 450, 60);
-                bPassword = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 150, 450, 60 );
+                bEnterAccount = new ButtonWords(processing, "ENTER", processing.width/2 - 150, processing.height/2 + 225, 300, 60, 10);
+        bEnterAccount.setFillColor(0xFFF4562A);
+                bName = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 50, 450, 60, "Name: ");
+                bPassword = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 150, 450, 60, "Password: " );
         img = processing.loadImage("data/userLogo.png");
         bAccount = new ButtonPhotos(processing, img, processing.width - Setup.logoDistW - Setup.logoW/2, Setup.logoDistH + Setup.logoH/2, Setup.logoW);
 
@@ -51,8 +52,7 @@ boolean menuOpen = false;
         b3.mouseIntoButton(processing);
         b4.mouseIntoButton(processing);
         bEnterAccount.mouseIntoButton(processing);
-        bPassword.mouseIntoTextRect(processing);
-        bName.mouseIntoTextRect(processing);
+
     }
 
     // BOTONS
@@ -101,13 +101,13 @@ boolean menuOpen = false;
     public void drawNom(PApplet processing, String x){
         processing.pushStyle();
         processing.rectMode(processing.CENTER);
-processing.fill(0xFF8E8E90);
-processing.rect((float)processing.width/2, Setup.edgeV + Setup.bannerH + Setup.nomH, Setup.nomW, Setup.nomH, 10);
+        processing.fill(0xFF8E8E90);
+        processing.rect((float)processing.width/2, Setup.edgeV + Setup.bannerH + Setup.nomH, Setup.nomW, Setup.nomH, 10);
         processing.fill(0);
         processing.textSize(18);
         processing.textMode(processing.CENTER);
         processing.text(x, processing.width/2, Setup.edgeV + Setup.bannerH + Setup.nomH);
-processing.popStyle();
+        processing.popStyle();
     }
 
     public void drawLines(PApplet processing){
@@ -320,7 +320,7 @@ processing.text(text, 1040, processing.height/2 + 150);
         }
     }
 
-    public void createFullScreen(PApplet processing){
+    public void drawCreateFullScreen(PApplet processing){
 
     }
 

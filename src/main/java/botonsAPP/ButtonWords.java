@@ -65,9 +65,7 @@ public class ButtonWords {
     }
 
     //Ens diu si cal posar el cursor a HAND
-public void cursorHandMode(PApplet processing){
-            processing.cursor(processing.HAND);
-}
+
 
 public void cursorArrowMode(PApplet processing){
         processing.cursor(processing.ARROW);
