@@ -32,7 +32,6 @@ public class ButtonPhotos {
 
     public void display(PApplet processing) {
         processing.pushStyle();
-        if (ences) {
         if (mouseIntoButton(processing)) {
                 processing.fill(fillColorInto);
                 cursorHandMode(processing);
@@ -46,7 +45,6 @@ public class ButtonPhotos {
             processing.ellipse(this.x, this.y, this.r, this.r);
             processing.imageMode(processing.CENTER);
             processing.image(imatge, this.x, this.y, this.r, this.r);
-        }
         processing.popStyle();
     }
 
@@ -55,7 +53,7 @@ public class ButtonPhotos {
     }
 
     public boolean mouseIntoButton(PApplet processing) {
-        return processing.dist(processing.mouseX, processing.mouseY, this.x, this.y) <= this.r;
+        return processing.dist(processing.mouseX, processing.mouseY, this.x, this.y) <= this.r && ences;
     }
 
     public void cursorHandMode(PApplet processing) {

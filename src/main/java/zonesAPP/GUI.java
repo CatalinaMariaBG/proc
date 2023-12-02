@@ -1,5 +1,6 @@
 package zonesAPP;
 
+import botonsAPP.CarrouselFoto;
 import processing.core.PApplet;
 
 import processing.core.PImage;
@@ -12,13 +13,14 @@ import botonsAPP.ButtonPhotos;
 
 import botonsAPP.ButtonInsertText;
 
-import zonesAPP.Trivio003;
+import botonsAPP.CarrouselFoto;
+
 //mesures: 1440, 900
 public class GUI {
 
     PImage img;
 
-    ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount;
+    ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding;
 
     ButtonPhotos bAccount;
 
@@ -27,6 +29,9 @@ public class GUI {
     public enum SCREEN{LOGIN, INICIAL, MYACCOUNT, MAP, BUILDING, NEWBUILDING, ARCHIVE, CREATE, SAVECREATION, CREATEFULLSCREEN};
 
     public SCREEN screenActual;
+
+    CarrouselFoto c;
+    String[] noms;
 
 boolean menuOpen = false;
     public GUI(PApplet processing){
@@ -38,41 +43,65 @@ boolean menuOpen = false;
         b2 = new ButtonWords(processing, "MAP", 490, Setup.yButtonInicial, 180, 80, 10);
         b3 = new ButtonWords(processing , "ARCHIVE", 790, Setup.yButtonInicial, 180, 80, 10);
         b4 = new ButtonWords(processing, "NEW BUILDING", 1090, Setup.yButtonInicial, 180, 80, 10);
-        bLogo = new ButtonWords(processing, "LOGO", Setup.logoDistW, Setup.logoDistH, Setup.logoW, Setup.logoH, 0);
-                bLogo.setFillColor(0xFFF4562A);
-                bEnterAccount = new ButtonWords(processing, "ENTER", processing.width/2 - 150, processing.height/2 + 225, 300, 60, 10);
-        bEnterAccount.setFillColor(0xFFF4562A);
-                bName = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 50, 450, 60, "Name: ");
-                bPassword = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 150, 450, 60, "Password: " );
-        img = processing.loadImage("data/userLogo.png");
-        bAccount = new ButtonPhotos(processing, img, processing.width - Setup.logoDistW - Setup.logoW/2, Setup.logoDistH + Setup.logoH/2, Setup.logoW);
-
         b1.mouseIntoButton(processing);
         b2.mouseIntoButton(processing);
         b3.mouseIntoButton(processing);
         b4.mouseIntoButton(processing);
-        bEnterAccount.mouseIntoButton(processing);
 
+        c = new CarrouselFoto(processing.width/2, processing.height/2 + 150, processing.width - 2*Setup.logoW, 580, 10);
+        c.setImatges(processing, noms);
+        c.setButtons(processing, "data/next.png", "data/back.png");
+        noms = new String[]{"data/auditori-de-manacor.jpg", "data/edificiCasasayas.jpg", "data/casaBalaguer.jpg", "data/fundacioMiro-tallerSert.jpg.webp", "data/MACE.jpg", "data/ciudadBlanca.jpg", "data/canLis.jpg.webp", "data/clubNauticFormentera.jpg.webp"};
+        c.checkCursor(processing);
+        c.chekButtons(processing);
+
+        //GENERAL
+        bLogo = new ButtonWords(processing, "LOGO", Setup.logoDistH, Setup.logoDistV, Setup.logoW, Setup.logoH, 0);
+            bLogo.setFillColor(0xFFF4562A);
+        img = processing.loadImage("data/userLogo.png");
+        bAccount = new ButtonPhotos(processing, img, processing.width - Setup.logoDistH - Setup.logoW/2, Setup.logoDistV + Setup.logoH/2, Setup.logoW);
+
+        //BOTONS LOGIN
+        bEnterAccount = new ButtonWords(processing, "ENTER", processing.width/2 - 150, processing.height/2 + 225, 300, 60, 10);
+            bEnterAccount.setFillColor(0xFFF4562A);
+            bEnterAccount.mouseIntoButton(processing);
+        bName = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 50, 450, 60, "Name: ");
+        bPassword = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 150, 450, 60, "Password: " );
+
+        //BOTONS BARRA LATERAL
+        bLateralBar = new ButtonWords(processing, "LOGO", 160 - Setup.logoW/2, Setup.logoDistV, Setup.logoW, Setup.logoH, 0);
+            bLateralBar.mouseIntoButton(processing);
+        bCreate = new ButtonWords(processing, "CREATE", Setup.edgeH, Setup.edgeV + Setup.logoW + 100, 280, 80, 10);
+        bMap = new ButtonWords(processing, "MAP", Setup.edgeH, Setup.edgeV + Setup.logoW + 250, 280, 80, 10);
+        bArchive = new ButtonWords(processing, "ARCHIVE", Setup.edgeH, Setup.edgeV + Setup.logoW + 400, 280, 80, 10);
+        bNewBuilding = new ButtonWords(processing, "NEW BUILDING", Setup.edgeH, Setup.edgeV + Setup.logoW + 550, 280, 80, 10);
     }
-
-    // BOTONS
 
 
     //DIFERENTS ZONES
 
     public void drawLateralBar(PApplet processing){
         processing.pushStyle();
-        processing.fill(0xFFDBD9D1);
+        processing.fill(219, 217, 209);
         processing.rectMode(processing.CORNER);
         processing.rect(0, 0, 4*Setup.logoW, processing.height, 10);
+        bLateralBar.display(processing);
+        bLateralBar.setFillColor(0xFFF4562A);
+        processing.stroke(0);processing.strokeWeight(3);
+        processing.line(Setup.edgeH, Setup.edgeV + Setup.logoW + 50 , 4*Setup.logoW - Setup.edgeH, Setup.edgeV + Setup.logoW + 50);
+        processing.noStroke();
+        bCreate.display(processing);
+        bMap.display(processing);
+        bArchive.display(processing);
+        bNewBuilding.display(processing);
         processing.popStyle();
     }
     public void drawAccount(PApplet processing){
         processing.pushStyle();
         processing.fill(0xFF435360);
         processing.ellipseMode(processing.CORNER);
-        processing.ellipse(processing.width - Setup.logoDistW - Setup.logoW, Setup.logoDistH, Setup.logoW, Setup.logoH);
-        processing.image(this.img, processing.width - Setup.logoDistW - Setup.logoW , Setup.logoDistH, Setup.logoW, Setup.logoH);
+        processing.ellipse(processing.width - Setup.logoDistH - Setup.logoW, Setup.logoDistV, Setup.logoW, Setup.logoH);
+        processing.image(this.img, processing.width - Setup.logoDistH - Setup.logoW , Setup.logoDistV, Setup.logoW, Setup.logoH);
         processing.popStyle();
     }
 
@@ -94,7 +123,7 @@ boolean menuOpen = false;
         processing.fill(0);
         processing.textSize(30);
         processing.textMode(processing.CORNER);
-        processing.text("NAME OF THE COMPANY", Setup.lletresBannerW, Setup.logoDistH + Setup.bannerH/2);
+        processing.text("NAME OF THE COMPANY", Setup.lletresBannerW, Setup.logoDistV + Setup.bannerH/2);
         processing.popStyle();
     }
 
@@ -115,14 +144,6 @@ boolean menuOpen = false;
         processing.stroke(0);processing.strokeWeight(3);
         processing.line((float)processing.width/2 + Setup.nomW/2 + Setup.edgeH, Setup.edgeV + Setup.bannerH + Setup.nomH, processing.width - Setup.edgeH, Setup.edgeV + Setup.bannerH + Setup.nomH);
         processing.line(Setup.edgeH, Setup.edgeV + Setup.bannerH + Setup.nomH, processing.width/2 - Setup.nomW/2 - Setup.edgeH, Setup.edgeV + Setup.bannerH + Setup.nomH);
-        processing.popStyle();
-    }
-
-    public void drawLinesInicial(PApplet processing){
-        processing.pushStyle();
-        processing.stroke(0);processing.strokeWeight(3);
-        processing.line(1090 + 180 + 10, Setup.yButtonInicial + 50/*height del botó /2*/, processing.width - Setup.edgeH, Setup.yButtonInicial + 50);
-        processing.line(Setup.edgeH, Setup.yButtonInicial + 50, 180, Setup.yButtonInicial + 50);
         processing.popStyle();
     }
 
@@ -168,9 +189,9 @@ processing.text(text, 1040, processing.height/2 + 150);
         processing.pushStyle();
         processing.fill(0xFFF4562A);
         processing.rectMode(processing.CORNER);
-        processing.rect(Setup.logoDistW, Setup.logoDistH, Setup.logoW, Setup.logoH);
+        processing.rect(Setup.logoDistH, Setup.logoDistV, Setup.logoW, Setup.logoH);
         processing.textAlign(processing.CENTER); processing.textSize(16); processing.fill(0);
-        processing.text("LOGO", Setup.logoDistW + Setup.logoW/2, Setup.logoDistH + Setup.logoH/2);
+        processing.text("LOGO", Setup.logoDistH + Setup.logoW/2, Setup.logoDistV + Setup.logoH/2);
         processing.popStyle();
     }
 
@@ -180,9 +201,8 @@ processing.text(text, 1040, processing.height/2 + 150);
         processing.background(219, 217, 209);
         processing.pushStyle();
         processing.background(0xFFDBD9D1);
-                drawBanner(processing);
+        drawBanner(processing);
         //drawLogo(processing);
-        bAccount.setEnces(true);
         bAccount.display(processing);
        b1.display(processing);
         b2.display(processing);
@@ -190,11 +210,21 @@ processing.text(text, 1040, processing.height/2 + 150);
         b4.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, "Imatges");
         bLogo.display(processing);
+        c.display(processing);
         if(menuOpen){
             drawLateralBar(processing);
+            bAccount.setEnces(false);
+            b1.setEnces(false);
+            b2.setEnces(false);
+            b3.setEnces(false);
+            b4.setEnces(false);
+        } else{
+            bAccount.setEnces(true);
+            b1.setEnces(true);
+            b2.setEnces(true);
+            b3.setEnces(true);
+            b4.setEnces(true);
         }
-        processing.popStyle();
-        //drawLinesInicial(processing);
     }
 
     public void drawLogin(PApplet processing){
@@ -219,13 +249,17 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawLines(processing);
         drawBanner(processing);
         bLogo.display(processing);
-        bAccount.setEnces(true);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, "My Account");
         drawNom(processing, "MY ACCOUNT");
         drawLoginPage(processing);
         if(menuOpen){
             drawLateralBar(processing);
+            bLogo.setEnces(false);
+            bAccount.setEnces(false);
+        } else{
+            bLogo.setEnces(true);
+            bAccount.setEnces(true);
         }
     }
 
@@ -234,13 +268,17 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawLines(processing);
         drawBanner(processing);
         bLogo.display(processing);
-        bAccount.setEnces(true);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "MAP");
         drawNom(processing, "MAP");
         if(menuOpen){
             drawLateralBar(processing);
+            bLogo.setEnces(false);
+            bAccount.setEnces(false);
+        } else {
+            bLogo.setEnces(true);
+            bAccount.setEnces(true);
         }
     }
 
@@ -249,13 +287,17 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawLines(processing);
         drawBanner(processing);
         bLogo.display(processing);
-        bAccount.setEnces(true);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "BUILDING IMAGE");
         drawNom(processing, "BUILDING INFORMATION");
         if(menuOpen){
             drawLateralBar(processing);
+            bLogo.setEnces(false);
+            bAccount.setEnces(false);
+        } else {
+            bLogo.setEnces(true);
+            bAccount.setEnces(true);
         }
     }
 
@@ -264,13 +306,17 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawLines(processing);
         drawBanner(processing);
         bLogo.display(processing);
-        bAccount.setEnces(true);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "BUILDING IMAGE");
         drawNom(processing, "NEW BUILDING");
         if(menuOpen){
             drawLateralBar(processing);
+            bLogo.setEnces(false);
+            bAccount.setEnces(false);
+        } else {
+            bLogo.setEnces(true);
+            bAccount.setEnces(true);
         }
     }
 
@@ -279,13 +325,17 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawLines(processing);
         drawBanner(processing);
         bLogo.display(processing);
-        bAccount.setEnces(true);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "ELEMENTS OF THE ARCHIVE");
         drawNom(processing, "ARCHIVE");
         if(menuOpen){
             drawLateralBar(processing);
+            bLogo.setEnces(false);
+            bAccount.setEnces(false);
+        } else {
+            bLogo.setEnces(true);
+            bAccount.setEnces(true);
         }
     }
 
@@ -294,7 +344,6 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawLines(processing);
         drawBanner(processing);
         bLogo.display(processing);
-        bAccount.setEnces(true);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "INSPIRATIONAL WALL");
@@ -302,6 +351,11 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawFullScreenSymbol(processing);
         if(menuOpen){
             drawLateralBar(processing);
+            bLogo.setEnces(false);
+            bAccount.setEnces(false);
+        } else {
+            bLogo.setEnces(true);
+            bAccount.setEnces(true);
         }
     }
 
@@ -310,13 +364,17 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawLines(processing);
         drawBanner(processing);
         bLogo.display(processing);
-        bAccount.setEnces(true);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "PREVIEW OF THE INSPIRATIONAL WALL");
         drawNom(processing, "NEW INSPIRATIONAL WALL");
         if(menuOpen){
             drawLateralBar(processing);
+            bLogo.setEnces(false);
+            bAccount.setEnces(false);
+        } else {
+            bLogo.setEnces(true);
+            bAccount.setEnces(true);
         }
     }
 

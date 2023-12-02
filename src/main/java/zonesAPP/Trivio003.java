@@ -1,13 +1,13 @@
 package zonesAPP;
 
 import processing.core.PApplet;
-
-import botonsAPP.ButtonPhotos;
+import botonsAPP.CarrouselFoto;
 
 public class Trivio003 extends PApplet {
 
     GUI gui;
-    boolean menuOpen = false;
+    CarrouselFoto c;
+
 
     public static void main(String[] args){
         PApplet.main("zonesAPP.Trivio003", args);
@@ -75,8 +75,11 @@ public class Trivio003 extends PApplet {
         }else if(key == '8'){
             gui.screenActual = GUI.SCREEN.ARCHIVE;
         }
-        gui.bName.keyPressed(key, (int) keyCode);
-        gui.bPassword.keyPressed(key, keyCode);
+        //Botons TextField
+        if(gui.screenActual == GUI.SCREEN.LOGIN) {
+            gui.bName.keyPressed(key, (int) keyCode);
+            gui.bPassword.keyPressed(key, keyCode);
+        }
     }
 
     //MOUSE INTERACTION
@@ -135,7 +138,9 @@ public class Trivio003 extends PApplet {
         }
 
             if(gui.bLogo.mouseIntoButton(this)){
-                gui.menuOpen = !gui.menuOpen;
+                gui.menuOpen = true;
+            } else if(gui.bLateralBar.mouseIntoButton(this)){
+                gui.menuOpen = false;
             }
 
             cursorHandMode(this);
@@ -153,10 +158,13 @@ public class Trivio003 extends PApplet {
     }
 
     public void comprovaLogin(){
-if(gui.bEnterAccount.mouseIntoButton(this)){
+if(gui.bEnterAccount.mouseIntoButton(this) && gui.bName.text.equals("Name: joan") && gui.bPassword.text.equals("Password: joan")){
     gui.screenActual = GUI.SCREEN.INICIAL;
+    gui.bName.text = gui.bName.textoEstatico;
+    gui.bPassword.text = gui.bPassword.textoEstatico;
 }
     }
+
 
 
     }

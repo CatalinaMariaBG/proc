@@ -9,7 +9,7 @@ public class ButtonWords {
     int fillColor;
     int fillColorOver, fillColorOff;
     String textButton;
-    boolean enabled; //estat del botó, encés o apagat
+    boolean ences; //estat del botó, encés o apagat
 
     public ButtonWords(PApplet processing, String text, float x, float y, float w, float h, float angle){
         this.textButton = text;
@@ -18,14 +18,14 @@ public class ButtonWords {
         this.w = w;
         this.h = h;
         this.angle = angle;
-        this.enabled = true;
+        this.ences = true;
         this.fillColor = processing.color(244, 93, 1);
         this.fillColorOver = processing.color(67, 83, 96);
-        this.fillColorOff = processing.color(219, 217, 209);
+        this.fillColorOff = processing.color(244, 93, 1);
     }
 
-    public void setEnabled(boolean enabled){
-        this.enabled = enabled;
+    public void setEnces(boolean ences){
+        this.ences = ences;
     }
 
     public void setTextButton(String text){
@@ -37,7 +37,7 @@ public class ButtonWords {
 
     public void display(PApplet processing){
         processing.pushStyle();
-        if(!enabled){
+        if(!ences){
             processing.fill(fillColorOff);
         } else if(mouseIntoButton(processing)){
             processing.fill(fillColorOver);
@@ -51,13 +51,13 @@ public class ButtonWords {
         //Text
         processing.fill(0); processing.textAlign(processing.CENTER);
         processing.textSize(16);
-        processing.text(textButton, this.x + this.w/2, this.y + this.h/2);
+        processing.text(textButton, this.x + this.w / 2, this.y + this.h / 2);
         processing.popStyle();
     }
 
     public boolean mouseIntoButton(PApplet processing){
         if(processing.mouseX >= this.x && processing.mouseX <= this.x + this.w &&
-                processing.mouseY >= this.y && processing.mouseY <= this.y + this.h){
+                processing.mouseY >= this.y && processing.mouseY <= this.y + this.h && ences){
             return true;
         } else {
             return false;

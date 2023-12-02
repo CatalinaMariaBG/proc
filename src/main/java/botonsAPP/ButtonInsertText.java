@@ -10,8 +10,8 @@ public class ButtonInsertText {
     int colorRect, colorText, colorSelected, colorBorder;
     int weightBorder = 1;
 
-    String text = "";
-    String textoEstatico;
+    public String text = "";
+    public String textoEstatico;
 
     int textSize = 16;
 
