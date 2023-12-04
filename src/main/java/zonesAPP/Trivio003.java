@@ -29,11 +29,11 @@ public class Trivio003 extends PApplet {
 
         switch (gui.screenActual) {
             case LOGIN:  gui.drawLogin(this);
-            break;
+                break;
             case INICIAL: gui.drawInicial(this);
-            break;
+                break;
             case MYACCOUNT: gui.drawMyAccount(this);
-            break;
+                break;
             case MAP: gui.drawMap(this);
                 break;
             case BUILDING: gui.drawBuilding(this);
@@ -46,6 +46,8 @@ public class Trivio003 extends PApplet {
                 break;
             case SAVECREATION: gui.drawSaveCreation(this);
                 break;
+            case CREATEFULLSCREEN: gui.drawCreateFullScreen(this);
+                break;
         }
 
         //Botons TextField LogIn
@@ -56,25 +58,6 @@ public class Trivio003 extends PApplet {
     //Keyboard interaction
 
     public void keyPressed(){
-        if(key=='0'){
-            gui.screenActual = GUI.SCREEN.LOGIN;
-        } else if (key == '1'){
-            gui.screenActual = GUI.SCREEN.INICIAL;
-        } else if(key == '2'){
-            gui.screenActual = GUI.SCREEN.MYACCOUNT;
-        }else if(key == '3'){
-            gui.screenActual = GUI.SCREEN.MAP;
-        }else if(key == '4'){
-            gui.screenActual = GUI.SCREEN.BUILDING;
-        }else if(key == '5'){
-            gui.screenActual = GUI.SCREEN.NEWBUILDING;
-        }else if(key == '6'){
-            gui.screenActual = GUI.SCREEN.CREATE;
-        }else if(key == '7'){
-            gui.screenActual = GUI.SCREEN.SAVECREATION;
-        }else if(key == '8'){
-            gui.screenActual = GUI.SCREEN.ARCHIVE;
-        }
         //Botons TextField
         if(gui.screenActual == GUI.SCREEN.LOGIN) {
             gui.bName.keyPressed(key, (int) keyCode);
@@ -103,37 +86,219 @@ public class Trivio003 extends PApplet {
             } else if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
             }
+            if(gui.menuOpen){
+                if(gui.bLateralBar.mouseIntoButton(this)){
+                    gui.menuOpen = false;
+                } else if(gui.bCreate.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.CREATE;
+                    gui.menuOpen = false;
+                } else if(gui.bMap.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.MAP;
+                    gui.menuOpen = false;
+                } else if(gui.bArchive.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.ARCHIVE;
+                    gui.menuOpen = false;
+                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
+                    gui.menuOpen = false;
+                } else if(gui.bInici.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.INICIAL;
+                    gui.menuOpen = false;
+                }
+            }
         } else if(gui.screenActual == GUI.SCREEN.MYACCOUNT){
              if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
+            }
+            if(gui.menuOpen){
+                if(gui.bLateralBar.mouseIntoButton(this)){
+                    gui.menuOpen = false;
+                } else if(gui.bCreate.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.CREATE;
+                    gui.menuOpen = false;
+                } else if(gui.bMap.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.MAP;
+                    gui.menuOpen = false;
+                } else if(gui.bArchive.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.ARCHIVE;
+                    gui.menuOpen = false;
+                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
+                    gui.menuOpen = false;
+                } else if(gui.bInici.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.INICIAL;
+                    gui.menuOpen = false;
+                }
             }
         } else if(gui.screenActual == GUI.SCREEN.MAP){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
             }
+            if(gui.menuOpen){
+                if(gui.bLateralBar.mouseIntoButton(this)){
+                    gui.menuOpen = false;
+                } else if(gui.bCreate.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.CREATE;
+                    gui.menuOpen = false;
+                } else if(gui.bMap.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.MAP;
+                    gui.menuOpen = false;
+                } else if(gui.bArchive.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.ARCHIVE;
+                    gui.menuOpen = false;
+                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
+                    gui.menuOpen = false;
+                } else if(gui.bInici.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.INICIAL;
+                    gui.menuOpen = false;
+                }
+            }
         } else if(gui.screenActual == GUI.SCREEN.BUILDING){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
+            }
+            if(gui.menuOpen){
+                if(gui.bLateralBar.mouseIntoButton(this)){
+                    gui.menuOpen = false;
+                } else if(gui.bCreate.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.CREATE;
+                    gui.menuOpen = false;
+                } else if(gui.bMap.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.MAP;
+                    gui.menuOpen = false;
+                } else if(gui.bArchive.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.ARCHIVE;
+                    gui.menuOpen = false;
+                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
+                    gui.menuOpen = false;
+                } else if(gui.bInici.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.INICIAL;
+                    gui.menuOpen = false;
+                }
             }
         } else if(gui.screenActual == GUI.SCREEN.NEWBUILDING){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
             }
+            if(gui.menuOpen){
+                if(gui.bLateralBar.mouseIntoButton(this)){
+                    gui.menuOpen = false;
+                } else if(gui.bCreate.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.CREATE;
+                    gui.menuOpen = false;
+                } else if(gui.bMap.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.MAP;
+                    gui.menuOpen = false;
+                } else if(gui.bArchive.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.ARCHIVE;
+                    gui.menuOpen = false;
+                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
+                    gui.menuOpen = false;
+                } else if(gui.bInici.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.INICIAL;
+                    gui.menuOpen = false;
+                }
+            }
         } else if(gui.screenActual == GUI.SCREEN.CREATE){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
+            } else if(gui.bFullCreate.mouseIntoButton(this)){
+                gui.screenActual = GUI.SCREEN.CREATEFULLSCREEN;
+            }
+            if(gui.menuOpen){
+                if(gui.bLateralBar.mouseIntoButton(this)){
+                    gui.menuOpen = false;
+                } else if(gui.bCreate.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.CREATE;
+                    gui.menuOpen = false;
+                } else if(gui.bMap.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.MAP;
+                    gui.menuOpen = false;
+                } else if(gui.bArchive.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.ARCHIVE;
+                    gui.menuOpen = false;
+                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
+                    gui.menuOpen = false;
+                } else if(gui.bInici.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.INICIAL;
+                    gui.menuOpen = false;
+                }
             }
         } else if(gui.screenActual == GUI.SCREEN.SAVECREATION){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
             }
+            if(gui.menuOpen){
+                if(gui.bLateralBar.mouseIntoButton(this)){
+                    gui.menuOpen = false;
+                } else if(gui.bCreate.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.CREATE;
+                    gui.menuOpen = false;
+                } else if(gui.bMap.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.MAP;
+                    gui.menuOpen = false;
+                } else if(gui.bArchive.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.ARCHIVE;
+                    gui.menuOpen = false;
+                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
+                    gui.menuOpen = false;
+                } else if(gui.bInici.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.INICIAL;
+                    gui.menuOpen = false;
+                }
+            }
         } else if(gui.screenActual == GUI.SCREEN.CREATEFULLSCREEN){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
             }
+            if(gui.menuOpen){
+                if(gui.bLateralBar.mouseIntoButton(this)){
+                    gui.menuOpen = false;
+                } else if(gui.bCreate.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.CREATE;
+                    gui.menuOpen = false;
+                } else if(gui.bMap.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.MAP;
+                    gui.menuOpen = false;
+                } else if(gui.bArchive.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.ARCHIVE;
+                    gui.menuOpen = false;
+                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
+                    gui.menuOpen = false;
+                } else if(gui.bInici.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.INICIAL;
+                    gui.menuOpen = false;
+                }
+            }
         } else if(gui.screenActual == GUI.SCREEN.ARCHIVE){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
+            }
+            if(gui.menuOpen){
+                if(gui.bLateralBar.mouseIntoButton(this)){
+                    gui.menuOpen = false;
+                } else if(gui.bCreate.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.CREATE;
+                    gui.menuOpen = false;
+                } else if(gui.bMap.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.MAP;
+                    gui.menuOpen = false;
+                } else if(gui.bArchive.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.ARCHIVE;
+                    gui.menuOpen = false;
+                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
+                    gui.menuOpen = false;
+                } else if(gui.bInici.mouseIntoButton(this)){
+                    gui.screenActual = GUI.SCREEN.INICIAL;
+                    gui.menuOpen = false;
+                }
             }
         }
 
@@ -164,8 +329,5 @@ if(gui.bEnterAccount.mouseIntoButton(this) && gui.bName.text.equals("Name: joan"
     gui.bPassword.text = gui.bPassword.textoEstatico;
 }
     }
-
-
-
     }
 

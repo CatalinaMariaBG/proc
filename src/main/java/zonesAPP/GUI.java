@@ -13,16 +13,14 @@ import botonsAPP.ButtonPhotos;
 
 import botonsAPP.ButtonInsertText;
 
-import botonsAPP.CarrouselFoto;
-
 //mesures: 1440, 900
 public class GUI {
 
-    PImage img;
+    PImage imgAccount, imgFullCreate;
 
-    ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding;
+    ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding, bInici;
 
-    ButtonPhotos bAccount;
+    ButtonPhotos bAccount, bFullCreate;
 
     ButtonInsertText bPassword, bName;
 
@@ -31,7 +29,7 @@ public class GUI {
     public SCREEN screenActual;
 
     CarrouselFoto c;
-    String[] noms;
+    String[] nomsCarrousel;
 
 boolean menuOpen = false;
     public GUI(PApplet processing){
@@ -48,18 +46,18 @@ boolean menuOpen = false;
         b3.mouseIntoButton(processing);
         b4.mouseIntoButton(processing);
 
-        c = new CarrouselFoto(processing.width/2, processing.height/2 + 150, processing.width - 2*Setup.logoW, 580, 10);
-        c.setImatges(processing, noms);
+       /* c = new CarrouselFoto(processing.width/2, processing.height/2 + 150, processing.width - 2*Setup.logoW, 580, 10);
+        nomsCarrousel = new String[]{"data/auditori-de-manacor.jpg", "data/edificiCasasayas.jpeg", "data/casaBalaguer.jpg", "fundacioMiro-tallerSert.jpg.webp", "MACE.jpg", "ciudadBlanca.jpg", "canLis.jpg.webp", "clubNauticFormentera.jpg.webp"};
+        c.setImatges(processing, nomsCarrousel);
         c.setButtons(processing, "data/next.png", "data/back.png");
-        noms = new String[]{"data/auditori-de-manacor.jpg", "data/edificiCasasayas.jpg", "data/casaBalaguer.jpg", "data/fundacioMiro-tallerSert.jpg.webp", "data/MACE.jpg", "data/ciudadBlanca.jpg", "data/canLis.jpg.webp", "data/clubNauticFormentera.jpg.webp"};
         c.checkCursor(processing);
-        c.chekButtons(processing);
+        c.chekButtons(processing);*/
 
         //GENERAL
         bLogo = new ButtonWords(processing, "LOGO", Setup.logoDistH, Setup.logoDistV, Setup.logoW, Setup.logoH, 0);
             bLogo.setFillColor(0xFFF4562A);
-        img = processing.loadImage("data/userLogo.png");
-        bAccount = new ButtonPhotos(processing, img, processing.width - Setup.logoDistH - Setup.logoW/2, Setup.logoDistV + Setup.logoH/2, Setup.logoW);
+        imgAccount = processing.loadImage("data/userLogo.png");
+        bAccount = new ButtonPhotos(processing, imgAccount, processing.width - Setup.logoDistH - Setup.logoW/2, Setup.logoDistV + Setup.logoH/2, Setup.logoW);
 
         //BOTONS LOGIN
         bEnterAccount = new ButtonWords(processing, "ENTER", processing.width/2 - 150, processing.height/2 + 225, 300, 60, 10);
@@ -71,10 +69,15 @@ boolean menuOpen = false;
         //BOTONS BARRA LATERAL
         bLateralBar = new ButtonWords(processing, "LOGO", 160 - Setup.logoW/2, Setup.logoDistV, Setup.logoW, Setup.logoH, 0);
             bLateralBar.mouseIntoButton(processing);
-        bCreate = new ButtonWords(processing, "CREATE", Setup.edgeH, Setup.edgeV + Setup.logoW + 100, 280, 80, 10);
-        bMap = new ButtonWords(processing, "MAP", Setup.edgeH, Setup.edgeV + Setup.logoW + 250, 280, 80, 10);
-        bArchive = new ButtonWords(processing, "ARCHIVE", Setup.edgeH, Setup.edgeV + Setup.logoW + 400, 280, 80, 10);
-        bNewBuilding = new ButtonWords(processing, "NEW BUILDING", Setup.edgeH, Setup.edgeV + Setup.logoW + 550, 280, 80, 10);
+            bInici = new ButtonWords(processing, "INICI", Setup.edgeH, Setup.edgeV + Setup.logoW + 100, 280, 80, 10);
+        bCreate = new ButtonWords(processing, "CREATE", Setup.edgeH, Setup.edgeV + Setup.logoW + 250 , 280, 80, 10);
+        bMap = new ButtonWords(processing, "MAP", Setup.edgeH, Setup.edgeV + Setup.logoW + 400, 280, 80, 10);
+        bArchive = new ButtonWords(processing, "ARCHIVE", Setup.edgeH, Setup.edgeV + Setup.logoW + 550, 280, 80, 10);
+        bNewBuilding = new ButtonWords(processing, "NEW BUILDING", Setup.edgeH, Setup.edgeV + Setup.logoW + 700, 280, 80, 10);
+
+        //BOTONS CREATE
+        imgFullCreate = processing.loadImage("data/fullScreenSymbol.png");
+        bFullCreate = new ButtonPhotos(processing, imgFullCreate, Setup.fullScreenX, Setup.fullScreenY, Setup.fullScreenW);
     }
 
 
@@ -90,6 +93,7 @@ boolean menuOpen = false;
         processing.stroke(0);processing.strokeWeight(3);
         processing.line(Setup.edgeH, Setup.edgeV + Setup.logoW + 50 , 4*Setup.logoW - Setup.edgeH, Setup.edgeV + Setup.logoW + 50);
         processing.noStroke();
+        bInici.display(processing);
         bCreate.display(processing);
         bMap.display(processing);
         bArchive.display(processing);
@@ -101,7 +105,7 @@ boolean menuOpen = false;
         processing.fill(0xFF435360);
         processing.ellipseMode(processing.CORNER);
         processing.ellipse(processing.width - Setup.logoDistH - Setup.logoW, Setup.logoDistV, Setup.logoW, Setup.logoH);
-        processing.image(this.img, processing.width - Setup.logoDistH - Setup.logoW , Setup.logoDistV, Setup.logoW, Setup.logoH);
+        processing.image(this.imgAccount, processing.width - Setup.logoDistH - Setup.logoW , Setup.logoDistV, Setup.logoW, Setup.logoH);
         processing.popStyle();
     }
 
@@ -110,9 +114,9 @@ boolean menuOpen = false;
         processing.fill(0xFF435360);
         processing.ellipseMode(processing.CENTER);
         processing.ellipse((float) processing.width /2, (float)processing.height/2 - 50, Setup.logoW, Setup.logoH);
-        img = processing.loadImage("data/userLogo.png");
+        imgAccount = processing.loadImage("data/userLogo.png");
         processing.imageMode(processing.CENTER);
-        processing.image(img, (float)processing.width/2, (float)processing.height/2 -50, Setup.logoW, Setup.logoH);
+        processing.image(imgAccount, (float)processing.width/2, (float)processing.height/2 -50, Setup.logoW, Setup.logoH);
         processing.popStyle();
     }
 
@@ -159,14 +163,6 @@ boolean menuOpen = false;
         processing.popStyle();
     }
 
-    public void drawFullScreenSymbol(PApplet processing){
-        processing.pushStyle();
-        img = processing.loadImage("data/fullScreenSymbol.png");
-        processing.imageMode(processing.CENTER);
-        processing.image(img, Setup.fullScreenX, Setup.fullScreenY, Setup.fullScreenW, Setup.fullScreenH);
-        processing.popStyle();
-    }
-
     public void drawSecondMiddle(PApplet processing, String text){
         processing.pushStyle();
 processing.fill(0xFFDBD9D1);
@@ -174,14 +170,6 @@ processing.rectMode(processing.CENTER);
 processing.rect(1040, processing.height/2 + 150, 600, 500, 10);
 processing.fill(0);
 processing.text(text, 1040, processing.height/2 + 150);
-        processing.popStyle();
-    }
-
-    public void drawBuildingInfo(PApplet processing){
-        processing.pushStyle();
-        processing.rectMode(processing.CORNER);
-        //processing.rect();
-
         processing.popStyle();
     }
 
@@ -210,7 +198,7 @@ processing.text(text, 1040, processing.height/2 + 150);
         b4.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, "Imatges");
         bLogo.display(processing);
-        c.display(processing);
+        //c.display(processing);
         if(menuOpen){
             drawLateralBar(processing);
             bAccount.setEnces(false);
@@ -348,7 +336,8 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "INSPIRATIONAL WALL");
         drawNom(processing, "CREATE");
-        drawFullScreenSymbol(processing);
+        processing.imageMode(processing.CENTER);
+        bFullCreate.display(processing);
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -377,11 +366,8 @@ processing.text(text, 1040, processing.height/2 + 150);
             bAccount.setEnces(true);
         }
     }
-
     public void drawCreateFullScreen(PApplet processing){
-
+        processing.background(0xFFDBD9D1);
+        processing.rect(Setup.edgeH, Setup.edgeV, 670, processing.height - 2*Setup.edgeV, 10);
     }
-
-
-
 }

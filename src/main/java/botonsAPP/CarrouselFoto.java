@@ -9,7 +9,7 @@ public class CarrouselFoto {
     float imgW;
     float margeH = 15;
 
-    int numImatgesTotal, numImatgesVisible;
+    float numImatgesTotal, numImatgesVisible;
 
     int imatgeActual;
 
@@ -28,10 +28,10 @@ public class CarrouselFoto {
 
     public void setImatges(PApplet processing, String[] n){
         this.noms = n;
-        this.numImatgesTotal = noms.length;
-        this.imatges = new PImage[noms.length];
+        this.numImatgesTotal = this.noms.length;
+        this.imatges = new PImage[this.noms.length];
         for(int i = 0; i<imatges.length; i++){
-            imatges[i] = processing.loadImage(noms[i]);
+            imatges[i] = processing.loadImage(this.noms[i]);
         }
     }
 
