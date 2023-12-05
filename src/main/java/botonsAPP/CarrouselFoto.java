@@ -26,12 +26,12 @@ public class CarrouselFoto {
         this.imgW = (w - margeH*(visibles-1)) / (float) visibles;
     }
 
-    public void setImatges(PApplet processing, String[] n){
-        this.noms = n;
-        this.numImatgesTotal = this.noms.length;
-        this.imatges = new PImage[this.noms.length];
+    public void setImatges(PApplet processing, String[] noms){
+        this.noms = noms;
+        this.numImatgesTotal = noms.length;
+        this.imatges = new PImage[noms.length];
         for(int i = 0; i<imatges.length; i++){
-            imatges[i] = processing.loadImage(this.noms[i]);
+            this.imatges[i] = processing.loadImage(noms[i]);
         }
     }
 

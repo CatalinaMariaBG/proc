@@ -11,7 +11,9 @@ public class ButtonWords {
     String textButton;
     boolean ences; //estat del botó, encés o apagat
 
-    public ButtonWords(PApplet processing, String text, float x, float y, float w, float h, float angle){
+   String mode;
+
+    public ButtonWords(PApplet processing, String text, float x, float y, float w, float h, float angle, String mode){
         this.textButton = text;
         this.x = x;
         this.y = y;
@@ -22,6 +24,7 @@ public class ButtonWords {
         this.fillColor = processing.color(244, 93, 1);
         this.fillColorOver = processing.color(67, 83, 96);
         this.fillColorOff = processing.color(244, 93, 1);
+        this.mode = mode;
     }
 
     public void setEnces(boolean ences){
@@ -45,21 +48,45 @@ public class ButtonWords {
             processing.fill(fillColor);
         }
 
-        processing.strokeWeight(2);
-        processing.rect(this.x, this.y, this.w, this.h, angle);
+        if(mode.equals("CORNER")){
+            processing.strokeWeight(2);
+            processing.rectMode(processing.CORNER);
+            processing.rect(this.x, this.y, this.w, this.h, angle);
 
-        //Text
-        processing.fill(0); processing.textAlign(processing.CENTER);
-        processing.textSize(16);
-        processing.text(textButton, this.x + this.w / 2, this.y + this.h / 2);
+            //Text
+            processing.fill(0); processing.textAlign(processing.CENTER);
+            processing.textSize(16);
+            processing.text(textButton, this.x + this.w / 2, this.y + this.h / 2);
+        } else if(mode.equals("CENTER")){
+            processing.strokeWeight(2);
+            processing.rectMode(processing.CENTER);
+            processing.rect(this.x, this.y, this.w, this.h, angle);
+
+            //Text
+            processing.fill(0); processing.textAlign(processing.CENTER);
+            processing.textSize(16);
+            processing.textAlign(processing.CENTER);
+            processing.text(textButton, this.x, this.y);
+        }
         processing.popStyle();
     }
 
     public boolean mouseIntoButton(PApplet processing){
-        if(processing.mouseX >= this.x && processing.mouseX <= this.x + this.w &&
-                processing.mouseY >= this.y && processing.mouseY <= this.y + this.h && ences){
-            return true;
-        } else {
+        if(this.mode.equals("CORNER")) {
+            if (processing.mouseX >= this.x && processing.mouseX <= this.x + this.w &&
+                    processing.mouseY >= this.y && processing.mouseY <= this.y + this.h && ences) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if(this.mode.equals("CENTER")){
+            if(processing.mouseX >= this.x - this.w/2 && processing.mouseX <= this.x + this.w/2 &&
+                    processing.mouseY >= this.y - this.h/2 && processing.mouseY <= this.y + this.h/2 && ences){
+                return true;
+            } else {
+                return false;
+            }
+        } else{
             return false;
         }
     }

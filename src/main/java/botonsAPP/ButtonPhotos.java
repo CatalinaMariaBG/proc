@@ -24,7 +24,7 @@ public class ButtonPhotos {
         this.ences = true;
     }
 
-    public void setColors(int cFill, int cStroke, int cOver, int cDisabled) {
+    public void setColors(int cFill, int cStroke, int cOver) {
         this.fillColor = cFill;
         this.strokeColor = cStroke;
         this.fillColorInto = cOver;

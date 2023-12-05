@@ -16,15 +16,15 @@ import botonsAPP.ButtonInsertText;
 //mesures: 1440, 900
 public class GUI {
 
-    PImage imgAccount, imgFullCreate;
+    PImage imgAccount, imgFullCreate, imgMenosCreate, x;
 
-    ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding, bInici;
+    ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding, bInici, bNProjects, bLogOut;
 
-    ButtonPhotos bAccount, bFullCreate;
+    ButtonPhotos bAccount, bFullCreate, bMenosCreate;
 
     ButtonInsertText bPassword, bName;
 
-    public enum SCREEN{LOGIN, INICIAL, MYACCOUNT, MAP, BUILDING, NEWBUILDING, ARCHIVE, CREATE, SAVECREATION, CREATEFULLSCREEN};
+    public enum SCREEN{LOGIN, INICIAL, MYACCOUNT, MAP, BUILDING, BUILDINGINFO, NEWBUILDING, ARCHIVE, CREATE, SAVECREATION, CREATEFULLSCREEN};
 
     public SCREEN screenActual;
 
@@ -37,47 +37,56 @@ boolean menuOpen = false;
         screenActual = SCREEN.LOGIN;
 
         //INICIAL
-        b1 = new ButtonWords(processing, "CREATE", 190, Setup.yButtonInicial, 180, 80, 10);
-        b2 = new ButtonWords(processing, "MAP", 490, Setup.yButtonInicial, 180, 80, 10);
-        b3 = new ButtonWords(processing , "ARCHIVE", 790, Setup.yButtonInicial, 180, 80, 10);
-        b4 = new ButtonWords(processing, "NEW BUILDING", 1090, Setup.yButtonInicial, 180, 80, 10);
+        b1 = new ButtonWords(processing, "CREATE", 190, Setup.yButtonInicial, 180, 80, 10, "CORNER");
+        b2 = new ButtonWords(processing, "MAP", 490, Setup.yButtonInicial, 180, 80, 10, "CORNER");
+        b3 = new ButtonWords(processing , "ARCHIVE", 790, Setup.yButtonInicial, 180, 80, 10, "CORNER");
+        b4 = new ButtonWords(processing, "NEW BUILDING", 1090, Setup.yButtonInicial, 180, 80, 10, "CORNER");
         b1.mouseIntoButton(processing);
         b2.mouseIntoButton(processing);
         b3.mouseIntoButton(processing);
         b4.mouseIntoButton(processing);
 
-       /* c = new CarrouselFoto(processing.width/2, processing.height/2 + 150, processing.width - 2*Setup.logoW, 580, 10);
-        nomsCarrousel = new String[]{"data/auditori-de-manacor.jpg", "data/edificiCasasayas.jpeg", "data/casaBalaguer.jpg", "fundacioMiro-tallerSert.jpg.webp", "MACE.jpg", "ciudadBlanca.jpg", "canLis.jpg.webp", "clubNauticFormentera.jpg.webp"};
+       c = new CarrouselFoto(processing.width/2, processing.height/2 + 150, processing.width - 2*Setup.logoW, 580, 10);
+        nomsCarrousel = new String[]{ "data/auditori-de-manacor.jpg", "data/edificiCasasayas.jpeg","data/casaBalaguer.jpg"};
+        //, "fundacioMiro-tallerSert.jpg.webp", "MACE.jpg", "ciudadBlanca.jpg", "canLis.jpg.webp", "clubNauticFormentera.jpg.webp"
         c.setImatges(processing, nomsCarrousel);
         c.setButtons(processing, "data/next.png", "data/back.png");
         c.checkCursor(processing);
-        c.chekButtons(processing);*/
+        c.chekButtons(processing);
 
         //GENERAL
-        bLogo = new ButtonWords(processing, "LOGO", Setup.logoDistH, Setup.logoDistV, Setup.logoW, Setup.logoH, 0);
+        bLogo = new ButtonWords(processing, "LOGO", Setup.logoDistH, Setup.logoDistV, Setup.logoW, Setup.logoH, 0, "CORNER");
             bLogo.setFillColor(0xFFF4562A);
         imgAccount = processing.loadImage("data/userLogo.png");
         bAccount = new ButtonPhotos(processing, imgAccount, processing.width - Setup.logoDistH - Setup.logoW/2, Setup.logoDistV + Setup.logoH/2, Setup.logoW);
 
         //BOTONS LOGIN
-        bEnterAccount = new ButtonWords(processing, "ENTER", processing.width/2 - 150, processing.height/2 + 225, 300, 60, 10);
+        bEnterAccount = new ButtonWords(processing, "ENTER", processing.width/2 - 150, processing.height/2 + 225, 300, 60, 10, "CORNER");
             bEnterAccount.setFillColor(0xFFF4562A);
             bEnterAccount.mouseIntoButton(processing);
-        bName = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 50, 450, 60, "Name: ");
-        bPassword = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 150, 450, 60, "Password: " );
+        bName = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 50, 450, 60, "Name: ", 16);
+        bPassword = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 150, 450, 60, "Password: ", 16);
 
         //BOTONS BARRA LATERAL
-        bLateralBar = new ButtonWords(processing, "LOGO", 160 - Setup.logoW/2, Setup.logoDistV, Setup.logoW, Setup.logoH, 0);
+        bLateralBar = new ButtonWords(processing, "LOGO", 160 - Setup.logoW/2, Setup.logoDistV, Setup.logoW, Setup.logoH, 0, "CORNER");
             bLateralBar.mouseIntoButton(processing);
-            bInici = new ButtonWords(processing, "INICI", Setup.edgeH, Setup.edgeV + Setup.logoW + 100, 280, 80, 10);
-        bCreate = new ButtonWords(processing, "CREATE", Setup.edgeH, Setup.edgeV + Setup.logoW + 250 , 280, 80, 10);
-        bMap = new ButtonWords(processing, "MAP", Setup.edgeH, Setup.edgeV + Setup.logoW + 400, 280, 80, 10);
-        bArchive = new ButtonWords(processing, "ARCHIVE", Setup.edgeH, Setup.edgeV + Setup.logoW + 550, 280, 80, 10);
-        bNewBuilding = new ButtonWords(processing, "NEW BUILDING", Setup.edgeH, Setup.edgeV + Setup.logoW + 700, 280, 80, 10);
+            bInici = new ButtonWords(processing, "INICI", Setup.edgeH, Setup.edgeV + Setup.logoW + 100, 280, 80, 10, "CORNER");
+        bCreate = new ButtonWords(processing, "CREATE", Setup.edgeH, Setup.edgeV + Setup.logoW + 250 , 280, 80, 10, "CORNER");
+        bMap = new ButtonWords(processing, "MAP", Setup.edgeH, Setup.edgeV + Setup.logoW + 400, 280, 80, 10, "CORNER");
+        bArchive = new ButtonWords(processing, "ARCHIVE", Setup.edgeH, Setup.edgeV + Setup.logoW + 550, 280, 80, 10, "CORNER");
+        bNewBuilding = new ButtonWords(processing, "NEW BUILDING", Setup.edgeH, Setup.edgeV + Setup.logoW + 700, 280, 80, 10, "CORNER");
 
         //BOTONS CREATE
-        imgFullCreate = processing.loadImage("data/fullScreenSymbol.png");
+        imgFullCreate = processing.loadImage("data/fullScreen.png");
         bFullCreate = new ButtonPhotos(processing, imgFullCreate, Setup.fullScreenX, Setup.fullScreenY, Setup.fullScreenW);
+        bFullCreate.setColors(255, 0,0xFFDBD9D1);
+        imgMenosCreate = processing.loadImage("data/menosScreen.png");
+        bMenosCreate = new ButtonPhotos(processing, imgMenosCreate, processing.width - 2* Setup.edgeH, processing.height - 2* Setup.edgeV, Setup.fullScreenW);
+        bMenosCreate.setColors(255, 0,0xFFDBD9D1);
+
+        // BOTONS ACCOUNT
+        bNProjects = new ButtonWords(processing, "SEE PROJECTS", processing.width/2 - 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
+        bLogOut = new ButtonWords(processing, "LOG OUT", processing.width/2 + 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
     }
 
 
@@ -109,7 +118,7 @@ boolean menuOpen = false;
         processing.popStyle();
     }
 
-    public void drawLoginPage(PApplet processing){
+    public void drawAccountSymbol(PApplet processing){
         processing.pushStyle();
         processing.fill(0xFF435360);
         processing.ellipseMode(processing.CENTER);
@@ -183,6 +192,22 @@ processing.text(text, 1040, processing.height/2 + 150);
         processing.popStyle();
     }
 
+    public void drawAccountInfo(PApplet processing){
+        //Name
+        processing.rectMode(processing.CENTER); processing.fill(219, 217, 209);
+        processing.rect(processing.width/2, processing.height/2 + 50, 450, 60, 10);
+
+        processing.textAlign(processing.CORNER); processing.textSize(18); processing.fill(0);
+        processing.text(bName.text, processing.width/2 -220,processing.height/2 + 50);
+
+        //Number of projects
+        processing.fill(219, 217, 209);
+        processing.rect(processing.width/2, processing.height/2 + 150, 450, 60, 10);
+
+        processing.fill(0);
+        processing.text("Number of projects: ", processing.width/2 -220, processing.height/2 + 150);
+    }
+
     //PANTALLES
 
     public void drawInicial(PApplet processing){
@@ -190,7 +215,6 @@ processing.text(text, 1040, processing.height/2 + 150);
         processing.pushStyle();
         processing.background(0xFFDBD9D1);
         drawBanner(processing);
-        //drawLogo(processing);
         bAccount.display(processing);
        b1.display(processing);
         b2.display(processing);
@@ -199,6 +223,9 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, "Imatges");
         bLogo.display(processing);
         //c.display(processing);
+        /*x = processing.loadImage("data/audtitori-de-manacor.jpg");
+        processing.imageMode(processing.CENTER);
+        processing.image(x, processing.width/2, processing.height/2, 400, 400);*/
         if(menuOpen){
             drawLateralBar(processing);
             bAccount.setEnces(false);
@@ -223,7 +250,7 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawLogo(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawNom(processing, "LOG IN");
-        drawLoginPage(processing);
+        drawAccountSymbol(processing);
         bName.display(processing);
         bPassword.display(processing);
         bEnterAccount.display(processing);
@@ -233,6 +260,7 @@ processing.text(text, 1040, processing.height/2 + 150);
     }
 
     public void drawMyAccount(PApplet processing){
+        processing.pushStyle();
         processing.background(0xFFDBD9D1);
         drawLines(processing);
         drawBanner(processing);
@@ -240,7 +268,12 @@ processing.text(text, 1040, processing.height/2 + 150);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, "My Account");
         drawNom(processing, "MY ACCOUNT");
-        drawLoginPage(processing);
+        drawAccountSymbol(processing);
+        drawAccountInfo(processing);
+        processing.rectMode(processing.CENTER);
+        processing.textAlign(processing.CENTER);
+        bNProjects.display(processing);
+        bLogOut.display(processing);
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -249,6 +282,7 @@ processing.text(text, 1040, processing.height/2 + 150);
             bLogo.setEnces(true);
             bAccount.setEnces(true);
         }
+        processing.popStyle();
     }
 
     public void drawMap(PApplet processing){
@@ -369,5 +403,7 @@ processing.text(text, 1040, processing.height/2 + 150);
     public void drawCreateFullScreen(PApplet processing){
         processing.background(0xFFDBD9D1);
         processing.rect(Setup.edgeH, Setup.edgeV, 670, processing.height - 2*Setup.edgeV, 10);
+        bMenosCreate.display(processing);
     }
+
 }
