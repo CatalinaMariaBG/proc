@@ -39,7 +39,7 @@ public class ButtonPhotos {
                 processing.fill(fillColor);
             }
             processing.stroke(strokeColor);
-            processing.strokeWeight(3);
+            processing.strokeWeight(1);
             processing.imageMode(processing.CENTER);
             processing.ellipseMode(processing.CENTER);
             processing.ellipse(this.x, this.y, this.r, this.r);

@@ -13,6 +13,8 @@ import botonsAPP.ButtonPhotos;
 
 import botonsAPP.ButtonInsertText;
 
+import botonsAPP.Timer;
+
 //mesures: 1440, 900
 public class GUI {
 
@@ -24,12 +26,14 @@ public class GUI {
 
     ButtonInsertText bPassword, bName;
 
-    public enum SCREEN{LOGIN, INICIAL, MYACCOUNT, MAP, BUILDING, BUILDINGINFO, NEWBUILDING, ARCHIVE, CREATE, SAVECREATION, CREATEFULLSCREEN};
+    public enum SCREEN{LOGIN, INICIAL, MYACCOUNT, MAP, BUILDING, NEWBUILDING, ARCHIVE, CREATE, SAVECREATION, CREATEFULLSCREEN};
 
     public SCREEN screenActual;
 
     CarrouselFoto c;
     String[] nomsCarrousel;
+
+    Timer timer;
 
 boolean menuOpen = false;
     public GUI(PApplet processing){
@@ -46,13 +50,12 @@ boolean menuOpen = false;
         b3.mouseIntoButton(processing);
         b4.mouseIntoButton(processing);
 
-       c = new CarrouselFoto(processing.width/2, processing.height/2 + 150, processing.width - 2*Setup.logoW, 580, 10);
-        nomsCarrousel = new String[]{ "data/auditori-de-manacor.jpg", "data/edificiCasasayas.jpeg","data/casaBalaguer.jpg"};
-        //, "fundacioMiro-tallerSert.jpg.webp", "MACE.jpg", "ciudadBlanca.jpg", "canLis.jpg.webp", "clubNauticFormentera.jpg.webp"
+       c = new CarrouselFoto(80, 310, processing.width - 2*Setup.logoW, 580, 2);
+        nomsCarrousel = new String[]{ "auditori-de-manacor.jpg", "edificiCasasayas.jpeg","casalBalaguer.jpg", "MACE.jpg", "ciudadBlanca.jpg"};
+        //, "fundacioMiro-tallerSert.jpg.webp", "canLis.jpg.webp", "clubNauticFormentera.jpg.webp"
         c.setImatges(processing, nomsCarrousel);
-        c.setButtons(processing, "data/next.png", "data/back.png");
-        c.checkCursor(processing);
-        c.chekButtons(processing);
+        c.setButtons(processing, "2048px-Back_Arrow.svg.png", "Next_Arrow.svg.png");
+        c.setTimer(processing, 7, 70);
 
         //GENERAL
         bLogo = new ButtonWords(processing, "LOGO", Setup.logoDistH, Setup.logoDistV, Setup.logoW, Setup.logoH, 0, "CORNER");
@@ -91,7 +94,6 @@ boolean menuOpen = false;
 
 
     //DIFERENTS ZONES
-
     public void drawLateralBar(PApplet processing){
         processing.pushStyle();
         processing.fill(219, 217, 209);
@@ -221,11 +223,8 @@ processing.text(text, 1040, processing.height/2 + 150);
         b3.display(processing);
         b4.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, "Imatges");
+        c.display(processing);
         bLogo.display(processing);
-        //c.display(processing);
-        /*x = processing.loadImage("data/audtitori-de-manacor.jpg");
-        processing.imageMode(processing.CENTER);
-        processing.image(x, processing.width/2, processing.height/2, 400, 400);*/
         if(menuOpen){
             drawLateralBar(processing);
             bAccount.setEnces(false);
@@ -240,6 +239,7 @@ processing.text(text, 1040, processing.height/2 + 150);
             b3.setEnces(true);
             b4.setEnces(true);
         }
+        processing.popStyle();
     }
 
     public void drawLogin(PApplet processing){
@@ -286,6 +286,7 @@ processing.text(text, 1040, processing.height/2 + 150);
     }
 
     public void drawMap(PApplet processing){
+        processing.pushStyle();
         processing.background(0xFFDBD9D1);
         drawLines(processing);
         drawBanner(processing);
@@ -302,9 +303,11 @@ processing.text(text, 1040, processing.height/2 + 150);
             bLogo.setEnces(true);
             bAccount.setEnces(true);
         }
+        processing.popStyle();
     }
 
     public void drawBuilding(PApplet processing){
+        processing.pushStyle();
         processing.background(0xFFDBD9D1);
         drawLines(processing);
         drawBanner(processing);
@@ -321,9 +324,11 @@ processing.text(text, 1040, processing.height/2 + 150);
             bLogo.setEnces(true);
             bAccount.setEnces(true);
         }
+        processing.popStyle();
     }
 
     public void drawNewBuilding(PApplet processing){
+        processing.pushStyle();
         processing.background(0xFFDBD9D1);
         drawLines(processing);
         drawBanner(processing);
@@ -340,9 +345,11 @@ processing.text(text, 1040, processing.height/2 + 150);
             bLogo.setEnces(true);
             bAccount.setEnces(true);
         }
+        processing.popStyle();
     }
 
     public void drawArchive(PApplet processing){
+        processing.pushStyle();
         processing.background(0xFFDBD9D1);
         drawLines(processing);
         drawBanner(processing);
@@ -359,9 +366,11 @@ processing.text(text, 1040, processing.height/2 + 150);
             bLogo.setEnces(true);
             bAccount.setEnces(true);
         }
+        processing.popStyle();
     }
 
     public void drawCreate(PApplet processing){
+        processing.pushStyle();
         processing.background(0xFFDBD9D1);
         drawLines(processing);
         drawBanner(processing);
@@ -380,9 +389,11 @@ processing.text(text, 1040, processing.height/2 + 150);
             bLogo.setEnces(true);
             bAccount.setEnces(true);
         }
+        processing.popStyle();
     }
 
     public void drawSaveCreation(PApplet processing){
+        processing.pushStyle();
         processing.background(0xFFDBD9D1);
         drawLines(processing);
         drawBanner(processing);
@@ -399,11 +410,13 @@ processing.text(text, 1040, processing.height/2 + 150);
             bLogo.setEnces(true);
             bAccount.setEnces(true);
         }
+        processing.popStyle();
     }
     public void drawCreateFullScreen(PApplet processing){
+        processing.pushStyle();
         processing.background(0xFFDBD9D1);
         processing.rect(Setup.edgeH, Setup.edgeV, 670, processing.height - 2*Setup.edgeV, 10);
         bMenosCreate.display(processing);
+        processing.popStyle();
     }
-
 }

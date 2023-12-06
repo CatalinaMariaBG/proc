@@ -6,8 +6,6 @@ import botonsAPP.CarrouselFoto;
 public class Trivio003 extends PApplet {
 
     GUI gui;
-    CarrouselFoto c;
-
 
     public static void main(String[] args){
         PApplet.main("zonesAPP.Trivio003", args);
@@ -50,9 +48,9 @@ public class Trivio003 extends PApplet {
                 break;
         }
 
-        //Botons TextField LogIn
-        /*gui.bName.text = "USER NAME: ";
-        gui.bPassword.text = "PASSWORD: ";*/
+        if(gui.screenActual == GUI.SCREEN.INICIAL){
+            gui.c.checkTimer(this);
+        }
     }
 
     //Keyboard interaction
@@ -62,6 +60,8 @@ public class Trivio003 extends PApplet {
         if(gui.screenActual == GUI.SCREEN.LOGIN) {
             gui.bName.keyPressed(key, (int) keyCode);
             gui.bPassword.keyPressed(key, keyCode);
+        } else if(gui.screenActual == GUI.SCREEN.INICIAL){
+            gui.c.checkKey(this);
         }
     }
 
@@ -107,6 +107,8 @@ public class Trivio003 extends PApplet {
                     gui.menuOpen = false;
                 }
             }
+            gui.c.chekButtons(this);
+            gui.c.checkCursor(this);
         } else if(gui.screenActual == GUI.SCREEN.MYACCOUNT){
              if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
@@ -296,8 +298,10 @@ public class Trivio003 extends PApplet {
             }
 
             cursorHandMode(this);
+            //BOTONS TEXTFIELD
             gui.bName.pressedTrue(this);
             gui.bPassword.pressedTrue(this);
+
         }
 
     public void mouseDragged(){

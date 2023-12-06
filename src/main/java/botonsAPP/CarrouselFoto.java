@@ -2,7 +2,6 @@ package botonsAPP;
 
 import processing.core.PApplet;
 import processing.core.PImage;
-import java.util.concurrent.TimeUnit;
 public class CarrouselFoto {
 
     float x, y, w, h;
@@ -18,6 +17,8 @@ public class CarrouselFoto {
     PImage[] imatges;
 
     ButtonPhotos bAnterior, bPost;
+
+    Timer timer;
 
     public CarrouselFoto(int x, int y, float w, int h, int visibles){
         this.x = x; this.y = y; this.w = w; this.h = h;
@@ -37,14 +38,18 @@ public class CarrouselFoto {
 
     public void setButtons(PApplet processing, String img1, String img2){
         PImage imgAnt = processing.loadImage(img1);
-        bAnterior = new ButtonPhotos(processing, imgAnt, x, y + h/2, 30);
+        bAnterior = new ButtonPhotos(processing, imgAnt, x, y + h/2, 40);
 
         PImage imgPost = processing.loadImage(img2);
-        bPost = new ButtonPhotos(processing, imgPost, x + w, y + h/2, 30);
+        bPost = new ButtonPhotos(processing, imgPost, x + w, y + h/2, 40);
+    }
+
+    public void setTimer(PApplet processing, int numberSecondsToChange, int numberSF){
+        this.timer = new Timer(processing, numberSecondsToChange, numberSF);
     }
 
     public void seguent(){
-        if(this.imatgeActual<this.numImatgesTotal - this.numImatgesVisible){
+        if(this.imatgeActual < this.numImatgesTotal - this.numImatgesVisible){
             this.imatgeActual++;
         }
     }
@@ -56,9 +61,9 @@ public class CarrouselFoto {
     }
 
     public void chekButtons(PApplet processing){
-        if(bPost.mouseIntoButton(processing)&& bPost.ences){
+        if( (bPost.mouseIntoButton(processing)) && bPost.ences){
             this.seguent();
-        } else if(bAnterior.mouseIntoButton(processing) && bAnterior.ences){
+        } else if( (bAnterior.mouseIntoButton(processing)) && bAnterior.ences){
             this.anterior();
         }
     }
@@ -71,10 +76,25 @@ public class CarrouselFoto {
         }
         return false;
     }
+
+    public void checkKey(PApplet processing){
+        if(processing.keyCode == processing.RIGHT){
+            seguent();
+        } else if(processing.keyCode == processing.LEFT){
+            anterior();
+        }
+    }
+
+    public void checkTimer(PApplet processing){
+        if(timer.timeOver()){
+            seguent();
+        }
+        timer.update(processing);
+    }
     public void display(PApplet processing){
         processing.pushStyle();
-        processing.fill(0); processing.noStroke();
-        processing.rect(x-5, y-5, w + 10, h + 10);
+        processing.fill(0xFF8E8E90); processing.noStroke();
+        processing.rect(x-5, y-5, w + 10, h + 10, 10);
 
         for(int i = 0; i<this.numImatgesVisible; i++){
             int contador = i + this.imatgeActual;
