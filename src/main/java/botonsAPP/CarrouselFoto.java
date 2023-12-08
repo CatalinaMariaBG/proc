@@ -44,8 +44,8 @@ public class CarrouselFoto {
         bPost = new ButtonPhotos(processing, imgPost, x + w, y + h/2, 40);
     }
 
-    public void setTimer(PApplet processing, int numberSecondsToChange, int numberSF){
-        this.timer = new Timer(processing, numberSecondsToChange, numberSF);
+    public void setTimer(PApplet processing, int numberSecondsToChange){
+        this.timer = new Timer(processing, numberSecondsToChange);
     }
 
     public void seguent(){
@@ -55,16 +55,20 @@ public class CarrouselFoto {
     }
 
     public void anterior(){
-        if(this.imatgeActual>0){
+        if(this.imatgeActual > 0){
             this.imatgeActual--;
         }
     }
 
-    public void chekButtons(PApplet processing){
-        if( (bPost.mouseIntoButton(processing)) && bPost.ences){
+    public boolean chekButtons(PApplet processing){
+        if( bPost.mouseIntoButton(processing) && bPost.ences){
             this.seguent();
-        } else if( (bAnterior.mouseIntoButton(processing)) && bAnterior.ences){
+            return true;
+        } else if( bAnterior.mouseIntoButton(processing) && bAnterior.ences){
             this.anterior();
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -77,11 +81,15 @@ public class CarrouselFoto {
         return false;
     }
 
-    public void checkKey(PApplet processing){
+    public boolean checkKey(PApplet processing){
         if(processing.keyCode == processing.RIGHT){
             seguent();
+            return true;
         } else if(processing.keyCode == processing.LEFT){
             anterior();
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -91,12 +99,16 @@ public class CarrouselFoto {
         }
         timer.update(processing);
     }
+
     public void display(PApplet processing){
         processing.pushStyle();
         processing.fill(0xFF8E8E90); processing.noStroke();
         processing.rect(x-5, y-5, w + 10, h + 10, 10);
-
         for(int i = 0; i<this.numImatgesVisible; i++){
+            if(imatgeActual == noms.length-1){
+                i = 0;
+                imatgeActual = 0;
+            }
             int contador = i + this.imatgeActual;
             float xPos = x + i*(this.imgW + this.margeH);
 

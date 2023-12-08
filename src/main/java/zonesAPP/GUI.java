@@ -13,14 +13,14 @@ import botonsAPP.ButtonPhotos;
 
 import botonsAPP.ButtonInsertText;
 
-import botonsAPP.Timer;
+import botonsAPP.TextList;
 
 //mesures: 1440, 900
 public class GUI {
 
     PImage imgAccount, imgFullCreate, imgMenosCreate, x;
 
-    ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding, bInici, bNProjects, bLogOut;
+    ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding, bInici, bNProjects, bLogOut, bTlist;
 
     ButtonPhotos bAccount, bFullCreate, bMenosCreate;
 
@@ -33,7 +33,8 @@ public class GUI {
     CarrouselFoto c;
     String[] nomsCarrousel;
 
-    Timer timer;
+    TextList list;
+    String[][] valuesTextList;
 
 boolean menuOpen = false;
     public GUI(PApplet processing){
@@ -55,7 +56,7 @@ boolean menuOpen = false;
         //, "fundacioMiro-tallerSert.jpg.webp", "canLis.jpg.webp", "clubNauticFormentera.jpg.webp"
         c.setImatges(processing, nomsCarrousel);
         c.setButtons(processing, "2048px-Back_Arrow.svg.png", "Next_Arrow.svg.png");
-        c.setTimer(processing, 7, 70);
+        c.setTimer(processing, 10);
 
         //GENERAL
         bLogo = new ButtonWords(processing, "LOGO", Setup.logoDistH, Setup.logoDistV, Setup.logoW, Setup.logoH, 0, "CORNER");
@@ -90,6 +91,11 @@ boolean menuOpen = false;
         // BOTONS ACCOUNT
         bNProjects = new ButtonWords(processing, "SEE PROJECTS", processing.width/2 - 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
         bLogOut = new ButtonWords(processing, "LOG OUT", processing.width/2 + 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
+
+        // BOTONS MAP
+        valuesTextList = new String[][]{{"0", "Tipografia 1"}, {"1", "LADRILLO"}, {"2", "CASA"}, {"3", "PÚBLIC"}};
+        bTlist = new ButtonWords(processing, "Tipografia", processing.width/2 - 50, processing.height/2, 100, 80, 10, "CORNER");
+        //list = new TextList(processing, valuesTextList, processing.width/8, processing.height/12, 600, 60, );
     }
 
 
@@ -211,7 +217,6 @@ processing.text(text, 1040, processing.height/2 + 150);
     }
 
     //PANTALLES
-
     public void drawInicial(PApplet processing){
         processing.background(219, 217, 209);
         processing.pushStyle();

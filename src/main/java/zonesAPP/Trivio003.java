@@ -1,7 +1,6 @@
 package zonesAPP;
 
 import processing.core.PApplet;
-import botonsAPP.CarrouselFoto;
 
 public class Trivio003 extends PApplet {
 

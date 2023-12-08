@@ -10,13 +10,10 @@ public class Timer {
     int numSeconds;
     int lastSecond;
 
-    int numberSecondsToChangeFirst;
-
-    public Timer(PApplet processing, int numberS, int numberSF){
+    public Timer(PApplet processing, int numberS){
         this.numSecondsToChange = numberS;
         this.numSeconds = 0;
         this.lastSecond = processing.millis();
-        this.numberSecondsToChangeFirst = numberSF;
     }
 
     public void update(PApplet processing){
@@ -34,4 +31,9 @@ public class Timer {
     public boolean timeOver(){
         return (numSeconds >= numSecondsToChange);
     }
+
+    public void stopTimer(PApplet processing) {
+processing.delay(1000);
+    }
 }
+
