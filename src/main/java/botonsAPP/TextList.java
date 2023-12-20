@@ -2,7 +2,6 @@ package botonsAPP;
 
 import java.util.ArrayList;
 import processing.core.PApplet;
-import java.util.Scanner;
 
 public class TextList {
     float x, y, w, h;

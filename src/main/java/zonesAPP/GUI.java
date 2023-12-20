@@ -218,9 +218,8 @@ processing.text(text, 1040, processing.height/2 + 150);
 
     //PANTALLES
     public void drawInicial(PApplet processing){
-        processing.background(219, 217, 209);
         processing.pushStyle();
-        processing.background(0xFFDBD9D1);
+        processing.background(219, 217, 209);
         drawBanner(processing);
         bAccount.display(processing);
        b1.display(processing);
@@ -233,12 +232,14 @@ processing.text(text, 1040, processing.height/2 + 150);
         if(menuOpen){
             drawLateralBar(processing);
             bAccount.setEnces(false);
+            bLogo.setEnces(false);
             b1.setEnces(false);
             b2.setEnces(false);
             b3.setEnces(false);
             b4.setEnces(false);
         } else{
             bAccount.setEnces(true);
+            bLogo.setEnces(true);
             b1.setEnces(true);
             b2.setEnces(true);
             b3.setEnces(true);

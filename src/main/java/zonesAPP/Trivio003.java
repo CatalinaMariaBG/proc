@@ -62,10 +62,34 @@ public class Trivio003 extends PApplet {
         } else if(gui.screenActual == GUI.SCREEN.INICIAL){
             gui.c.checkKey(this);
         }
+        if(gui.screenActual == GUI.SCREEN.LOGIN && keyCode == '1'){
+            gui.screenActual = GUI.SCREEN.INICIAL;
+        }
     }
 
     //MOUSE INTERACTION
     public void mousePressed(){
+
+        if(gui.menuOpen){
+            if(gui.bLateralBar.mouseIntoButton(this)){
+                gui.menuOpen = false;
+            } else if(gui.bCreate.mouseIntoButton(this)){
+                gui.screenActual = GUI.SCREEN.CREATE;
+                gui.menuOpen = false;
+            } else if(gui.bMap.mouseIntoButton(this)) {
+                gui.screenActual = GUI.SCREEN.MAP;
+                gui.menuOpen = false;
+            } else if(gui.bArchive.mouseIntoButton(this)) {
+                gui.screenActual = GUI.SCREEN.ARCHIVE;
+                gui.menuOpen = false;
+            } else if(gui.bNewBuilding.mouseIntoButton(this)) {
+                gui.screenActual = GUI.SCREEN.NEWBUILDING;
+                gui.menuOpen = false;
+            } else if(gui.bInici.mouseIntoButton(this)){
+                gui.screenActual = GUI.SCREEN.INICIAL;
+                gui.menuOpen = false;
+            }
+        }
 
         if(gui.screenActual == GUI.SCREEN.LOGIN){
             comprovaLogin();
@@ -86,26 +110,6 @@ public class Trivio003 extends PApplet {
             } else if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
             }
-            if(gui.menuOpen){
-                if(gui.bLateralBar.mouseIntoButton(this)){
-                    gui.menuOpen = false;
-                } else if(gui.bCreate.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.CREATE;
-                    gui.menuOpen = false;
-                } else if(gui.bMap.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.MAP;
-                    gui.menuOpen = false;
-                } else if(gui.bArchive.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.ARCHIVE;
-                    gui.menuOpen = false;
-                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
-                    gui.menuOpen = false;
-                } else if(gui.bInici.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.INICIAL;
-                    gui.menuOpen = false;
-                }
-            }
             gui.c.chekButtons(this);
             gui.c.checkCursor(this);
         } else if(gui.screenActual == GUI.SCREEN.MYACCOUNT){
@@ -118,97 +122,17 @@ public class Trivio003 extends PApplet {
                gui.bName.text = gui.bName.textoEstatico;
                gui.bPassword.text = gui.bPassword.textoEstatico;
             }
-            if(gui.menuOpen){
-                if(gui.bLateralBar.mouseIntoButton(this)){
-                    gui.menuOpen = false;
-                } else if(gui.bCreate.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.CREATE;
-                    gui.menuOpen = false;
-                } else if(gui.bMap.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.MAP;
-                    gui.menuOpen = false;
-                } else if(gui.bArchive.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.ARCHIVE;
-                    gui.menuOpen = false;
-                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
-                    gui.menuOpen = false;
-                } else if(gui.bInici.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.INICIAL;
-                    gui.menuOpen = false;
-                }
-            }
         } else if(gui.screenActual == GUI.SCREEN.MAP){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-            }
-            if(gui.menuOpen){
-                if(gui.bLateralBar.mouseIntoButton(this)){
-                    gui.menuOpen = false;
-                } else if(gui.bCreate.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.CREATE;
-                    gui.menuOpen = false;
-                } else if(gui.bMap.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.MAP;
-                    gui.menuOpen = false;
-                } else if(gui.bArchive.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.ARCHIVE;
-                    gui.menuOpen = false;
-                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
-                    gui.menuOpen = false;
-                } else if(gui.bInici.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.INICIAL;
-                    gui.menuOpen = false;
-                }
             }
         } else if(gui.screenActual == GUI.SCREEN.BUILDING){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
             }
-            if(gui.menuOpen){
-                if(gui.bLateralBar.mouseIntoButton(this)){
-                    gui.menuOpen = false;
-                } else if(gui.bCreate.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.CREATE;
-                    gui.menuOpen = false;
-                } else if(gui.bMap.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.MAP;
-                    gui.menuOpen = false;
-                } else if(gui.bArchive.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.ARCHIVE;
-                    gui.menuOpen = false;
-                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
-                    gui.menuOpen = false;
-                } else if(gui.bInici.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.INICIAL;
-                    gui.menuOpen = false;
-                }
-            }
         } else if(gui.screenActual == GUI.SCREEN.NEWBUILDING){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-            }
-            if(gui.menuOpen){
-                if(gui.bLateralBar.mouseIntoButton(this)){
-                    gui.menuOpen = false;
-                } else if(gui.bCreate.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.CREATE;
-                    gui.menuOpen = false;
-                } else if(gui.bMap.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.MAP;
-                    gui.menuOpen = false;
-                } else if(gui.bArchive.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.ARCHIVE;
-                    gui.menuOpen = false;
-                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
-                    gui.menuOpen = false;
-                } else if(gui.bInici.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.INICIAL;
-                    gui.menuOpen = false;
-                }
             }
         } else if(gui.screenActual == GUI.SCREEN.CREATE){
             if(gui.bAccount.mouseIntoButton(this)){
@@ -216,49 +140,9 @@ public class Trivio003 extends PApplet {
             } else if(gui.bFullCreate.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.CREATEFULLSCREEN;
             }
-            if(gui.menuOpen){
-                if(gui.bLateralBar.mouseIntoButton(this)){
-                    gui.menuOpen = false;
-                } else if(gui.bCreate.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.CREATE;
-                    gui.menuOpen = false;
-                } else if(gui.bMap.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.MAP;
-                    gui.menuOpen = false;
-                } else if(gui.bArchive.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.ARCHIVE;
-                    gui.menuOpen = false;
-                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
-                    gui.menuOpen = false;
-                } else if(gui.bInici.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.INICIAL;
-                    gui.menuOpen = false;
-                }
-            }
         } else if(gui.screenActual == GUI.SCREEN.SAVECREATION){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-            }
-            if(gui.menuOpen){
-                if(gui.bLateralBar.mouseIntoButton(this)){
-                    gui.menuOpen = false;
-                } else if(gui.bCreate.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.CREATE;
-                    gui.menuOpen = false;
-                } else if(gui.bMap.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.MAP;
-                    gui.menuOpen = false;
-                } else if(gui.bArchive.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.ARCHIVE;
-                    gui.menuOpen = false;
-                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
-                    gui.menuOpen = false;
-                } else if(gui.bInici.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.INICIAL;
-                    gui.menuOpen = false;
-                }
             }
         } else if(gui.screenActual == GUI.SCREEN.CREATEFULLSCREEN){
             if(gui.bMenosCreate.mouseIntoButton(this)) {
@@ -268,31 +152,12 @@ public class Trivio003 extends PApplet {
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
             }
-            if(gui.menuOpen){
-                if(gui.bLateralBar.mouseIntoButton(this)){
-                    gui.menuOpen = false;
-                } else if(gui.bCreate.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.CREATE;
-                    gui.menuOpen = false;
-                } else if(gui.bMap.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.MAP;
-                    gui.menuOpen = false;
-                } else if(gui.bArchive.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.ARCHIVE;
-                    gui.menuOpen = false;
-                } else if(gui.bNewBuilding.mouseIntoButton(this)) {
-                    gui.screenActual = GUI.SCREEN.NEWBUILDING;
-                    gui.menuOpen = false;
-                } else if(gui.bInici.mouseIntoButton(this)){
-                    gui.screenActual = GUI.SCREEN.INICIAL;
-                    gui.menuOpen = false;
-                }
-            }
         }
 
             if(gui.bLogo.mouseIntoButton(this)){
                 gui.menuOpen = true;
-            } else if(gui.bLateralBar.mouseIntoButton(this)){
+            }
+            if(gui.bLateralBar.mouseIntoButton(this)){
                 gui.menuOpen = false;
             }
 
@@ -312,7 +177,7 @@ public class Trivio003 extends PApplet {
     }
 
     public void comprovaLogin(){
-if(gui.bEnterAccount.mouseIntoButton(this) && gui.bName.text.equals("Name: catalina maria") && gui.bPassword.text.equals("Password: 12345")){
+if(gui.bEnterAccount.mouseIntoButton(this) && gui.bName.text.equals("Name: catalina maria") && gui.bPassword.text.equals("Password: cccc")){
     gui.screenActual = GUI.SCREEN.INICIAL;
     gui.menuOpen = false;
 }
