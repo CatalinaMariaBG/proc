@@ -1,26 +1,19 @@
 package zonesAPP;
 
-import botonsAPP.CarrouselFoto;
+import botonsAPP.*;
 import processing.core.PApplet;
 
 import processing.core.PImage;
 
 import setupAPP.Setup;
 
-import botonsAPP.ButtonWords;
-
-import botonsAPP.ButtonPhotos;
-
-import botonsAPP.ButtonInsertText;
-
-import botonsAPP.TextList;
-
 //mesures: 1440, 900
 public class GUI {
 
     PImage imgAccount, imgFullCreate, imgMenosCreate, x;
 
-    ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding, bInici, bNProjects, bLogOut, bTlist;
+    ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding,
+    bInici, bNProjects, bLogOut, bTlist, bAddBuild, bSaveC, bSaveCfull, bAddImage;
 
     ButtonPhotos bAccount, bFullCreate, bMenosCreate;
 
@@ -31,10 +24,12 @@ public class GUI {
     public SCREEN screenActual;
 
     CarrouselFoto c;
-    String[] nomsCarrousel;
+    String[] nomsCarrousel, tipusDibuix, tipusPlantilla;
 
     TextList list;
     String[][] valuesTextList;
+
+    ButtonSelect selectDraw, selectPlantilla;
 
 boolean menuOpen = false;
     public GUI(PApplet processing){
@@ -42,14 +37,10 @@ boolean menuOpen = false;
         screenActual = SCREEN.LOGIN;
 
         //INICIAL
-        b1 = new ButtonWords(processing, "CREATE", 190, Setup.yButtonInicial, 180, 80, 10, "CORNER");
-        b2 = new ButtonWords(processing, "MAP", 490, Setup.yButtonInicial, 180, 80, 10, "CORNER");
-        b3 = new ButtonWords(processing , "ARCHIVE", 790, Setup.yButtonInicial, 180, 80, 10, "CORNER");
-        b4 = new ButtonWords(processing, "NEW BUILDING", 1090, Setup.yButtonInicial, 180, 80, 10, "CORNER");
-        b1.mouseIntoButton(processing);
-        b2.mouseIntoButton(processing);
-        b3.mouseIntoButton(processing);
-        b4.mouseIntoButton(processing);
+        b1 = new ButtonWords(processing, "CREAR", 190, Setup.yButtonInicial, 180, 80, 10, "CORNER");
+        b2 = new ButtonWords(processing, "MAPA", 490, Setup.yButtonInicial, 180, 80, 10, "CORNER");
+        b3 = new ButtonWords(processing , "ARXIUS", 790, Setup.yButtonInicial, 180, 80, 10, "CORNER");
+        b4 = new ButtonWords(processing, "NOU EDIFICI", 1090, Setup.yButtonInicial, 180, 80, 10, "CORNER");
 
        c = new CarrouselFoto(80, 310, processing.width - 2*Setup.logoW, 580, 2);
         nomsCarrousel = new String[]{ "auditori-de-manacor.jpg", "edificiCasasayas.jpeg","casalBalaguer.jpg", "MACE.jpg", "ciudadBlanca.jpg"};
@@ -57,7 +48,6 @@ boolean menuOpen = false;
         c.setImatges(processing, nomsCarrousel);
         c.setButtons(processing, "2048px-Back_Arrow.svg.png", "Next_Arrow.svg.png");
         c.setTimer(processing, 10);
-
         //GENERAL
         bLogo = new ButtonWords(processing, "LOGO", Setup.logoDistH, Setup.logoDistV, Setup.logoW, Setup.logoH, 0, "CORNER");
             bLogo.setFillColor(0xFFF4562A);
@@ -65,7 +55,7 @@ boolean menuOpen = false;
         bAccount = new ButtonPhotos(processing, imgAccount, processing.width - Setup.logoDistH - Setup.logoW/2, Setup.logoDistV + Setup.logoH/2, Setup.logoW);
 
         //BOTONS LOGIN
-        bEnterAccount = new ButtonWords(processing, "ENTER", processing.width/2 - 150, processing.height/2 + 225, 300, 60, 10, "CORNER");
+        bEnterAccount = new ButtonWords(processing, "LOG IN", processing.width/2 - 150, processing.height/2 + 225, 300, 60, 10, "CORNER");
             bEnterAccount.setFillColor(0xFFF4562A);
             bEnterAccount.mouseIntoButton(processing);
         bName = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 50, 450, 60, "Name: ", 16);
@@ -75,27 +65,40 @@ boolean menuOpen = false;
         bLateralBar = new ButtonWords(processing, "LOGO", 160 - Setup.logoW/2, Setup.logoDistV, Setup.logoW, Setup.logoH, 0, "CORNER");
             bLateralBar.mouseIntoButton(processing);
             bInici = new ButtonWords(processing, "INICI", Setup.edgeH, Setup.edgeV + Setup.logoW + 100, 280, 80, 10, "CORNER");
-        bCreate = new ButtonWords(processing, "CREATE", Setup.edgeH, Setup.edgeV + Setup.logoW + 250 , 280, 80, 10, "CORNER");
-        bMap = new ButtonWords(processing, "MAP", Setup.edgeH, Setup.edgeV + Setup.logoW + 400, 280, 80, 10, "CORNER");
-        bArchive = new ButtonWords(processing, "ARCHIVE", Setup.edgeH, Setup.edgeV + Setup.logoW + 550, 280, 80, 10, "CORNER");
-        bNewBuilding = new ButtonWords(processing, "NEW BUILDING", Setup.edgeH, Setup.edgeV + Setup.logoW + 700, 280, 80, 10, "CORNER");
+        bCreate = new ButtonWords(processing, "CREAR", Setup.edgeH, Setup.edgeV + Setup.logoW + 250 , 280, 80, 10, "CORNER");
+        bMap = new ButtonWords(processing, "MAPA", Setup.edgeH, Setup.edgeV + Setup.logoW + 400, 280, 80, 10, "CORNER");
+        bArchive = new ButtonWords(processing, "ARXIUS", Setup.edgeH, Setup.edgeV + Setup.logoW + 550, 280, 80, 10, "CORNER");
+        bNewBuilding = new ButtonWords(processing, "NOU EDIFICI", Setup.edgeH, Setup.edgeV + Setup.logoW + 700, 280, 80, 10, "CORNER");
 
         //BOTONS CREATE
         imgFullCreate = processing.loadImage("data/fullScreen.png");
         bFullCreate = new ButtonPhotos(processing, imgFullCreate, Setup.fullScreenX, Setup.fullScreenY, Setup.fullScreenW);
         bFullCreate.setColors(255, 0,0xFFDBD9D1);
         imgMenosCreate = processing.loadImage("data/menosScreen.png");
-        bMenosCreate = new ButtonPhotos(processing, imgMenosCreate, processing.width - 2* Setup.edgeH, processing.height - 2* Setup.edgeV, Setup.fullScreenW);
+        bMenosCreate = new ButtonPhotos(processing, imgMenosCreate, processing.width - 3* Setup.edgeH, processing.height - 3* Setup.edgeV, Setup.fullScreenW);
         bMenosCreate.setColors(255, 0,0xFFDBD9D1);
+        bSaveC = new ButtonWords(processing, "GUARDAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 820, 300, 30, 10, "CORNER");
+        tipusDibuix = new String[]{"DIBUIXA","CERCLE", "QUADRAT", "LÍNIA"};
+        selectDraw = new ButtonSelect(tipusDibuix, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 350, (float)192.5, 60, "DIBUIXA");
+        bAddImage = new ButtonWords(processing, "AFEGEIX IMATGE", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, 400, 60, 10, "CORNER");
+        bAddImage.setFillColor(processing.color(219, 217, 209));
+        tipusPlantilla = new String[]{"DUES CASELLES", "QUATRE CASELLES", "SIS CASELLES", "LLIURE"};
+        selectPlantilla = new ButtonSelect(tipusPlantilla, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, 400, 60, "PLANTILLA");
+
+        //BOTONS CREATE FULL SCREEN
+        bSaveCfull = new ButtonWords(processing, "SAVE", Setup.edgeH + 50, 800, 250, 80, 10, "CORNER");
 
         // BOTONS ACCOUNT
         bNProjects = new ButtonWords(processing, "SEE PROJECTS", processing.width/2 - 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
         bLogOut = new ButtonWords(processing, "LOG OUT", processing.width/2 + 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
 
         // BOTONS MAP
-        valuesTextList = new String[][]{{"0", "Tipografia 1"}, {"1", "LADRILLO"}, {"2", "CASA"}, {"3", "PÚBLIC"}};
+        /*valuesTextList = new String[][]{{"0", "Tipografia 1"}, {"1", "LADRILLO"}, {"2", "CASA"}, {"3", "PÚBLIC"}};
+        list = new TextList(processing, valuesTextList, processing.width/8, processing.height/2, 450, 60, "TIPOGRAFIA");
         bTlist = new ButtonWords(processing, "Tipografia", processing.width/2 - 50, processing.height/2, 100, 80, 10, "CORNER");
-        //list = new TextList(processing, valuesTextList, processing.width/8, processing.height/12, 600, 60, );
+        list.mouseIntoButton(processing);
+        list.buttonPressed(processing);*/
+        bAddBuild = new ButtonWords(processing, "ADD BUILDING", 1260, 375, 140, 30, 10, "CENTER");
     }
 
 
@@ -181,13 +184,13 @@ boolean menuOpen = false;
     }
 
     public void drawSecondMiddle(PApplet processing, String text){
-        processing.pushStyle();
+processing.pushStyle();
 processing.fill(0xFFDBD9D1);
-processing.rectMode(processing.CENTER);
-processing.rect(1040, processing.height/2 + 150, 600, 500, 10);
+processing.rectMode(processing.CORNER);
+processing.rect(570, 350, 770, 500, 10);
 processing.fill(0);
-processing.text(text, 1040, processing.height/2 + 150);
-        processing.popStyle();
+processing.text(text, 570+(770/2), (float) processing.height /2 + 150);
+processing.popStyle();
     }
 
     public void drawLogo(PApplet processing){
@@ -301,6 +304,20 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "MAP");
         drawNom(processing, "MAP");
+        bAddBuild.display(processing);
+        /*list.display(processing);
+        bTlist.display(processing);
+        list.update(processing);*/
+        //processing.width/2 - 50, processing.height/2, 100, 80, 10
+        //mesures: 1440, 900
+        //1040, processing.height/2 + 150, 600, 500, 10
+        processing.rectMode(processing.CORNER);
+        processing.fill(0xFFDBD9D1);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 350, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 650, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10);
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -322,6 +339,13 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "BUILDING IMAGE");
         drawNom(processing, "BUILDING INFORMATION");
+        processing.rectMode(processing.CORNER);
+        processing.fill(0xFFDBD9D1);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 350, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 650, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10);
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -343,6 +367,13 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "BUILDING IMAGE");
         drawNom(processing, "NEW BUILDING");
+        processing.rectMode(processing.CORNER);
+        processing.fill(0xFFDBD9D1);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 350, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 650, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10);
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -364,6 +395,10 @@ processing.text(text, 1040, processing.height/2 + 150);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "ELEMENTS OF THE ARCHIVE");
         drawNom(processing, "ARCHIVE");
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 350, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 500, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 600, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 700, 400, 60, 10);
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -383,10 +418,22 @@ processing.text(text, 1040, processing.height/2 + 150);
         bLogo.display(processing);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
-        drawSecondMiddle(processing, "INSPIRATIONAL WALL");
+        drawSecondMiddle(processing, "");
         drawNom(processing, "CREATE");
         processing.imageMode(processing.CENTER);
         bFullCreate.display(processing);
+        bSaveC.display(processing);
+        processing.rectMode(processing.CORNER);
+        processing.fill(0xFFDBD9D1);
+        processing.rect((float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 350F, (float)192.5, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 444, (float)192.5, 60, 10);
+        processing.rect((float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 444F, (float)192.5, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 726, 400, 60, 10);
+        bAddImage.display(processing);
+        selectDraw.display(processing);
+        selectPlantilla.display(processing);
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -421,7 +468,14 @@ processing.text(text, 1040, processing.height/2 + 150);
     public void drawCreateFullScreen(PApplet processing){
         processing.pushStyle();
         processing.background(0xFFDBD9D1);
-        processing.rect(Setup.edgeH, Setup.edgeV, 670, processing.height - 2*Setup.edgeV, 10);
+        processing.rectMode(processing.CORNER);
+        processing.rect(Setup.edgeH, Setup.edgeV, 350, 80, 10);
+        processing.rect(Setup.edgeH, 176, 350, 80, 10);
+        processing.rect(Setup.edgeH, 332, 350, 80, 10);
+        processing.rect(Setup.edgeH, 488, 350, 80, 10);
+        processing.rect(Setup.edgeH, 644, 350, 80, 10);
+        processing.rect(410, Setup.edgeV, 1010, 860, 10);
+        bSaveCfull.display(processing);
         bMenosCreate.display(processing);
         processing.popStyle();
     }

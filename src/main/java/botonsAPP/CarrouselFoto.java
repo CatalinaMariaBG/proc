@@ -1,5 +1,6 @@
 package botonsAPP;
 
+import funcionsAPP.Timer;
 import processing.core.PApplet;
 import processing.core.PImage;
 public class CarrouselFoto {
@@ -48,6 +49,10 @@ public class CarrouselFoto {
         this.timer = new Timer(processing, numberSecondsToChange);
     }
 
+    public void setStart(PApplet processing){
+        this.timer.start(processing);
+    }
+
     public void seguent(){
         if(this.imatgeActual < this.numImatgesTotal - this.numImatgesVisible){
             this.imatgeActual++;
@@ -61,7 +66,7 @@ public class CarrouselFoto {
     }
 
     public boolean chekButtons(PApplet processing){
-        if( bPost.mouseIntoButton(processing) && bPost.ences){
+        if(bPost.mouseIntoButton(processing) && bPost.ences){
             this.seguent();
             return true;
         } else if( bAnterior.mouseIntoButton(processing) && bAnterior.ences){

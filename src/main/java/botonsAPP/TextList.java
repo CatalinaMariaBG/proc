@@ -32,7 +32,7 @@ public class TextList {
         this.buttons = new ArrayList<ButtonWords>();
     }
 
-    boolean mouseIntoButton(PApplet processing){
+    public boolean mouseIntoButton(PApplet processing){
         for(ButtonWords b : buttons){
             if(b.mouseIntoButton(processing)){
                 return true;
@@ -41,7 +41,7 @@ public class TextList {
         return false;
     }
 
-    void buttonPressed(PApplet processing){
+    public void buttonPressed(PApplet processing){
         boolean pressed = false;
         for(ButtonWords b : buttons){
             if(b.mouseIntoButton(processing)){
@@ -65,15 +65,7 @@ public class TextList {
         processing.popStyle();
     }
 
-    public String getValueSelected(){
-        return this.valueSelected;
-    }
-
-    public ButtonInsertText getTextField(){
-        return this.textField;
-    }
-
-    void update(PApplet processing){
+    public void update(PApplet processing){
         String searchFor = this.textField.text;
         System.out.println("SEARCH FOR: "+searchFor);
 
