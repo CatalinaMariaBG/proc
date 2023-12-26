@@ -31,9 +31,15 @@ public class GUI {
 
     ButtonSelect selectDraw, selectPlantilla;
 
-    int standardSize = 10;
+    int standardSize = 5;
     int colour = 0;
-    int plus, minus, xLine, yLine;
+    float size = 5;
+    float xLine, yLine;
+
+    ButtonSlide bSizeDraw;
+
+    MosaicColors paletaColors;
+    int[] colorsPaleta;
 
 boolean menuOpen = false;
     public GUI(PApplet processing){
@@ -88,6 +94,10 @@ boolean menuOpen = false;
         bAddImage.setFillColor(processing.color(219, 217, 209));
         tipusPlantilla = new String[]{"DUES CASELLES", "QUATRE CASELLES", "SIS CASELLES", "LLIURE"};
         selectPlantilla = new ButtonSelect(tipusPlantilla, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, 400, 60, "PLANTILLA");
+        bSizeDraw = new ButtonSlide(processing, "MIDA", (float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 350F, (float)192.5, 60F, standardSize, 50,10);
+        paletaColors = new MosaicColors(processing.width/2, processing.height/2, 500, 400, 5, 4);
+        colorsPaleta = new int[]{100, 30, 22};
+        paletaColors.setColors(processing, colorsPaleta );
 
         //BOTONS CREATE FULL SCREEN
         bSaveCfull = new ButtonWords(processing, "SAVE", Setup.edgeH + 50, 800, 250, 80, 10, "CORNER");
@@ -223,39 +233,64 @@ processing.popStyle();
         processing.text("Number of projects: ", processing.width/2 -220, processing.height/2 + 150);
     }
 
-    //UTILITATS
-
     //CREATE FUNCIÓ DE DIBUIXAR LÍNIES...
     public void updateDraw(PApplet processing, ButtonSelect b){
-        if(mouseIntoCreate(processing, 570, 350, 770, 500)){ //Coordenades del SecondMiddle
+        if(mouseIntoCreate(processing, 570, 350, 770, 500) && processing.mousePressed){ //Coordenades del SecondMiddle
             if(b.valorSelected.equals("CERCLE")){
                 cercle(processing);
+                bFullCreate.setEnces(false);
             }  else if(b.valorSelected.equals("QUADRAT")){
                 quadrat(processing);
+                bFullCreate.setEnces(false);
             } else if(b.valorSelected.equals("LÍNIA")){
                 line(processing);
+                bFullCreate.setEnces(false);
+            } else{
+                bFullCreate.setEnces(true);
             }
         }
     }
     public void cercle(PApplet processing){
         processing.fill(colour);
-        processing.ellipse(processing.mouseX, processing.mouseY, standardSize + plus - minus, standardSize + plus - minus);
+        processing.ellipse(processing.mouseX, processing.mouseY, size, size);
     }
     public void quadrat(PApplet processing){
         processing.fill(colour);
-        processing.rect(processing.mouseX, processing.mouseY, standardSize + plus - minus, standardSize + plus - minus);
+        processing.rect(processing.mouseX, processing.mouseY, size, size);
     }
     public void line(PApplet processing){
         processing.pushStyle();
         processing.fill(colour);
         processing.stroke(colour);
-        processing.strokeWeight(3 + plus - minus);
+        processing.strokeWeight(size);
         processing.line(xLine, yLine, processing.mouseX, processing.mouseY);
         processing.popStyle();
     }
 
     public boolean mouseIntoCreate(PApplet processing, float x, float y, float w, float h){
         return processing.mouseX >= x && processing.mouseX <= x + w && processing.mouseY >= y && processing.mouseY <= y + h;
+    }
+
+    //DIBUIXAR LES PLANTILLES
+    public void updatePlantilla(PApplet processing, ButtonSelect b){
+        processing.pushStyle();
+        processing.stroke(0); processing.strokeWeight(2);
+        if(b.valorSelected == "DUES CASELLES"){
+            processing.line(955, 350, 955, 850);
+        } else if(b.valorSelected == "QUATRE CASELLES"){
+            processing.line(955,350, 955, 850);
+            processing.line(570, 600, 1340, 600);
+        } else if(b.valorSelected == "SIS CASELLES"){
+            processing.line(955,350, 955, 850);
+            processing.line(570, 350 + Setup.divHsis, 1340, 350 + Setup.divHsis);
+            processing.line(570, 350 + 2*Setup.divHsis, 1340, 350 + 2*Setup.divHsis);
+        }
+        processing.popStyle();
+    }
+
+    //CANVIAR MIDA DIBUIXOS
+    public void updateSizeDraw(){
+        size = bSizeDraw.getValue();
     }
 
     //PANTALLES
@@ -464,15 +499,19 @@ processing.popStyle();
         bSaveC.display(processing);
         processing.rectMode(processing.CORNER);
         processing.fill(0xFFDBD9D1);
-        processing.rect((float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 350F, (float)192.5, 60, 10);
+        //processing.rect((float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 350F, (float)192.5, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 444, (float)192.5, 60, 10);
         processing.rect((float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 444F, (float)192.5, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 726, 400, 60, 10);
         bAddImage.display(processing);
-        selectDraw.display(processing);
         selectPlantilla.display(processing);
+        bSizeDraw.display(processing);
+        selectDraw.display(processing);
+        updatePlantilla(processing, selectPlantilla);
+        updateDraw(processing, selectDraw);
+        updateSizeDraw();
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -481,6 +520,7 @@ processing.popStyle();
             bLogo.setEnces(true);
             bAccount.setEnces(true);
         }
+
         processing.popStyle();
     }
 

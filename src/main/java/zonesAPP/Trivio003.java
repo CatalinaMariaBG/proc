@@ -62,10 +62,7 @@ public class Trivio003 extends PApplet {
             }
 
         } else if(gui.screenActual == GUI.SCREEN.CREATE){
-            if(mousePressed){
-                //updateDraw(gui.selectDraw);
-                updatePlantilla(gui.selectPlantilla);
-            } else if(imageAddedCreate !=null){
+           if(imageAddedCreate !=null){
                 //image(imageAddedCreate)
             }
         }
@@ -184,6 +181,8 @@ public class Trivio003 extends PApplet {
                     gui.selectPlantilla.update(this);
                 }
                 gui.selectPlantilla.conmutar();
+            } else if(gui.bSizeDraw.mouseIntoSlide(this)){
+                gui.bSizeDraw.checkSlider(this);
             }
 
         } else if(gui.screenActual == GUI.SCREEN.SAVECREATION){
@@ -218,13 +217,16 @@ public class Trivio003 extends PApplet {
 
         }
 
-    public void mouseDragged(){
-        println("MOUSE DRAGGED");
-    }
-
+        public void mouseDragged(){
+        if(gui.screenActual == GUI.SCREEN.CREATE && gui.bSizeDraw.mouseIntoSlide(this)){
+            gui.bSizeDraw.checkSlider(this);
+        }
+        }
     public void mouseClicked(){
-gui.xLine = mouseX;
-gui.yLine = mouseY;
+        if(gui.mouseIntoCreate(this, 570, 350, 770, 500) && gui.screenActual == GUI.SCREEN.CREATE){
+            gui.xLine = mouseX;
+            gui.yLine = mouseY;
+        }
     }
 
     public void cursorHandMode(PApplet processing){
@@ -237,25 +239,6 @@ if(gui.bEnterAccount.mouseIntoButton(this) && gui.bName.text.equals("Name: catal
     gui.menuOpen = false;
     gui.c.setStart(this);
 }
-    }
-
-    //CREATE
-
-
-    public void updatePlantilla(ButtonSelect b){
-        pushStyle();
-        stroke(0); strokeWeight(2);
-        if(b.valorSelected == "DUES CASELLES"){
-            line(955,350, 955, 850);
-        } else if(b.valorSelected == "QUATRE CASELLES"){
-            line(955,350, 955, 850);
-            line(570, 600, 1340, 600);
-        } else if(b.valorSelected == "SIS CASELLES"){
-            line(955,350, 955, 850);
-            line(570, 350 + Setup.divHsis, 1340, 350 + Setup.divHsis);
-            line(570, 350 + 2*Setup.divHsis, 1340, 350 + 2*Setup.divHsis);
-        }
-        popStyle();
     }
 
     //Carregar imatges
