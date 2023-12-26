@@ -31,6 +31,10 @@ public class GUI {
 
     ButtonSelect selectDraw, selectPlantilla;
 
+    int standardSize = 10;
+    int colour = 0;
+    int plus, minus, xLine, yLine;
+
 boolean menuOpen = false;
     public GUI(PApplet processing){
 
@@ -217,6 +221,41 @@ processing.popStyle();
 
         processing.fill(0);
         processing.text("Number of projects: ", processing.width/2 -220, processing.height/2 + 150);
+    }
+
+    //UTILITATS
+
+    //CREATE FUNCIÓ DE DIBUIXAR LÍNIES...
+    public void updateDraw(PApplet processing, ButtonSelect b){
+        if(mouseIntoCreate(processing, 570, 350, 770, 500)){ //Coordenades del SecondMiddle
+            if(b.valorSelected.equals("CERCLE")){
+                cercle(processing);
+            }  else if(b.valorSelected.equals("QUADRAT")){
+                quadrat(processing);
+            } else if(b.valorSelected.equals("LÍNIA")){
+                line(processing);
+            }
+        }
+    }
+    public void cercle(PApplet processing){
+        processing.fill(colour);
+        processing.ellipse(processing.mouseX, processing.mouseY, standardSize + plus - minus, standardSize + plus - minus);
+    }
+    public void quadrat(PApplet processing){
+        processing.fill(colour);
+        processing.rect(processing.mouseX, processing.mouseY, standardSize + plus - minus, standardSize + plus - minus);
+    }
+    public void line(PApplet processing){
+        processing.pushStyle();
+        processing.fill(colour);
+        processing.stroke(colour);
+        processing.strokeWeight(3 + plus - minus);
+        processing.line(xLine, yLine, processing.mouseX, processing.mouseY);
+        processing.popStyle();
+    }
+
+    public boolean mouseIntoCreate(PApplet processing, float x, float y, float w, float h){
+        return processing.mouseX >= x && processing.mouseX <= x + w && processing.mouseY >= y && processing.mouseY <= y + h;
     }
 
     //PANTALLES

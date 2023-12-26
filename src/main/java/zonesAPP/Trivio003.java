@@ -3,15 +3,13 @@ package zonesAPP;
 import botonsAPP.ButtonSelect;
 import processing.core.PApplet;
 import processing.core.PImage;
+import setupAPP.Setup;
 
 import java.io.File;
 
 public class Trivio003 extends PApplet {
 
     GUI gui;
-    int standardSize = 10;
-    int colour = 0;
-    int plus, minus, xLine, yLine;
 
     PImage imageAddedCreate;
     String titolFoto = "";
@@ -65,7 +63,8 @@ public class Trivio003 extends PApplet {
 
         } else if(gui.screenActual == GUI.SCREEN.CREATE){
             if(mousePressed){
-                updateDraw(gui.selectDraw);
+                //updateDraw(gui.selectDraw);
+                updatePlantilla(gui.selectPlantilla);
             } else if(imageAddedCreate !=null){
                 //image(imageAddedCreate)
             }
@@ -224,8 +223,8 @@ public class Trivio003 extends PApplet {
     }
 
     public void mouseClicked(){
-xLine = mouseX;
-yLine = mouseY;
+gui.xLine = mouseX;
+gui.yLine = mouseY;
     }
 
     public void cursorHandMode(PApplet processing){
@@ -241,37 +240,22 @@ if(gui.bEnterAccount.mouseIntoButton(this) && gui.bName.text.equals("Name: catal
     }
 
     //CREATE
-    public void updateDraw(ButtonSelect b){
-        if(mouseIntoCreate(570, 350, 770, 500)){ //Coordenades del SecondMiddle
-            if(b.valorSelected.equals("CERCLE")){
-                cercle();
-            }  else if(b.valorSelected.equals("QUADRAT")){
-                quadrat();
-            } else if(b.valorSelected.equals("LÍNIA")){
-                line();
-            }
-        }
-    }
 
-    public void cercle(){
-        fill(colour);
-        ellipse(mouseX, mouseY, standardSize + plus - minus, standardSize + plus - minus);
-    }
-    public void quadrat(){
-        fill(colour);
-        rect(mouseX, mouseY, standardSize + plus - minus, standardSize + plus - minus);
-    }
-    public void line(){
+
+    public void updatePlantilla(ButtonSelect b){
         pushStyle();
-        fill(colour);
-        stroke(colour);
-        strokeWeight(3 + plus - minus);
-        line(xLine, yLine, mouseX, mouseY);
+        stroke(0); strokeWeight(2);
+        if(b.valorSelected == "DUES CASELLES"){
+            line(955,350, 955, 850);
+        } else if(b.valorSelected == "QUATRE CASELLES"){
+            line(955,350, 955, 850);
+            line(570, 600, 1340, 600);
+        } else if(b.valorSelected == "SIS CASELLES"){
+            line(955,350, 955, 850);
+            line(570, 350 + Setup.divHsis, 1340, 350 + Setup.divHsis);
+            line(570, 350 + 2*Setup.divHsis, 1340, 350 + 2*Setup.divHsis);
+        }
         popStyle();
-    }
-
-    public boolean mouseIntoCreate(float x, float y, float w, float h){
-        return mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h;
     }
 
     //Carregar imatges

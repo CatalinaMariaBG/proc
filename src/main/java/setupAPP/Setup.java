@@ -17,5 +17,7 @@ public class Setup {
 
         public static int fullScreenX = 1310, fullScreenY = 820, fullScreenW = 40, fullScreenH = 40;
 
+        public static float divHsis = 500/3;
+
 
 }
