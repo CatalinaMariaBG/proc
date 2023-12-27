@@ -78,7 +78,7 @@ selColor = new SelectedColorRect[this.colors.length];
 
     public void display(PApplet processing){
         processing.pushStyle();
-        processing.fill(0xFF8E8E90); processing.noStroke();
+        processing.fill(0xFF8E8E90); processing.noStroke(); processing.rectMode(processing.CENTER);
         processing.rect(x, y, w, h, 10);
 
         for(SelectedColorRect s : selColor){

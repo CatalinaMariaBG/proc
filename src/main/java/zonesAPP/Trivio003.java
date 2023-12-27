@@ -29,6 +29,8 @@ public class Trivio003 extends PApplet {
         noStroke();
         textAlign(CENTER); textSize(16);
         gui = new GUI(this);
+        //PER PODER DIBUIXAR I QUE NO ES BORRI
+       fill(0xFFDBD9D1);
     }
 
     public void draw() {
@@ -183,6 +185,8 @@ public class Trivio003 extends PApplet {
                 gui.selectPlantilla.conmutar();
             } else if(gui.bSizeDraw.mouseIntoSlide(this)){
                 gui.bSizeDraw.checkSlider(this);
+            } else if(gui.bColorCreate.mouseIntoButton(this)){
+                gui.paletaOpen = !gui.paletaOpen;
             }
 
         } else if(gui.screenActual == GUI.SCREEN.SAVECREATION){

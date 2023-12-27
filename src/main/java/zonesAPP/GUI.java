@@ -13,7 +13,7 @@ public class GUI {
     PImage imgAccount, imgFullCreate, imgMenosCreate, x;
 
     ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding,
-    bInici, bNProjects, bLogOut, bTlist, bAddBuild, bSaveC, bSaveCfull, bAddImage;
+    bInici, bNProjects, bLogOut, bTlist, bAddBuild, bSaveC, bSaveCfull, bAddImage, bColorCreate;
 
     ButtonPhotos bAccount, bFullCreate, bMenosCreate;
 
@@ -38,10 +38,13 @@ public class GUI {
 
     ButtonSlide bSizeDraw;
 
-    MosaicColors paletaColors;
-    int[] colorsPaleta;
+    PaletaColors colorsCreate;
 
 boolean menuOpen = false;
+boolean paletaOpen = false;
+
+    MosaicColors paletaColors;
+    int[] colorsPaleta;
     public GUI(PApplet processing){
 
         screenActual = SCREEN.LOGIN;
@@ -95,9 +98,12 @@ boolean menuOpen = false;
         tipusPlantilla = new String[]{"DUES CASELLES", "QUATRE CASELLES", "SIS CASELLES", "LLIURE"};
         selectPlantilla = new ButtonSelect(tipusPlantilla, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, 400, 60, "PLANTILLA");
         bSizeDraw = new ButtonSlide(processing, "MIDA", (float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 350F, (float)192.5, 60F, standardSize, 50,10);
-        paletaColors = new MosaicColors(processing.width/2, processing.height/2, 500, 400, 5, 4);
-        colorsPaleta = new int[]{100, 30, 22};
-        paletaColors.setColors(processing, colorsPaleta );
+        colorsCreate = new PaletaColors(processing, (int)Setup.logoDistH, (int)Setup.logoDistV, 800, 800, 3, 2);
+        bColorCreate = new ButtonWords(processing, "COLOR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 444, (float)192.5, 60, 10, "CORNER");
+        /*paletaColors = new MosaicColors(processing.width/2, processing.height/2, 500, 400, 5, 4);
+        colorsPaleta = new int[]{processing.color(192, 57, 43), processing.color(231, 76, 60), processing.color(155, 89, 182)};
+        paletaColors.setColors(processing, colorsPaleta);*/
+
 
         //BOTONS CREATE FULL SCREEN
         bSaveCfull = new ButtonWords(processing, "SAVE", Setup.edgeH + 50, 800, 250, 80, 10, "CORNER");
@@ -199,7 +205,6 @@ boolean menuOpen = false;
 
     public void drawSecondMiddle(PApplet processing, String text){
 processing.pushStyle();
-processing.fill(0xFFDBD9D1);
 processing.rectMode(processing.CORNER);
 processing.rect(570, 350, 770, 500, 10);
 processing.fill(0);
@@ -218,6 +223,7 @@ processing.popStyle();
     }
 
     public void drawAccountInfo(PApplet processing){
+        processing.pushStyle();
         //Name
         processing.rectMode(processing.CENTER); processing.fill(219, 217, 209);
         processing.rect(processing.width/2, processing.height/2 + 50, 450, 60, 10);
@@ -231,6 +237,7 @@ processing.popStyle();
 
         processing.fill(0);
         processing.text("Number of projects: ", processing.width/2 -220, processing.height/2 + 150);
+        processing.popStyle();
     }
 
     //CREATE FUNCIÓ DE DIBUIXAR LÍNIES...
@@ -251,12 +258,16 @@ processing.popStyle();
         }
     }
     public void cercle(PApplet processing){
+        processing.pushStyle();
         processing.fill(colour);
         processing.ellipse(processing.mouseX, processing.mouseY, size, size);
+        processing.popStyle();
     }
     public void quadrat(PApplet processing){
+        processing.pushStyle();
         processing.fill(colour);
         processing.rect(processing.mouseX, processing.mouseY, size, size);
+        processing.popStyle();
     }
     public void line(PApplet processing){
         processing.pushStyle();
@@ -500,18 +511,19 @@ processing.popStyle();
         processing.rectMode(processing.CORNER);
         processing.fill(0xFFDBD9D1);
         //processing.rect((float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 350F, (float)192.5, 60, 10);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 444, (float)192.5, 60, 10);
+        //processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 444, (float)192.5, 60, 10);
         processing.rect((float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 444F, (float)192.5, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 726, 400, 60, 10);
         bAddImage.display(processing);
-        selectPlantilla.display(processing);
+        //selectPlantilla.display(processing);
         bSizeDraw.display(processing);
-        selectDraw.display(processing);
-        updatePlantilla(processing, selectPlantilla);
-        updateDraw(processing, selectDraw);
+        //selectDraw.display(processing);
+        //updatePlantilla(processing, selectPlantilla);
+        //updateDraw(processing, selectDraw);
         updateSizeDraw();
+        bColorCreate.display(processing);
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -519,6 +531,18 @@ processing.popStyle();
         } else {
             bLogo.setEnces(true);
             bAccount.setEnces(true);
+        }
+
+        /*if(!selectDraw.plegat){
+            bSaveC.setEnces(false);
+            bAddImage.setEnces(false);
+        } else {
+            bSaveC.setEnces(true);
+            bAddImage.setEnces(true);
+        }*/
+
+        if(paletaOpen){
+            colorsCreate.display(processing);
         }
 
         processing.popStyle();

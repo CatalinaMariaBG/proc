@@ -27,6 +27,8 @@ public class ButtonSelect {
         this.plegat = p;
     }
 
+    public void setEnces(boolean b){this.ences = b;}
+
     public void conmutar(){
 this.plegat = !this.plegat;
     }
