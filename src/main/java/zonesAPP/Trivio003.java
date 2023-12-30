@@ -153,6 +153,12 @@ public class Trivio003 extends PApplet {
             } else if(gui.bAddBuild.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.NEWBUILDING;
             }
+            int nl = gui.llocsMap.getSelect(this, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
+            if(nl!=-1){
+                gui.selectedLloc = gui.llocsMap.getLlocAt(nl);
+            } else {
+                gui.selectedLloc = null;
+            }
 
         } else if(gui.screenActual == GUI.SCREEN.BUILDING){
             if(gui.bAccount.mouseIntoButton(this)){

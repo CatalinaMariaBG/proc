@@ -31,6 +31,9 @@ public class GUI {
 
     ButtonSelect selectDraw, selectPlantilla;
 
+    LocationSetter llocsMap;
+    LocationMap selectedLloc;
+
     int standardSize = 5;
     int colour = 0;
     float size = 5;
@@ -92,13 +95,13 @@ boolean paletaOpen = false;
         bMenosCreate.setColors(255, 0,0xFFDBD9D1);
         bSaveC = new ButtonWords(processing, "GUARDAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 820, 300, 30, 10, "CORNER");
         tipusDibuix = new String[]{"DIBUIXA","CERCLE", "QUADRAT", "LÍNIA"};
-        selectDraw = new ButtonSelect(tipusDibuix, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 350, (float)192.5, 60, "DIBUIXA");
+        selectDraw = new ButtonSelect(tipusDibuix, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, (float)192.5, 60, "DIBUIXA");
         bAddImage = new ButtonWords(processing, "AFEGEIX IMATGE", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, 400, 60, 10, "CORNER");
         bAddImage.setFillColor(processing.color(219, 217, 209));
         tipusPlantilla = new String[]{"DUES CASELLES", "QUATRE CASELLES", "SIS CASELLES", "LLIURE"};
         selectPlantilla = new ButtonSelect(tipusPlantilla, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, 400, 60, "PLANTILLA");
         bSizeDraw = new ButtonSlide(processing, "MIDA", (float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 350F, (float)192.5, 60F, standardSize, 50,10);
-        colorsCreate = new PaletaColors(processing, (int)Setup.logoDistH, (int)Setup.logoDistV, 800, 800, 3, 2);
+        colorsCreate = new PaletaColors(processing, (int)Setup.xPaletaColors, (int)Setup.logoDistV, 800, 800, 5, 4);
         bColorCreate = new ButtonWords(processing, "COLOR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 444, (float)192.5, 60, 10, "CORNER");
         /*paletaColors = new MosaicColors(processing.width/2, processing.height/2, 500, 400, 5, 4);
         colorsPaleta = new int[]{processing.color(192, 57, 43), processing.color(231, 76, 60), processing.color(155, 89, 182)};
@@ -119,6 +122,9 @@ boolean paletaOpen = false;
         list.mouseIntoButton(processing);
         list.buttonPressed(processing);*/
         bAddBuild = new ButtonWords(processing, "ADD BUILDING", 1260, 375, 140, 30, 10, "CENTER");
+        llocsMap = new LocationSetter(processing, Setup.info);
+        selectedLloc = null;
+        Setup.mapaIlles = processing.loadImage("mapaBalears.svg.png");
     }
 
 
@@ -206,7 +212,7 @@ boolean paletaOpen = false;
     public void drawSecondMiddle(PApplet processing, String text){
 processing.pushStyle();
 processing.rectMode(processing.CORNER);
-processing.rect(570, 350, 770, 500, 10);
+processing.rect(Setup.xSecondMiddle, Setup.ySecondMiddle,770, 500, 10);
 processing.fill(0);
 processing.text(text, 570+(770/2), (float) processing.height /2 + 150);
 processing.popStyle();
@@ -242,7 +248,7 @@ processing.popStyle();
 
     //CREATE FUNCIÓ DE DIBUIXAR LÍNIES...
     public void updateDraw(PApplet processing, ButtonSelect b){
-        if(mouseIntoCreate(processing, 570, 350, 770, 500) && processing.mousePressed){ //Coordenades del SecondMiddle
+        if(mouseIntoCreate(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500) && processing.mousePressed){ //Coordenades del SecondMiddle
             if(b.valorSelected.equals("CERCLE")){
                 cercle(processing);
                 bFullCreate.setEnces(false);
@@ -256,6 +262,10 @@ processing.popStyle();
                 bFullCreate.setEnces(true);
             }
         }
+    }
+
+    public void setColour(int c){
+        colour = c;
     }
     public void cercle(PApplet processing){
         processing.pushStyle();
@@ -287,14 +297,14 @@ processing.popStyle();
         processing.pushStyle();
         processing.stroke(0); processing.strokeWeight(2);
         if(b.valorSelected == "DUES CASELLES"){
-            processing.line(955, 350, 955, 850);
+            processing.line(955, Setup.ySecondMiddle, 955, 850);
         } else if(b.valorSelected == "QUATRE CASELLES"){
-            processing.line(955,350, 955, 850);
-            processing.line(570, 600, 1340, 600);
+            processing.line(955,Setup.ySecondMiddle, 955, 850);
+            processing.line(Setup.xSecondMiddle, 600, 1340, 600);
         } else if(b.valorSelected == "SIS CASELLES"){
-            processing.line(955,350, 955, 850);
-            processing.line(570, 350 + Setup.divHsis, 1340, 350 + Setup.divHsis);
-            processing.line(570, 350 + 2*Setup.divHsis, 1340, 350 + 2*Setup.divHsis);
+            processing.line(955,Setup.ySecondMiddle, 955, 850);
+            processing.line(Setup.xSecondMiddle, 350 + Setup.divHsis, 1340, 350 + Setup.divHsis);
+            processing.line(Setup.xSecondMiddle, 350 + 2*Setup.divHsis, 1340, 350 + 2*Setup.divHsis);
         }
         processing.popStyle();
     }
@@ -387,7 +397,7 @@ processing.popStyle();
         bLogo.display(processing);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
-        drawSecondMiddle(processing, "MAP");
+        drawSecondMiddle(processing, "");
         drawNom(processing, "MAP");
         bAddBuild.display(processing);
         /*list.display(processing);
@@ -398,11 +408,13 @@ processing.popStyle();
         //1040, processing.height/2 + 150, 600, 500, 10
         processing.rectMode(processing.CORNER);
         processing.fill(0xFFDBD9D1);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 350, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 650, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10);
+        processing.image(Setup.mapaIlles, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
+        llocsMap.display(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -410,6 +422,9 @@ processing.popStyle();
         } else {
             bLogo.setEnces(true);
             bAccount.setEnces(true);
+        }
+        if(selectedLloc != null){
+            selectedLloc.displayInfo(processing, Setup.xSecondMiddle + 10, Setup.ySecondMiddle + 10, 200, 80);
         }
         processing.popStyle();
     }
@@ -426,7 +441,7 @@ processing.popStyle();
         drawNom(processing, "BUILDING INFORMATION");
         processing.rectMode(processing.CORNER);
         processing.fill(0xFFDBD9D1);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 350, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 650, 400, 60, 10);
@@ -454,7 +469,7 @@ processing.popStyle();
         drawNom(processing, "NEW BUILDING");
         processing.rectMode(processing.CORNER);
         processing.fill(0xFFDBD9D1);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 350, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 650, 400, 60, 10);
@@ -480,7 +495,7 @@ processing.popStyle();
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "ELEMENTS OF THE ARCHIVE");
         drawNom(processing, "ARCHIVE");
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 350, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 500, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 600, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 700, 400, 60, 10);
@@ -517,11 +532,11 @@ processing.popStyle();
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 726, 400, 60, 10);
         bAddImage.display(processing);
-        //selectPlantilla.display(processing);
+        selectPlantilla.display(processing);
         bSizeDraw.display(processing);
-        //selectDraw.display(processing);
-        //updatePlantilla(processing, selectPlantilla);
-        //updateDraw(processing, selectDraw);
+        selectDraw.display(processing);
+        updatePlantilla(processing, selectPlantilla);
+        updateDraw(processing, selectDraw);
         updateSizeDraw();
         bColorCreate.display(processing);
         if(menuOpen){
@@ -533,13 +548,13 @@ processing.popStyle();
             bAccount.setEnces(true);
         }
 
-        /*if(!selectDraw.plegat){
+        if(!selectDraw.plegat){
             bSaveC.setEnces(false);
             bAddImage.setEnces(false);
         } else {
             bSaveC.setEnces(true);
             bAddImage.setEnces(true);
-        }*/
+        }
 
         if(paletaOpen){
             colorsCreate.display(processing);
@@ -572,11 +587,11 @@ processing.popStyle();
         processing.pushStyle();
         processing.background(0xFFDBD9D1);
         processing.rectMode(processing.CORNER);
-        processing.rect(Setup.edgeH, Setup.edgeV, 350, 80, 10);
-        processing.rect(Setup.edgeH, 176, 350, 80, 10);
-        processing.rect(Setup.edgeH, 332, 350, 80, 10);
-        processing.rect(Setup.edgeH, 488, 350, 80, 10);
-        processing.rect(Setup.edgeH, 644, 350, 80, 10);
+        processing.rect(Setup.edgeH, Setup.edgeV, Setup.ySecondMiddle, 80, 10);
+        processing.rect(Setup.edgeH, 176, Setup.ySecondMiddle, 80, 10);
+        processing.rect(Setup.edgeH, 332, Setup.ySecondMiddle, 80, 10);
+        processing.rect(Setup.edgeH, 488, Setup.ySecondMiddle, 80, 10);
+        processing.rect(Setup.edgeH, 644, Setup.ySecondMiddle, 80, 10);
         processing.rect(410, Setup.edgeV, 1010, 860, 10);
         bSaveCfull.display(processing);
         bMenosCreate.display(processing);
