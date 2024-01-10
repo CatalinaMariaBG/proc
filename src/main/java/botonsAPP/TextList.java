@@ -5,19 +5,14 @@ import processing.core.PApplet;
 
 public class TextList {
     float x, y, w, h;
-
     String [][] texts;
     ButtonInsertText textField;
-
     int filaSelected;
     String idSelected;
     String valueSelected;
-
     boolean ences;
-
     int numMatchs = 0;
     ArrayList<ButtonWords> buttons;
-
     public TextList(PApplet processing, String[][] texts, float x, float y, float w, float h, String text){
         this.texts = texts;
         this.idSelected = "";
@@ -32,6 +27,13 @@ public class TextList {
         this.buttons = new ArrayList<ButtonWords>();
     }
 
+    public String getValueSelected(){
+        return this.valueSelected;
+    }
+
+    public ButtonInsertText getTextField(){
+        return this.textField;
+    }
     public boolean mouseIntoButton(PApplet processing){
         for(ButtonWords b : buttons){
             if(b.mouseIntoButton(processing)){
@@ -72,7 +74,7 @@ public class TextList {
         this.numMatchs = 0;
         this.buttons = new ArrayList<ButtonWords>();
 
-        if(!searchFor.isEmpty()){
+        if(searchFor.length() > 0){
             for(int i = 0; i<texts.length; i++){
                 if(texts[i][1].startsWith(searchFor)){
                     ButtonWords b = new ButtonWords(processing, texts[i][1], x + 10, y + h + 50 + (h + 50)*numMatchs, w, h, 10, "CORNER");

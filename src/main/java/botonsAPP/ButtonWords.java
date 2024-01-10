@@ -9,7 +9,7 @@ public class ButtonWords {
     int fillColor;
     int fillColorOver, fillColorOff;
     String textButton;
-    boolean ences; //estat del botó, encés o apagat
+    public boolean ences; //estat del botó, encés o apagat
 
    String mode;
 

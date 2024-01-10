@@ -159,6 +159,11 @@ public class Trivio003 extends PApplet {
             } else {
                 gui.selectedLloc = null;
             }
+            if(gui.bTlist.mouseIntoButton(this) && gui.bTlist.ences){
+                Setup.selectedTextTipografia = gui.list.getValueSelected();
+            }
+            gui.list.getTextField().pressedTrue(this);
+            gui.list.buttonPressed(this);
 
         } else if(gui.screenActual == GUI.SCREEN.BUILDING){
             if(gui.bAccount.mouseIntoButton(this)){
@@ -182,7 +187,7 @@ public class Trivio003 extends PApplet {
                     gui.selectDraw.update(this);
                 }
                 gui.selectDraw.conmutar();
-            } else if(gui.bAddImage.mouseIntoButton(this)){
+            } else if(gui.bAddImage.mouseIntoButton(this) && gui.bAddImage.ences){
                 selectInput("Selecciona una imatge...", "fileSelected");
             } else if(gui.selectPlantilla.mouseIntoSelect(this) && gui.selectPlantilla.ences){
                 if(!gui.selectPlantilla.plegat){
@@ -193,6 +198,12 @@ public class Trivio003 extends PApplet {
                 gui.bSizeDraw.checkSlider(this);
             } else if(gui.bColorCreate.mouseIntoButton(this)){
                 gui.paletaOpen = !gui.paletaOpen;
+            } else if(gui.paletaOpen){
+                if(gui.bColorPersonal.mouseIntoButton(this)){
+
+                }
+            } else if(gui.bRed.mouseIntoSlide(this) && gui.establishPersonalC){
+                gui.bRed.checkSlider(this);
             }
 
         } else if(gui.screenActual == GUI.SCREEN.SAVECREATION){
@@ -225,11 +236,16 @@ public class Trivio003 extends PApplet {
             gui.bName.pressedTrue(this);
             gui.bPassword.pressedTrue(this);
 
+
         }
 
         public void mouseDragged(){
-        if(gui.screenActual == GUI.SCREEN.CREATE && gui.bSizeDraw.mouseIntoSlide(this)){
-            gui.bSizeDraw.checkSlider(this);
+        if(gui.screenActual == GUI.SCREEN.CREATE ){
+            if(gui.bSizeDraw.mouseIntoSlide(this)){
+                gui.bSizeDraw.checkSlider(this);
+            } else if(gui.bRed.mouseIntoSlide(this) && gui.establishPersonalC){
+                gui.bRed.checkSlider(this);
+            }
         }
         }
     public void mouseClicked(){

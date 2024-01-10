@@ -54,14 +54,19 @@ public class CarrouselFoto {
     }
 
     public void seguent(){
-        if(this.imatgeActual < this.numImatgesTotal - this.numImatgesVisible){
+        if(this.imatgeActual<=this.numImatgesTotal){
             this.imatgeActual++;
+        } else{
+            this.imatgeActual = 0;
         }
     }
 
     public void anterior(){
-        if(this.imatgeActual > 0){
+        if(this.imatgeActual>= 0){
             this.imatgeActual--;
+        }
+        if(this.imatgeActual < 0){
+            this.imatgeActual = (int)this.numImatgesTotal-1;
         }
     }
 

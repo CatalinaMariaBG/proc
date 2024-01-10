@@ -11,10 +11,10 @@ public class LocationMap {
     String nom;
     String localitat;
     float lat, lng;
+    float longMin, longMax, latMin, latMax;
+    float r = 10;
 
-    float r = 5;
-
-    public LocationMap(PApplet processing, String n, String l, float lat, float lng, String img){
+    public LocationMap(PApplet processing, String n, String l, float lat, float lng, String img) {
         this.nom = n;
         this.localitat = l;
         this.lat = lat;
@@ -28,12 +28,16 @@ public class LocationMap {
         this.lng = parseFloat(info[2]);
         this.lat = parseFloat(info[3]);
         this.img = processing.loadImage(info[4]);
+        this.longMin = 0.49761425F;
+        this.longMax = 4.89452897F;
+        this.latMin = 38.54582099F;
+        this.latMax = 40.167229F;
     }
 
     public void displayLloc(PApplet processing, float x, float y, float w, float h){
         processing.pushStyle();
-        float posLong = PApplet.map(this.lng, -180, 180, x,x+w);
-        float posLat = PApplet.map(this.lat, 90, -90, y, y+h);
+        float posLong = PApplet.map(this.lng, longMin, longMax, x,x+w);
+        float posLat = PApplet.map(this.lat, latMax, latMin, y, y+h);
 
         processing.fill(0xFFF4562A);
         if(this.mouseIntoLloc(processing, x, y, w, h)){
@@ -41,8 +45,6 @@ public class LocationMap {
         }
 
         processing.ellipse(posLong, posLat, r, r);
-        processing.fill(0); processing.textSize(16); processing.textAlign(processing.CENTER);
-        processing.text(this.nom, posLong, posLat - r);
         processing.popStyle();
     }
 
@@ -53,14 +55,16 @@ public class LocationMap {
         processing.image(this.img, x+5, y+5, w-10, w-10);
 
         processing.fill(0); processing.textSize(18); processing.textAlign(processing.CENTER);
-        processing.text(this.nom+" ("+this.localitat+")", x + w/2, y + w + 50);
+        processing.text(this.nom, x + w/2, y + w + 30);
+
+        processing.text("("+this.localitat+")", x + w/2, y + w + 30 + 18);
         processing.popStyle();
     }
 
     public boolean mouseIntoLloc(PApplet processing, float x, float y, float w, float h){
-        float posLong = processing.map(this.lng, -180, 180, x,x+w);
-        float posLat = processing.map(this.lat, 90, -90, y, y + h);
-        return processing.dist(processing.mouseX, processing.mouseY, posLong, posLat) < r/2;
+        float posLong = PApplet.map(this.lng, longMin, longMax, x,x+w);
+        float posLat = PApplet.map(this.lat, latMax, latMin, y, y + h);
+        return PApplet.dist(processing.mouseX, processing.mouseY, posLong, posLat) < r/2;
     }
 
 

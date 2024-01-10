@@ -2,15 +2,13 @@ package botonsAPP;
 
 import processing.core.PApplet;
 
-import zonesAPP.GUI;
+import setupAPP.Setup;
 
 public class PaletaColors {
 
     int x, y, w, h, numColumns, numFiles, colorW, colorH, colorX, colorY;
     ButtonWordsPaleta b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20;
     ButtonWordsPaleta[] b;
-
-    GUI gui;
 
     int selectedColor;
     boolean selected;
@@ -55,7 +53,7 @@ deselectAll();
 bw.setSelected(!prevState);
                 if(bw.isSelected()){
                     selected = true;
-                    //selectedColor = bw.getFillColor(processing);
+                    selectedColor = bw.getFillColor(processing);
                 } else {
                     selected = false;
                 }
@@ -120,9 +118,9 @@ public void display(PApplet processing){
             b[numColor].setFillColorOver(b[numColor].fillColor);
             b[numColor].display(processing);
 
-        /*if (selected) {
-            gui.setColour(selectedColor);
-        }*/
+        if (selected) {
+            Setup.colour = selectedColor;
+        }
         }
     }
     select(processing);

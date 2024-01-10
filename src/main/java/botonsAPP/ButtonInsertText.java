@@ -6,15 +6,11 @@ import static processing.core.PConstants.BACKSPACE;
 
 public class ButtonInsertText {
     int x, y, w, h;
-
     int colorRect, colorText, colorSelected, colorBorder;
     int weightBorder = 1;
-
     public String text = "";
     public String textoEstatico;
-
     int textSize;
-
     boolean selected = false;
 
     public ButtonInsertText(PApplet processing, int x, int y, int width, int height, String t, int textSize){
@@ -30,8 +26,6 @@ public class ButtonInsertText {
 
     public void display(PApplet processing){
     processing.pushStyle();
-
-
         if(mouseIntoTextRect(processing)){
             processing.fill(colorSelected);
         } else{

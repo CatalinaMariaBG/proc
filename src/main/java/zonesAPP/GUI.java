@@ -13,7 +13,7 @@ public class GUI {
     PImage imgAccount, imgFullCreate, imgMenosCreate, x;
 
     ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding,
-    bInici, bNProjects, bLogOut, bTlist, bAddBuild, bSaveC, bSaveCfull, bAddImage, bColorCreate;
+    bInici, bNProjects, bLogOut, bTlist, bAddBuild, bSaveC, bSaveCfull, bAddImage, bColorCreate, bColorPersonal, bPinCreate;
 
     ButtonPhotos bAccount, bFullCreate, bMenosCreate;
 
@@ -35,19 +35,16 @@ public class GUI {
     LocationMap selectedLloc;
 
     int standardSize = 5;
-    int colour = 0;
-    float size = 5;
     float xLine, yLine;
 
-    ButtonSlide bSizeDraw;
+    ButtonSlide bSizeDraw, bRed, bGreen, bBlue;
 
     PaletaColors colorsCreate;
 
 boolean menuOpen = false;
 boolean paletaOpen = false;
+boolean establishPersonalC = false;
 
-    MosaicColors paletaColors;
-    int[] colorsPaleta;
     public GUI(PApplet processing){
 
         screenActual = SCREEN.LOGIN;
@@ -60,7 +57,6 @@ boolean paletaOpen = false;
 
        c = new CarrouselFoto(80, 310, processing.width - 2*Setup.logoW, 580, 2);
         nomsCarrousel = new String[]{ "auditori-de-manacor.jpg", "edificiCasasayas.jpeg","casalBalaguer.jpg", "MACE.jpg", "ciudadBlanca.jpg"};
-        //, "fundacioMiro-tallerSert.jpg.webp", "canLis.jpg.webp", "clubNauticFormentera.jpg.webp"
         c.setImatges(processing, nomsCarrousel);
         c.setButtons(processing, "2048px-Back_Arrow.svg.png", "Next_Arrow.svg.png");
         c.setTimer(processing, 10);
@@ -96,17 +92,19 @@ boolean paletaOpen = false;
         bSaveC = new ButtonWords(processing, "GUARDAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 820, 300, 30, 10, "CORNER");
         tipusDibuix = new String[]{"DIBUIXA","CERCLE", "QUADRAT", "LÍNIA"};
         selectDraw = new ButtonSelect(tipusDibuix, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, (float)192.5, 60, "DIBUIXA");
-        bAddImage = new ButtonWords(processing, "AFEGEIX IMATGE", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, 400, 60, 10, "CORNER");
+        bAddImage = new ButtonWords(processing, "AFEGEIX IMATGE", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, Setup.wButtonsMap, 60, 10, "CORNER");
         bAddImage.setFillColor(processing.color(219, 217, 209));
+        bPinCreate = new ButtonWords(processing, "PIN",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 726, 400, 60, 10, "CORNER");
+        bPinCreate.setFillColor(processing.color(219, 217, 209));
         tipusPlantilla = new String[]{"DUES CASELLES", "QUATRE CASELLES", "SIS CASELLES", "LLIURE"};
-        selectPlantilla = new ButtonSelect(tipusPlantilla, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, 400, 60, "PLANTILLA");
-        bSizeDraw = new ButtonSlide(processing, "MIDA", (float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 350F, (float)192.5, 60F, standardSize, 50,10);
-        colorsCreate = new PaletaColors(processing, (int)Setup.xPaletaColors, (int)Setup.logoDistV, 800, 800, 5, 4);
+        selectPlantilla = new ButtonSelect(tipusPlantilla, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, Setup.wButtonsMap, 60, "PLANTILLA");
+        bSizeDraw = new ButtonSlide(processing, "MIDA", (float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), Setup.ySecondMiddle, (float)192.5, 60F, standardSize, 50,10);
+        colorsCreate = new PaletaColors(processing, Setup.xPaletaColors, (int)Setup.logoDistV, Setup.sizePaletaColors, Setup.sizePaletaColors, 5, 4);
         bColorCreate = new ButtonWords(processing, "COLOR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 444, (float)192.5, 60, 10, "CORNER");
-        /*paletaColors = new MosaicColors(processing.width/2, processing.height/2, 500, 400, 5, 4);
-        colorsPaleta = new int[]{processing.color(192, 57, 43), processing.color(231, 76, 60), processing.color(155, 89, 182)};
-        paletaColors.setColors(processing, colorsPaleta);*/
-
+        bColorCreate.setFillColor(processing.color(219, 217, 209));
+        bColorPersonal = new ButtonWords(processing, "PERSONALITZAR", Setup.xPaletaColors + Setup.sizePaletaColors/2, Setup.logoDistV + Setup.sizePaletaColors - 30, 400, 40, 10, "CENTER");
+        bColorPersonal.setFillColor(0xFF8E8E90);
+        bRed = new ButtonSlide(processing, "RED", Setup.xPaletaColors+100+Setup.edgeH, Setup.logoDistV+100+Setup.edgeV, 200, 80, 0, 255, 0);
 
         //BOTONS CREATE FULL SCREEN
         bSaveCfull = new ButtonWords(processing, "SAVE", Setup.edgeH + 50, 800, 250, 80, 10, "CORNER");
@@ -116,11 +114,9 @@ boolean paletaOpen = false;
         bLogOut = new ButtonWords(processing, "LOG OUT", processing.width/2 + 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
 
         // BOTONS MAP
-        /*valuesTextList = new String[][]{{"0", "Tipografia 1"}, {"1", "LADRILLO"}, {"2", "CASA"}, {"3", "PÚBLIC"}};
-        list = new TextList(processing, valuesTextList, processing.width/8, processing.height/2, 450, 60, "TIPOGRAFIA");
-        bTlist = new ButtonWords(processing, "Tipografia", processing.width/2 - 50, processing.height/2, 100, 80, 10, "CORNER");
-        list.mouseIntoButton(processing);
-        list.buttonPressed(processing);*/
+        list = new TextList(processing, Setup.valuesTextList, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 200, Setup.ySecondMiddle + 30, Setup.wButtonsMap, 60, "Estil: ");
+        bTlist = new ButtonWords(processing, "APLICA", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10,"CORNER");
+
         bAddBuild = new ButtonWords(processing, "ADD BUILDING", 1260, 375, 140, 30, 10, "CENTER");
         llocsMap = new LocationSetter(processing, Setup.info);
         selectedLloc = null;
@@ -228,22 +224,36 @@ processing.popStyle();
         processing.popStyle();
     }
 
-    public void drawAccountInfo(PApplet processing){
+    public void drawAccountInfo(PApplet processing) {
         processing.pushStyle();
         //Name
-        processing.rectMode(processing.CENTER); processing.fill(219, 217, 209);
-        processing.rect(processing.width/2, processing.height/2 + 50, 450, 60, 10);
+        processing.rectMode(processing.CENTER);
+        processing.fill(219, 217, 209);
+        processing.rect(processing.width / 2, processing.height / 2 + 50, 450, 60, 10);
 
-        processing.textAlign(processing.CORNER); processing.textSize(18); processing.fill(0);
-        processing.text(bName.text, processing.width/2 -220,processing.height/2 + 50);
+        processing.textAlign(processing.CORNER);
+        processing.textSize(18);
+        processing.fill(0);
+        processing.text(bName.text, processing.width / 2 - 220, processing.height / 2 + 50);
 
         //Number of projects
         processing.fill(219, 217, 209);
-        processing.rect(processing.width/2, processing.height/2 + 150, 450, 60, 10);
+        processing.rect(processing.width / 2, processing.height / 2 + 150, 450, 60, 10);
 
         processing.fill(0);
-        processing.text("Number of projects: ", processing.width/2 -220, processing.height/2 + 150);
+        processing.text("Number of projects: ", processing.width / 2 - 220, processing.height / 2 + 150);
         processing.popStyle();
+    }
+
+    public void drawPersonalColor(PApplet processing){
+        processing.pushStyle();
+        processing.fill(219, 217, 209);
+        processing.rect(Setup.xPaletaColors+100, Setup.logoDistV+100, Setup.sizePaletaColors/2, Setup.sizePaletaColors/2, 10);
+        bRed.display(processing);
+        processing.fill(Setup.red, Setup.green, Setup.blue);
+        processing.rect(900, 160, 150, 150, 10);
+        processing.popStyle();
+        // Setup.xPaletaColors, (int)Setup.logoDistV, Setup.sizePaletaColors, Setup.sizePaletaColors
     }
 
     //CREATE FUNCIÓ DE DIBUIXAR LÍNIES...
@@ -263,27 +273,23 @@ processing.popStyle();
             }
         }
     }
-
-    public void setColour(int c){
-        colour = c;
-    }
     public void cercle(PApplet processing){
         processing.pushStyle();
-        processing.fill(colour);
-        processing.ellipse(processing.mouseX, processing.mouseY, size, size);
+        processing.fill(Setup.colour);
+        processing.ellipse(processing.mouseX, processing.mouseY, Setup.size, Setup.size);
         processing.popStyle();
     }
     public void quadrat(PApplet processing){
         processing.pushStyle();
-        processing.fill(colour);
-        processing.rect(processing.mouseX, processing.mouseY, size, size);
+        processing.fill(Setup.colour);
+        processing.rect(processing.mouseX, processing.mouseY, Setup.size, Setup.size);
         processing.popStyle();
     }
     public void line(PApplet processing){
         processing.pushStyle();
-        processing.fill(colour);
-        processing.stroke(colour);
-        processing.strokeWeight(size);
+        processing.fill(Setup.colour);
+        processing.stroke(Setup.colour);
+        processing.strokeWeight(Setup.size);
         processing.line(xLine, yLine, processing.mouseX, processing.mouseY);
         processing.popStyle();
     }
@@ -311,7 +317,11 @@ processing.popStyle();
 
     //CANVIAR MIDA DIBUIXOS
     public void updateSizeDraw(){
-        size = bSizeDraw.getValue();
+        Setup.size = bSizeDraw.getValue();
+    }
+
+    public void updateRed(){
+        Setup.red = bRed.getValue();
     }
 
     //PANTALLES
@@ -400,19 +410,24 @@ processing.popStyle();
         drawSecondMiddle(processing, "");
         drawNom(processing, "MAP");
         bAddBuild.display(processing);
-        /*list.display(processing);
+        list.display(processing);
         bTlist.display(processing);
-        list.update(processing);*/
+        if(Setup.selectedTextTipografia!=null){
+            processing.pushStyle();
+            processing.textAlign(processing.CENTER); processing.fill(0);
+            //processing.text(Setup.selectedTextTipografia, );
+            processing.popStyle();
+        }
         //processing.width/2 - 50, processing.height/2, 100, 80, 10
         //mesures: 1440, 900
         //1040, processing.height/2 + 150, 600, 500, 10
         processing.rectMode(processing.CORNER);
         processing.fill(0xFFDBD9D1);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, 400, 60, 10);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450, 400, 60, 10);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550, 400, 60, 10);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 650, 400, 60, 10);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10);
+        //processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450, Setup.wButtonsMap, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550, Setup.wButtonsMap, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 650, Setup.wButtonsMap, 60, 10);
+        //processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10);
         processing.image(Setup.mapaIlles, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
         llocsMap.display(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
         if(menuOpen){
@@ -424,7 +439,7 @@ processing.popStyle();
             bAccount.setEnces(true);
         }
         if(selectedLloc != null){
-            selectedLloc.displayInfo(processing, Setup.xSecondMiddle + 10, Setup.ySecondMiddle + 10, 200, 80);
+            selectedLloc.displayInfo(processing, Setup.xSecondMiddle + 10, Setup.ySecondMiddle + 10, 200, 260);
         }
         processing.popStyle();
     }
@@ -441,10 +456,10 @@ processing.popStyle();
         drawNom(processing, "BUILDING INFORMATION");
         processing.rectMode(processing.CORNER);
         processing.fill(0xFFDBD9D1);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, 400, 60, 10);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450, 400, 60, 10);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550, 400, 60, 10);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 650, 400, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, Setup.wButtonsMap, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450, Setup.wButtonsMap, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550, Setup.wButtonsMap, 60, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 650, Setup.wButtonsMap, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10);
         if(menuOpen){
             drawLateralBar(processing);
@@ -531,6 +546,8 @@ processing.popStyle();
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 726, 400, 60, 10);
+        bPinCreate.display(processing);
+        bColorCreate.display(processing);
         bAddImage.display(processing);
         selectPlantilla.display(processing);
         bSizeDraw.display(processing);
@@ -538,28 +555,42 @@ processing.popStyle();
         updatePlantilla(processing, selectPlantilla);
         updateDraw(processing, selectDraw);
         updateSizeDraw();
-        bColorCreate.display(processing);
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
             bAccount.setEnces(false);
+            bFullCreate.setEnces(false);
+            bSaveC.setEnces(false);
+            bAddImage.setEnces(false);
+            selectPlantilla.setEnces(false);
+            selectDraw.setEnces(false);
         } else {
             bLogo.setEnces(true);
             bAccount.setEnces(true);
+            bFullCreate.setEnces(true);
+            bSaveC.setEnces(true);
+            bAddImage.setEnces(true);
+            selectPlantilla.setEnces(true);
+            selectDraw.setEnces(true);
         }
 
-        if(!selectDraw.plegat){
+        /*if(!selectDraw.plegat){
             bSaveC.setEnces(false);
             bAddImage.setEnces(false);
         } else {
             bSaveC.setEnces(true);
             bAddImage.setEnces(true);
         }
+        if(!selectPlantilla.plegat) {
+selectPlantilla.setEnces(false);
+        } else {
+            selectPlantilla.setEnces(true);
+        }*/
 
         if(paletaOpen){
             colorsCreate.display(processing);
+            bColorPersonal.display(processing);
         }
-
         processing.popStyle();
     }
 
