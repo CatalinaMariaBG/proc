@@ -26,8 +26,8 @@ public class GUI {
     CarrouselFoto c;
     String[] nomsCarrousel, tipusDibuix, tipusPlantilla;
 
-    TextList list;
-    String[][] valuesTextList;
+    TextList listEstil;
+    String[][] valuesEstil = {{"0", "tipografia"}, {"1", "ladrillo"}, {"2", "lalala"}, {"3", "berta guapaa"}, {"4", "titita"}};
 
     ButtonSelect selectDraw, selectPlantilla;
 
@@ -70,8 +70,8 @@ boolean establishPersonalC = false;
         bEnterAccount = new ButtonWords(processing, "LOG IN", processing.width/2 - 150, processing.height/2 + 225, 300, 60, 10, "CORNER");
             bEnterAccount.setFillColor(0xFFF4562A);
             bEnterAccount.mouseIntoButton(processing);
-        bName = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 50, 450, 60, "Name: ", 16);
-        bPassword = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 150, 450, 60, "Password: ", 16);
+        bName = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 50, 450, 60, "Name: ", "Name: ", 16);
+        bPassword = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 150, 450, 60, "Password: ","Password: ", 16);
 
         //BOTONS BARRA LATERAL
         bLateralBar = new ButtonWords(processing, "LOGO", 160 - Setup.logoW/2, Setup.logoDistV, Setup.logoW, Setup.logoH, 0, "CORNER");
@@ -114,7 +114,7 @@ boolean establishPersonalC = false;
         bLogOut = new ButtonWords(processing, "LOG OUT", processing.width/2 + 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
 
         // BOTONS MAP
-        list = new TextList(processing, Setup.valuesTextList, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 200, Setup.ySecondMiddle + 30, Setup.wButtonsMap, 60, "Estil: ");
+        listEstil = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 200, Setup.ySecondMiddle + 30, Setup.wButtonsMap, 60, "Estil: ");
         bTlist = new ButtonWords(processing, "APLICA", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10,"CORNER");
 
         bAddBuild = new ButtonWords(processing, "ADD BUILDING", 1260, 375, 140, 30, 10, "CENTER");
@@ -410,7 +410,7 @@ processing.popStyle();
         drawSecondMiddle(processing, "");
         drawNom(processing, "MAP");
         bAddBuild.display(processing);
-        list.display(processing);
+        listEstil.display(processing);
         bTlist.display(processing);
         if(Setup.selectedTextTipografia!=null){
             processing.pushStyle();

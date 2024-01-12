@@ -84,7 +84,10 @@ public class Trivio003 extends PApplet {
             gui.screenActual = GUI.SCREEN.INICIAL;
         }
         if(gui.screenActual == GUI.SCREEN.MAP){
-
+            if(gui.listEstil.getTextField().mouseIntoTextRect(this)) {
+                gui.listEstil.getTextField().keyPressed(key, (int)keyCode);
+                gui.listEstil.update(this);
+            }
         }
     }
 
@@ -160,10 +163,10 @@ public class Trivio003 extends PApplet {
                 gui.selectedLloc = null;
             }
             if(gui.bTlist.mouseIntoButton(this) && gui.bTlist.ences){
-                Setup.selectedTextTipografia = gui.list.getValueSelected();
+                Setup.selectedTextTipografia = gui.listEstil.getValueSelected();
             }
-            gui.list.getTextField().pressedTrue(this);
-            gui.list.buttonPressed(this);
+            gui.listEstil.getTextField().pressedTrue(this);
+            gui.listEstil.buttonPressed(this);
 
         } else if(gui.screenActual == GUI.SCREEN.BUILDING){
             if(gui.bAccount.mouseIntoButton(this)){

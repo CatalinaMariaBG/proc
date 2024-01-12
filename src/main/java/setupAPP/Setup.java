@@ -29,11 +29,6 @@ public class Setup {
                 {"Centre Nàutic Formentera", "La Savina, Formentera", "1.41603", "38.73206", "clubNauticFormentera.jpg"}
         };
         public static String selectedTextTipografia;
-        public static String[][] valuesTextList = {
-                {"0", "Tipografia 1"},
-                {"1", "LADRILLO"},
-                {"2", "CASA"},
-                {"3", "PÚBLIC"}};
 
         public static int wButtonsMap = 400;
         public static int yButtonsMap = 60;

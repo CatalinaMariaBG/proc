@@ -10,6 +10,7 @@ public class TextList {
     int filaSelected;
     String idSelected;
     String valueSelected;
+    String textoEstatico;
     boolean ences;
     int numMatchs = 0;
     ArrayList<ButtonWords> buttons;
@@ -21,16 +22,16 @@ public class TextList {
         this.y = y;
         this.w = w;
         this.h = h;
+        this.textoEstatico = text;
         this.ences = true;
 
-        this.textField = new ButtonInsertText(processing, (int) x, (int) y, (int) w, (int) h, text, 16);
+        this.textField = new ButtonInsertText(processing, (int) x, (int) y, (int) w, (int) h, textoEstatico + valueSelected, textoEstatico, 16);
         this.buttons = new ArrayList<ButtonWords>();
     }
 
     public String getValueSelected(){
         return this.valueSelected;
     }
-
     public ButtonInsertText getTextField(){
         return this.textField;
     }
