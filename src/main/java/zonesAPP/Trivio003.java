@@ -29,8 +29,6 @@ public class Trivio003 extends PApplet {
         noStroke();
         textAlign(CENTER); textSize(16);
         gui = new GUI(this);
-        //PER PODER DIBUIXAR I QUE NO ES BORRI
-       fill(0xFFDBD9D1);
     }
 
     public void draw() {
@@ -87,6 +85,15 @@ public class Trivio003 extends PApplet {
             if(gui.listEstil.getTextField().mouseIntoTextRect(this)) {
                 gui.listEstil.getTextField().keyPressed(key, (int)keyCode);
                 gui.listEstil.update(this);
+            } else if(gui.listUse.getTextField().mouseIntoTextRect(this)){
+                gui.listUse.getTextField().keyPressed(key, (int)keyCode);
+                gui.listUse.update(this);
+            } else if(gui.listTipologia.getTextField().mouseIntoTextRect(this)) {
+                gui.listTipologia.getTextField().keyPressed(key, (int) keyCode);
+                gui.listTipologia.update(this);
+            } else if(gui.listMaterial.getTextField().mouseIntoTextRect(this)) {
+                gui.listMaterial.getTextField().keyPressed(key, (int) keyCode);
+                gui.listMaterial.update(this);
             }
         }
     }
@@ -163,10 +170,19 @@ public class Trivio003 extends PApplet {
                 gui.selectedLloc = null;
             }
             if(gui.bTlist.mouseIntoButton(this) && gui.bTlist.ences){
-                Setup.selectedTextTipografia = gui.listEstil.getValueSelected();
+
             }
             gui.listEstil.getTextField().pressedTrue(this);
             gui.listEstil.buttonPressed(this);
+
+            gui.listUse.getTextField().pressedTrue(this);
+            gui.listUse.buttonPressed(this);
+
+            gui.listTipologia.getTextField().pressedTrue(this);
+            gui.listTipologia.buttonPressed(this);
+
+            gui.listMaterial.getTextField().pressedTrue(this);
+            gui.listMaterial.buttonPressed(this);
 
         } else if(gui.screenActual == GUI.SCREEN.BUILDING){
             if(gui.bAccount.mouseIntoButton(this)){

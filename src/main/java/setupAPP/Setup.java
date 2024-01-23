@@ -28,10 +28,8 @@ public class Setup {
                 {"Edifici Casasayas", "Palma, Mallorca", "2.64916", "39.5712", "edificiCasasayas.jpeg"},
                 {"Centre Nàutic Formentera", "La Savina, Formentera", "1.41603", "38.73206", "clubNauticFormentera.jpg"}
         };
-        public static String selectedTextTipografia;
-
         public static int wButtonsMap = 400;
-        public static int yButtonsMap = 60;
+        public static int hButtonsMap = 60;
         public static PImage mapaIlles;
         public static int xMap = 955;
         public static int yMap = 600;

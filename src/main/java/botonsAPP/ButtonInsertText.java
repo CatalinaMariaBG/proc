@@ -13,13 +13,13 @@ public class ButtonInsertText {
     int textSize;
     boolean selected = false;
 
-    public ButtonInsertText(PApplet processing, int x, int y, int width, int height, String t, String tS, int textSize){
+    public ButtonInsertText(PApplet processing, int x, int y, int width, int height, String tS, int textSize){
         this.x = x; this.y = y; this.w = width; this.h = height;
         this.colorRect = processing.color(219, 217, 209);
         this.colorText = processing.color(0);
         this.colorSelected = processing.color(255, 255, 255);
         this.colorBorder = processing.color(0);
-        this.text = t;
+        this.text = tS;
         this.textoEstatico= tS;
         this.textSize = textSize;
     }

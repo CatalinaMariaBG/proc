@@ -13,11 +13,11 @@ public class GUI {
     PImage imgAccount, imgFullCreate, imgMenosCreate, x;
 
     ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding,
-    bInici, bNProjects, bLogOut, bTlist, bAddBuild, bSaveC, bSaveCfull, bAddImage, bColorCreate, bColorPersonal, bPinCreate;
+    bInici, bNProjects, bLogOut, bTlist, bAddBuild, bSaveC, bSaveCfull, bAddImage, bColorCreate, bColorPersonal, bPinCreate, bErraseCreate;
 
     ButtonPhotos bAccount, bFullCreate, bMenosCreate;
 
-    ButtonInsertText bPassword, bName;
+    ButtonInsertText bPassword, bName, bNameBuilding, bLocationBuilding;
 
     public enum SCREEN{LOGIN, INICIAL, MYACCOUNT, MAP, BUILDING, NEWBUILDING, ARCHIVE, CREATE, SAVECREATION, CREATEFULLSCREEN};
 
@@ -26,7 +26,7 @@ public class GUI {
     CarrouselFoto c;
     String[] nomsCarrousel, tipusDibuix, tipusPlantilla;
 
-    TextList listEstil;
+    TextList listEstil, listUse, listTipologia, listMaterial;
     String[][] valuesEstil = {{"0", "tipografia"}, {"1", "ladrillo"}, {"2", "lalala"}, {"3", "berta guapaa"}, {"4", "titita"}};
 
     ButtonSelect selectDraw, selectPlantilla;
@@ -70,8 +70,8 @@ boolean establishPersonalC = false;
         bEnterAccount = new ButtonWords(processing, "LOG IN", processing.width/2 - 150, processing.height/2 + 225, 300, 60, 10, "CORNER");
             bEnterAccount.setFillColor(0xFFF4562A);
             bEnterAccount.mouseIntoButton(processing);
-        bName = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 50, 450, 60, "Name: ", "Name: ", 16);
-        bPassword = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 150, 450, 60, "Password: ","Password: ", 16);
+        bName = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 50, 450, 60, "Name: ", 16);
+        bPassword = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 150, 450, 60, "Password: ", 16);
 
         //BOTONS BARRA LATERAL
         bLateralBar = new ButtonWords(processing, "LOGO", 160 - Setup.logoW/2, Setup.logoDistV, Setup.logoW, Setup.logoH, 0, "CORNER");
@@ -94,6 +94,8 @@ boolean establishPersonalC = false;
         selectDraw = new ButtonSelect(tipusDibuix, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, (float)192.5, 60, "DIBUIXA");
         bAddImage = new ButtonWords(processing, "AFEGEIX IMATGE", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, Setup.wButtonsMap, 60, 10, "CORNER");
         bAddImage.setFillColor(processing.color(219, 217, 209));
+        bErraseCreate = new ButtonWords(processing, "BORRAR",(float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 444F, (float)192.5, 60, 10, "CORNER");
+        bErraseCreate.setFillColor(processing.color(219, 217, 209));
         bPinCreate = new ButtonWords(processing, "PIN",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 726, 400, 60, 10, "CORNER");
         bPinCreate.setFillColor(processing.color(219, 217, 209));
         tipusPlantilla = new String[]{"DUES CASELLES", "QUATRE CASELLES", "SIS CASELLES", "LLIURE"};
@@ -114,13 +116,20 @@ boolean establishPersonalC = false;
         bLogOut = new ButtonWords(processing, "LOG OUT", processing.width/2 + 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
 
         // BOTONS MAP
-        listEstil = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 200, Setup.ySecondMiddle + 30, Setup.wButtonsMap, 60, "Estil: ");
+        listEstil = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 200, Setup.ySecondMiddle + 30, Setup.wButtonsMap, Setup.hButtonsMap, "Estil: ");
+        listUse = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 200, 450 + 30, Setup.wButtonsMap, Setup.hButtonsMap,"Funció: ");
+        listTipologia = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 200, 550 + 30, Setup.wButtonsMap, Setup.hButtonsMap, "Tipologia: ");
+        listMaterial = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 200, 650 + 30, Setup.wButtonsMap, Setup.hButtonsMap, "Material: ");
         bTlist = new ButtonWords(processing, "APLICA", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10,"CORNER");
 
         bAddBuild = new ButtonWords(processing, "ADD BUILDING", 1260, 375, 140, 30, 10, "CENTER");
         llocsMap = new LocationSetter(processing, Setup.info);
         selectedLloc = null;
         Setup.mapaIlles = processing.loadImage("mapaBalears.svg.png");
+
+        //BOTONS NEW BUILDING
+        bNameBuilding = new ButtonInsertText(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH), Setup.ySecondMiddle, 170, Setup.hButtonsMap, "Name: ", 16);
+        bLocationBuilding = new ButtonInsertText(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 170 + 60), Setup.ySecondMiddle, 170, Setup.hButtonsMap, "Location: ", 16);
     }
 
 
@@ -208,6 +217,7 @@ boolean establishPersonalC = false;
     public void drawSecondMiddle(PApplet processing, String text){
 processing.pushStyle();
 processing.rectMode(processing.CORNER);
+processing.fill(0xFFDBD9D1);
 processing.rect(Setup.xSecondMiddle, Setup.ySecondMiddle,770, 500, 10);
 processing.fill(0);
 processing.text(text, 570+(770/2), (float) processing.height /2 + 150);
@@ -411,22 +421,15 @@ processing.popStyle();
         drawNom(processing, "MAP");
         bAddBuild.display(processing);
         listEstil.display(processing);
+        listUse.display(processing);
+        listTipologia.display(processing);
+        listMaterial.display(processing);
         bTlist.display(processing);
-        if(Setup.selectedTextTipografia!=null){
-            processing.pushStyle();
-            processing.textAlign(processing.CENTER); processing.fill(0);
-            //processing.text(Setup.selectedTextTipografia, );
-            processing.popStyle();
-        }
         //processing.width/2 - 50, processing.height/2, 100, 80, 10
         //mesures: 1440, 900
         //1040, processing.height/2 + 150, 600, 500, 10
         processing.rectMode(processing.CORNER);
         processing.fill(0xFFDBD9D1);
-        //processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, 400, 60, 10);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450, Setup.wButtonsMap, 60, 10);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550, Setup.wButtonsMap, 60, 10);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 650, Setup.wButtonsMap, 60, 10);
         //processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10);
         processing.image(Setup.mapaIlles, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
         llocsMap.display(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
@@ -489,6 +492,9 @@ processing.popStyle();
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 650, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10);
+        bNameBuilding.display(processing);
+        bLocationBuilding.display(processing);
+
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -548,6 +554,7 @@ processing.popStyle();
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 726, 400, 60, 10);
         bPinCreate.display(processing);
         bColorCreate.display(processing);
+        bErraseCreate.display(processing);
         bAddImage.display(processing);
         selectPlantilla.display(processing);
         bSizeDraw.display(processing);

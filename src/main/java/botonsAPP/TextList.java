@@ -25,7 +25,7 @@ public class TextList {
         this.textoEstatico = text;
         this.ences = true;
 
-        this.textField = new ButtonInsertText(processing, (int) x, (int) y, (int) w, (int) h, textoEstatico + valueSelected, textoEstatico, 16);
+        this.textField = new ButtonInsertText(processing, (int) x, (int) y, (int) w, (int) h, textoEstatico + valueSelected, 16);
         this.buttons = new ArrayList<ButtonWords>();
     }
 
@@ -70,8 +70,6 @@ public class TextList {
 
     public void update(PApplet processing){
         String searchFor = this.textField.text;
-        System.out.println("SEARCH FOR: "+searchFor);
-
         this.numMatchs = 0;
         this.buttons = new ArrayList<ButtonWords>();
 
