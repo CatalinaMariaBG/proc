@@ -3,7 +3,7 @@ package setupAPP;
 import processing.core.PImage;
 public class Setup {
 
-
+//Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsMap/2
         // Marges, horitzontal i vertical
         public static float edgeH = 20, edgeV = 20;
 

@@ -80,6 +80,8 @@ public class Trivio003 extends PApplet {
         }
         if(gui.screenActual == GUI.SCREEN.LOGIN && keyCode == '1'){
             gui.screenActual = GUI.SCREEN.INICIAL;
+        } else if(keyCode == '2'){
+            gui.screenActual = GUI.SCREEN.BUILDING;
         }
         if(gui.screenActual == GUI.SCREEN.MAP){
             if(gui.listEstil.getTextField().mouseIntoTextRect(this)) {

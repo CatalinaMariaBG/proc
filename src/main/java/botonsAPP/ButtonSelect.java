@@ -11,6 +11,7 @@ public class ButtonSelect {
     public boolean ences;
 
     float lineSpace = 15;
+    int fillColor;
 
    public ButtonSelect(String[] texts, float x, float y, float w, float h, String tDefault){
         this.texts = texts;
@@ -21,10 +22,15 @@ public class ButtonSelect {
         this.ences = true;
         this.plegat = true;
         this.textDefault = tDefault;
+        this.fillColor = 0xFFDBD9D1;
     }
 
     public void setPlegat(boolean p){
         this.plegat = p;
+    }
+
+    public void setFillColor(int c){
+       fillColor = c;
     }
 
     public void setEnces(boolean b){this.ences = b;}
@@ -45,7 +51,7 @@ this.plegat = !this.plegat;
 
   public void display(PApplet processing){
         processing.pushStyle();
-        processing.fill(0xFFDBD9D1);
+        processing.fill(fillColor);
         processing.rect(x, y, w, h, 10);
 
         processing.fill(67, 83, 96);
