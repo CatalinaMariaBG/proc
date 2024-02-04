@@ -10,11 +10,10 @@ public class TextList {
     int filaSelected;
     String idSelected;
     String valueSelected;
-    String textoEstatico;
     boolean ences;
     int numMatchs = 0;
     ArrayList<ButtonWords> buttons;
-    public TextList(PApplet processing, String[][] texts, float x, float y, float w, float h, String text){
+    public TextList(PApplet processing, String[][] texts, float x, float y, float w, float h){
         this.texts = texts;
         this.idSelected = "";
         this.valueSelected = "";
@@ -22,10 +21,9 @@ public class TextList {
         this.y = y;
         this.w = w;
         this.h = h;
-        this.textoEstatico = text;
         this.ences = true;
 
-        this.textField = new ButtonInsertText(processing, (int) x, (int) y, (int) w, (int) h, textoEstatico + valueSelected, 16);
+        this.textField = new ButtonInsertText(processing, (int) x, (int) y, (int) w, (int) h, "", 16);
         this.buttons = new ArrayList<ButtonWords>();
     }
 
@@ -76,7 +74,7 @@ public class TextList {
         if(searchFor.length() > 0){
             for(int i = 0; i<texts.length; i++){
                 if(texts[i][1].startsWith(searchFor)){
-                    ButtonWords b = new ButtonWords(processing, texts[i][1], x + 10, y + h + 50 + (h + 50)*numMatchs, w, h, 10, "CORNER");
+                    ButtonWords b = new ButtonWords(processing, texts[i][1], x + 10, y + h + 50 + (h + 50)*numMatchs, w, h, 10, "CENTER");
                     buttons.add(b);
                     this.numMatchs++;
                     if(this.numMatchs == 5){

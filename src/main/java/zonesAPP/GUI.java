@@ -94,14 +94,14 @@ boolean establishPersonalC = false;
         bSaveC = new ButtonWords(processing, "GUARDAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 820, 300, 30, 10, "CORNER");
         tipusDibuix = new String[]{"DIBUIXA","CERCLE", "QUADRAT", "LÍNIA"};
         selectDraw = new ButtonSelect(tipusDibuix, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, (float)192.5, 60, "DIBUIXA");
-        bAddImage = new ButtonWords(processing, "AFEGEIX IMATGE", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, Setup.wButtonsMap, 60, 10, "CORNER");
+        bAddImage = new ButtonWords(processing, "AFEGEIX IMATGE", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, Setup.wButtonsNewBuild, 60, 10, "CORNER");
         bAddImage.setFillColor(processing.color(219, 217, 209));
         bErraseCreate = new ButtonWords(processing, "BORRAR",(float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 444F, (float)192.5, 60, 10, "CORNER");
         bErraseCreate.setFillColor(processing.color(219, 217, 209));
         bPinCreate = new ButtonWords(processing, "PIN",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 726, 400, 60, 10, "CORNER");
         bPinCreate.setFillColor(processing.color(219, 217, 209));
         tipusPlantilla = new String[]{"DUES CASELLES", "QUATRE CASELLES", "SIS CASELLES", "LLIURE"};
-        selectPlantilla = new ButtonSelect(tipusPlantilla, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, Setup.wButtonsMap, 60, "PLANTILLA");
+        selectPlantilla = new ButtonSelect(tipusPlantilla, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, Setup.wButtonsNewBuild, 60, "PLANTILLA");
         bSizeDraw = new ButtonSlide(processing, "MIDA", (float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), Setup.ySecondMiddle, (float)192.5, 60F, standardSize, 50,10);
         colorsCreate = new PaletaColors(processing, Setup.xPaletaColors, (int)Setup.logoDistV, Setup.sizePaletaColors, Setup.sizePaletaColors, 5, 4);
         bColorCreate = new ButtonWords(processing, "COLOR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 444, (float)192.5, 60, 10, "CORNER");
@@ -132,11 +132,11 @@ boolean establishPersonalC = false;
         bLogOut = new ButtonWords(processing, "LOG OUT", processing.width/2 + 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
 
         // BOTONS MAP
-        listEstil = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 200, Setup.ySecondMiddle + 30, Setup.wButtonsMap, Setup.hButtonsMap, "Estil: ");
-        listUse = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 200, 450 + 30, Setup.wButtonsMap, Setup.hButtonsMap,"Funció: ");
-        listTipologia = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 200, 550 + 30, Setup.wButtonsMap, Setup.hButtonsMap, "Tipologia: ");
-        listMaterial = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 200, 650 + 30, Setup.wButtonsMap, Setup.hButtonsMap, "Material: ");
         bTlist = new ButtonWords(processing, "APLICA", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10,"CORNER");
+        listMaterial = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, 650 + 30, Setup.wButtonMap, Setup.hButtonsMap);
+        listTipologia = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, 550 + 30, Setup.wButtonMap, Setup.hButtonsMap);
+        listUse = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, 450 + 30, Setup.wButtonMap, Setup.hButtonsMap);
+        listEstil = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, Setup.ySecondMiddle + 30,Setup.wButtonMap, Setup.hButtonsMap);
 
         bAddBuild = new ButtonWords(processing, "ADD BUILDING", 1260, 375, 140, 30, 10, "CENTER");
         llocsMap = new LocationSetter(processing, Setup.info);
@@ -144,13 +144,13 @@ boolean establishPersonalC = false;
         Setup.mapaIlles = processing.loadImage("mapaBalears.svg.png");
 
         //BOTONS NEW BUILDING
-        bNameBuilding = new ButtonInsertText(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsMap/2), Setup.ySecondMiddle + Setup.hButtonsMap/2, Setup.wButtonsMap, Setup.hButtonsMap, "Name: ", 16);
-        bLocationBuilding = new ButtonInsertText(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsMap/2), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 75, Setup.wButtonsMap, Setup.hButtonsMap, "Location: ", 16);
-        buildEstil = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsMap/2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 150, Setup.wButtonsMap, Setup.hButtonsMap, "Estil: ");
-        buildUse = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsMap/2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 225, Setup.wButtonsMap, Setup.hButtonsMap, "Funció: ");
-        buildTipologia = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsMap/2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 300, Setup.wButtonsMap, Setup.hButtonsMap, "Tipologia: ");
-        buildMaterial = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsMap/2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 375, Setup.wButtonsMap, Setup.hButtonsMap, "Materials: ");
-        bSaveBuild = new ButtonWords(processing, "SAVE", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsMap/2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 450, 300, 30, 10,"CENTER");
+        bNameBuilding = new ButtonInsertText(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2), Setup.ySecondMiddle + Setup.hButtonsMap/2, Setup.wButtonsNewBuild, Setup.hButtonsMap, "Name: ", 16);
+        bLocationBuilding = new ButtonInsertText(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 75, Setup.wButtonsNewBuild, Setup.hButtonsMap, "Location: ", 16);
+        buildEstil = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 150, Setup.wButtonsNewBuild, Setup.hButtonsMap);
+        buildUse = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 225, Setup.wButtonsNewBuild, Setup.hButtonsMap);
+        buildTipologia = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 300, Setup.wButtonsNewBuild, Setup.hButtonsMap);
+        buildMaterial = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 375, Setup.wButtonsNewBuild, Setup.hButtonsMap);
+        bSaveBuild = new ButtonWords(processing, "SAVE", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 450, 300, 30, 10,"CENTER");
 
         //BOTONS BUILDING INFO
         bCopyImageBuild = new ButtonWords(processing, "COPY THE IMAGE", 100, Setup.ySecondMiddle + 450, 190, 30, 10,"CORNER");
@@ -163,8 +163,8 @@ boolean establishPersonalC = false;
         bNewProject = new ButtonWords(processing, "NEW CREATION", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 700, 400, 60, 10, "CORNER");
 
         //BOTONS SAVE CREATION
-        saveCreationName = new ButtonInsertText(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsMap/2), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 80, Setup.wButtonsMap, Setup.hButtonsMap, "Name: ", 16);
-        bSaveCreation = new ButtonWords(processing, "SAVE", (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsMap/2), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 160, Setup.wButtonsMap, Setup.hButtonsMap, 10, "CENTER");
+        saveCreationName = new ButtonInsertText(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 80, Setup.wButtonsNewBuild, Setup.hButtonsMap, "Name: ", 16);
+        bSaveCreation = new ButtonWords(processing, "SAVE", (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 160, Setup.wButtonsNewBuild, Setup.hButtonsMap, 10, "CENTER");
     }
 
 
@@ -455,17 +455,25 @@ processing.popStyle();
         drawSecondMiddle(processing, "");
         drawNom(processing, "MAP");
         bAddBuild.display(processing);
-        listEstil.display(processing);
-        listUse.display(processing);
-        listTipologia.display(processing);
-        listMaterial.display(processing);
+
+        processing.rectMode(processing.CORNER);
+        processing.fill(67, 83, 96);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle,100, Setup.hButtonsMap, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450,100, Setup.hButtonsMap, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550,100, Setup.hButtonsMap, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 650,100, Setup.hButtonsMap, 10);
+        processing.fill(0);
+        processing.text("Estil: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
+        processing.text("Ús: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 450 + 30);
+        processing.text("Tipologia: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 550 + 30);
+        processing.text("Material: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 650 + 30);
         bTlist.display(processing);
-        //processing.width/2 - 50, processing.height/2, 100, 80, 10
-        //mesures: 1440, 900
-        //1040, processing.height/2 + 150, 600, 500, 10
+        listMaterial.display(processing);
+        listTipologia.display(processing);
+        listUse.display(processing);
+        listEstil.display(processing);
         processing.rectMode(processing.CORNER);
         processing.fill(0xFFDBD9D1);
-        //processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10);
         processing.image(Setup.mapaIlles, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
         llocsMap.display(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
         if(menuOpen){
