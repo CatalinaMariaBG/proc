@@ -1,18 +1,16 @@
 package zonesAPP;
 
-import botonsAPP.ButtonSelect;
 import processing.core.PApplet;
 import processing.core.PImage;
 import setupAPP.Setup;
+import bbdd.DataBase;
 
 import java.io.File;
 
 public class Trivio003 extends PApplet {
 
     GUI gui;
-
-    PImage imageAddedCreate;
-    String titolFoto = "";
+    DataBase db;
 
 
     public static void main(String[] args){
@@ -29,6 +27,10 @@ public class Trivio003 extends PApplet {
         noStroke();
         textAlign(CENTER); textSize(16);
         gui = new GUI(this);
+        db = new DataBase("admin", "12345", "edificis");
+        db.connect();
+        gui.info = db.getInfoTaulaEdificio();
+        Setup.numLlocsMapa = db.getNumRowsTaula("EDIFICIO");
     }
 
     public void draw() {
@@ -61,11 +63,8 @@ public class Trivio003 extends PApplet {
                 gui.c.checkTimer(this);
             }
 
-        } else if(gui.screenActual == GUI.SCREEN.CREATE){
-           if(imageAddedCreate !=null){
-                //image(imageAddedCreate)
-            }
         }
+
     }
 
     //Keyboard interaction
@@ -289,14 +288,5 @@ if(gui.bEnterAccount.mouseIntoButton(this) && gui.bName.text.equals("Name: catal
     }
 
     //Carregar imatges
-    public void fileSelected(File selection){
-        if(selection == null){
-            println("No s'ha seleccionat cap fitxer.");
-        } else {
-            String imageRuta = selection.getAbsolutePath();
 
-            imageAddedCreate = loadImage(imageRuta);
-            titolFoto = selection.getName();
-        }
-    }
     }

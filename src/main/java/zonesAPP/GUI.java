@@ -1,5 +1,6 @@
 package zonesAPP;
 
+import bbdd.DataBase;
 import botonsAPP.*;
 import processing.core.PApplet;
 
@@ -7,10 +8,13 @@ import processing.core.PImage;
 
 import setupAPP.Setup;
 
+import java.io.File;
+import java.util.Objects;
+
 //mesures: 1440, 900
 public class GUI {
 
-    PImage imgAccount, imgFullCreate, imgMenosCreate, x;
+    PImage imgAccount, imgFullCreate, imgMenosCreate, imageAddedCreate;
 
     ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding,
     bInici, bNProjects, bLogOut, bTlist, bAddBuild, bSaveC, bSaveCfull, bAddImage, bColorCreate, bColorPersonal, bPinCreate,
@@ -26,18 +30,21 @@ public class GUI {
     public SCREEN screenActual;
 
     CarrouselFoto c;
-    String[] nomsCarrousel, tipusDibuix, tipusPlantilla;
+    String[] nomsCarrousel, tipusDibuix, tipusPlantilla, nombreQuadrat;
 
     TextList listEstil, listUse, listTipologia, listMaterial, buildEstil, buildUse, buildTipologia, buildMaterial;
     String[][] valuesEstil = {{"0", "tipografia"}, {"1", "ladrillo"}, {"2", "lalala"}, {"3", "berta guapaa"}, {"4", "titita"}};
 
-    ButtonSelect selectDraw, selectPlantilla, selectArxiu, selectDrawFull, selectPlantillaFull;
+    ButtonSelect selectDraw, selectPlantilla, selectArxiu, selectDrawFull, selectPlantillaFull, selectQuadratImage;
 
     LocationSetter llocsMap;
     LocationMap selectedLloc;
+    String[][] info;
 
     int standardSize = 5;
     float xLine, yLine;
+
+    String titolFoto;
 
     ButtonSlide bSizeDraw, bRed, bGreen, bBlue, bSizeDrawFull;
 
@@ -46,11 +53,11 @@ public class GUI {
 boolean menuOpen = false;
 boolean paletaOpen = false;
 boolean establishPersonalC = false;
+boolean selectQuadrat = false;
 
     public GUI(PApplet processing){
 
         screenActual = SCREEN.LOGIN;
-
         //INICIAL
         b1 = new ButtonWords(processing, "CREAR", 190, Setup.yButtonInicial, 180, 80, 10, "CORNER");
         b2 = new ButtonWords(processing, "MAPA", 490, Setup.yButtonInicial, 180, 80, 10, "CORNER");
@@ -109,6 +116,8 @@ boolean establishPersonalC = false;
         bColorPersonal = new ButtonWords(processing, "PERSONALITZAR", Setup.xPaletaColors + Setup.sizePaletaColors/2, Setup.logoDistV + Setup.sizePaletaColors - 30, 400, 40, 10, "CENTER");
         bColorPersonal.setFillColor(0xFF8E8E90);
         bRed = new ButtonSlide(processing, "RED", Setup.xPaletaColors+100+Setup.edgeH, Setup.logoDistV+100+Setup.edgeV, 200, 80, 0, 255, 0);
+        nombreQuadrat = new String[]{"1", "2", "3", "4", "5", "6"};
+        selectQuadratImage = new ButtonSelect(nombreQuadrat, processing.width/2, processing.height/2 - 100, Setup.wButtonsNewBuild, 60, "QUADRAT ON INSERIR");
 
         //BOTONS CREATE FULL SCREEN
         bSaveCfull = new ButtonWords(processing, "SAVE", Setup.edgeH, 818, Setup.ySecondMiddle, 60, 10, "CORNER");
@@ -139,9 +148,10 @@ boolean establishPersonalC = false;
         listEstil = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, Setup.ySecondMiddle + 30,Setup.wButtonMap, Setup.hButtonsMap);
 
         bAddBuild = new ButtonWords(processing, "ADD BUILDING", 1260, 375, 140, 30, 10, "CENTER");
-        llocsMap = new LocationSetter(processing, Setup.info);
+        llocsMap = new LocationSetter(processing, info);
         selectedLloc = null;
         Setup.mapaIlles = processing.loadImage("mapaBalears.svg.png");
+
 
         //BOTONS NEW BUILDING
         bNameBuilding = new ButtonInsertText(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2), Setup.ySecondMiddle + Setup.hButtonsMap/2, Setup.wButtonsNewBuild, Setup.hButtonsMap, "Name: ", 16);
@@ -367,6 +377,33 @@ processing.popStyle();
 
     public void updateRed(){
         Setup.red = bRed.getValue();
+    }
+
+    //On carregar la imatge
+    public void fileSelected(PApplet processing, File selection){
+        if(selection == null){
+            processing.println("No s'ha seleccionat cap fitxer.");
+        } else {
+            String imageRuta = selection.getAbsolutePath();
+
+            imageAddedCreate = processing.loadImage(imageRuta);
+            titolFoto = selection.getName();
+        }
+    }
+    public void updateQuadrat(PApplet processing, ButtonSelect b){
+        if(selectPlantilla.valorSelected == "DUES CASELLES"){
+            if(Objects.equals(b.valorSelected, "1")) {
+                processing.image(imageAddedCreate, 20, 30, 300, 400);
+            } else if(Objects.equals(b.valorSelected, "2")){
+
+            }
+        }
+    }
+
+    public void drawSelectQuadrat(PApplet processing){
+        processing.fill(0xFFDBD9D1);
+        processing.rect(processing.width/2, processing.height/2, 300, 300, 10);
+        selectQuadratImage.display(processing);
     }
 
     //PANTALLES
@@ -643,6 +680,10 @@ selectPlantilla.setEnces(false);
             colorsCreate.display(processing);
             bColorPersonal.display(processing);
         }
+
+        if(selectQuadrat){
+            
+        }
         processing.popStyle();
     }
 
@@ -668,17 +709,17 @@ selectPlantilla.setEnces(false);
         }
         processing.popStyle();
     }
-    public void drawCreateFullScreen(PApplet processing){
+    public void drawCreateFullScreen(PApplet processing) {
         processing.pushStyle();
         processing.background(0xFFDBD9D1);
         processing.rectMode(processing.CORNER);
-selectDrawFull.display(processing);
-bSizeDrawFull.display(processing);
-bColorCreateFull.display(processing);
-bErraseCreateFull.display(processing);
-selectPlantillaFull.display(processing);
-bAddImageFull.display(processing);
-bPinFull.display(processing);
+        selectDrawFull.display(processing);
+        bSizeDrawFull.display(processing);
+        bColorCreateFull.display(processing);
+        bErraseCreateFull.display(processing);
+        selectPlantillaFull.display(processing);
+        bAddImageFull.display(processing);
+        bPinFull.display(processing);
         processing.rect(410, Setup.edgeV, 1010, 860, 10);
         bSaveCfull.display(processing);
         bMenosCreate.display(processing);

@@ -1,16 +1,15 @@
 package botonsAPP;
 
 import processing.core.PApplet;
+import setupAPP.Setup;
 
 public class LocationSetter {
 
-    int numLlocs;
     LocationMap[] edificis;
 
     public LocationSetter(PApplet processing, String[][] info){
-        this.numLlocs = info.length;
-        edificis = new LocationMap[this.numLlocs];
-        for(int i = 0; i<info.length; i++){
+        edificis = new LocationMap[Setup.numLlocsMapa];
+        for(int i = 0; i<Setup.numLlocsMapa; i++){
             edificis[i] = new LocationMap(processing, info[i]);
         }
     }
