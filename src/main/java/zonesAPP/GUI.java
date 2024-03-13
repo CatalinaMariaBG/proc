@@ -19,7 +19,7 @@ public class GUI {
     ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding,
     bInici, bNProjects, bLogOut, bTlist, bAddBuild, bSaveC, bSaveCfull, bAddImage, bColorCreate, bColorPersonal, bPinCreate,
             bErraseCreate, bSaveBuild, bCopyImageBuild, bReturnMap, bImportImage, bCreateBuilding, bNewProject, bSaveCreation,
-    bColorCreateFull, bErraseCreateFull, bAddImageFull, bPinFull;
+    bColorCreateFull, bErraseCreateFull, bAddImageFull, bPinFull, bCercarImage;
 
     ButtonPhotos bAccount, bFullCreate, bMenosCreate;
 
@@ -45,6 +45,7 @@ public class GUI {
     float xLine, yLine;
 
     String titolFoto;
+    String[] imageEdificio;
 
     ButtonSlide bSizeDraw, bRed, bGreen, bBlue, bSizeDrawFull;
 
@@ -107,7 +108,7 @@ boolean selectQuadrat = false;
         bErraseCreate.setFillColor(processing.color(219, 217, 209));
         bPinCreate = new ButtonWords(processing, "PIN",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 726, 400, 60, 10, "CORNER");
         bPinCreate.setFillColor(processing.color(219, 217, 209));
-        tipusPlantilla = new String[]{"DUES CASELLES", "QUATRE CASELLES", "SIS CASELLES", "LLIURE"};
+        tipusPlantilla = new String[]{"UNA CASELLA","DUES CASELLES", "QUATRE CASELLES", "SIS CASELLES"};
         selectPlantilla = new ButtonSelect(tipusPlantilla, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, Setup.wButtonsNewBuild, 60, "PLANTILLA");
         bSizeDraw = new ButtonSlide(processing, "MIDA", (float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), Setup.ySecondMiddle, (float)192.5, 60F, standardSize, 50,10);
         colorsCreate = new PaletaColors(processing, Setup.xPaletaColors, (int)Setup.logoDistV, Setup.sizePaletaColors, Setup.sizePaletaColors, 5, 4);
@@ -117,7 +118,8 @@ boolean selectQuadrat = false;
         bColorPersonal.setFillColor(0xFF8E8E90);
         bRed = new ButtonSlide(processing, "RED", Setup.xPaletaColors+100+Setup.edgeH, Setup.logoDistV+100+Setup.edgeV, 200, 80, 0, 255, 0);
         nombreQuadrat = new String[]{"1", "2", "3", "4", "5", "6"};
-        selectQuadratImage = new ButtonSelect(nombreQuadrat, processing.width/2, processing.height/2 - 100, Setup.wButtonsNewBuild, 60, "QUADRAT ON INSERIR");
+        selectQuadratImage = new ButtonSelect(nombreQuadrat, Setup.xSecondMiddle + 385, Setup.ySecondMiddle + 100, Setup.wButtonsNewBuild, 60, "QUADRAT ON INSERIR");
+        bCercarImage = new ButtonWords(processing, "BUSCAR IMAGEN", Setup.xSecondMiddle + 385, Setup.ySecondMiddle + 250, Setup.wButtonsNewBuild, 60, 10, "CENTER");
 
         //BOTONS CREATE FULL SCREEN
         bSaveCfull = new ButtonWords(processing, "SAVE", Setup.edgeH, 818, Setup.ySecondMiddle, 60, 10, "CORNER");
@@ -148,7 +150,7 @@ boolean selectQuadrat = false;
         listEstil = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, Setup.ySecondMiddle + 30,Setup.wButtonMap, Setup.hButtonsMap);
 
         bAddBuild = new ButtonWords(processing, "ADD BUILDING", 1260, 375, 140, 30, 10, "CENTER");
-        llocsMap = new LocationSetter(processing, info);
+        llocsMap = new LocationSetter(processing, info, imageEdificio);
         selectedLloc = null;
         Setup.mapaIlles = processing.loadImage("mapaBalears.svg.png");
 
@@ -391,19 +393,49 @@ processing.popStyle();
         }
     }
     public void updateQuadrat(PApplet processing, ButtonSelect b){
-        if(selectPlantilla.valorSelected == "DUES CASELLES"){
+        if(selectPlantilla.valorSelected == "QUATRE CASELLES"){
             if(Objects.equals(b.valorSelected, "1")) {
-                processing.image(imageAddedCreate, 20, 30, 300, 400);
+                processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle, 385, 250);
             } else if(Objects.equals(b.valorSelected, "2")){
-
+                processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle, 385, 250);
+            } else if(Objects.equals(b.valorSelected, "3")){
+                processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle + 250, 385, 250);
+            } else if(Objects.equals(b.valorSelected, "4")){
+                processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle + 250, 385, 250);
             }
+        } else if(selectPlantilla.valorSelected == "DUES CASELLES"){
+            if(Objects.equals(b.valorSelected, "1")) {
+                processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle, 385, 500);
+            } else if(Objects.equals(b.valorSelected, "2")){
+                processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle, 385, 500);
+            }
+        } else if(selectPlantilla.valorSelected == "SIS CASELLES"){
+            if(Objects.equals(b.valorSelected, "1")) {
+                processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle, 385, (float) 500 /3);
+            } else if(Objects.equals(b.valorSelected, "2")){
+                processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle, 385, (float) 500 /3);
+            } else if(Objects.equals(b.valorSelected, "3")){
+                processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle + (float) 500 /3, 385, (float) 500 /3);
+            } else if(Objects.equals(b.valorSelected, "4")){
+                processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle + (float) 500 /3, 385, (float) 500 /3);
+            } else if(Objects.equals(b.valorSelected, "5")){
+                processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle + (float) 2*((float) 500 /3), 385, (float) 500 /3);
+            }else if(Objects.equals(b.valorSelected, "6")){
+                processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle + (float) 2*((float) 500 /3), 385, (float) 500 /3);
+            }
+        } else if(selectPlantilla.valorSelected == "UNA CASELLA") {
+            processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
         }
     }
-
     public void drawSelectQuadrat(PApplet processing){
-        processing.fill(0xFFDBD9D1);
-        processing.rect(processing.width/2, processing.height/2, 300, 300, 10);
+        processing.pushStyle();
+        processing.rectMode(processing.CENTER);
+        processing.fill(255);
+        processing.rect(Setup.xSecondMiddle+385, Setup.ySecondMiddle+250, 500, 400, 10);
         selectQuadratImage.display(processing);
+        updateQuadrat(processing, selectQuadratImage);
+        bCercarImage.display(processing);
+        processing.popStyle();
     }
 
     //PANTALLES
@@ -628,8 +660,6 @@ processing.popStyle();
         bSaveC.display(processing);
         processing.rectMode(processing.CORNER);
         processing.fill(0xFFDBD9D1);
-        //processing.rect((float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 350F, (float)192.5, 60, 10);
-        //processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 444, (float)192.5, 60, 10);
         processing.rect((float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 444F, (float)192.5, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, 400, 60, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, 400, 60, 10);
@@ -682,7 +712,7 @@ selectPlantilla.setEnces(false);
         }
 
         if(selectQuadrat){
-            
+            drawSelectQuadrat(processing);
         }
         processing.popStyle();
     }

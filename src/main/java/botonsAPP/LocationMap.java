@@ -2,8 +2,10 @@ package botonsAPP;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import setupAPP.Setup;
 
 import static java.lang.Float.parseFloat;
+import bbdd.DataBase;
 
 public class LocationMap {
 
@@ -22,11 +24,12 @@ public class LocationMap {
         this.img = processing.loadImage(img);
     }
 
-    public LocationMap(PApplet processing, String[] info){
+    public LocationMap(PApplet processing, String[] info, String[] img){
         this.nom = info[1];
+        Setup.edificio = nom;
         this.lng = parseFloat(info[2]);
         this.lat = parseFloat(info[3]);
-        this.img = processing.loadImage(info[1]);
+        this.img = processing.loadImage(img[0]);
         this.longMin = 0.49761425F;
         this.longMax = 4.89452897F;
         this.latMin = 38.54582099F;

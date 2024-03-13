@@ -44,6 +44,7 @@ public class Setup {
         public static float blue;
 
         public static int numLlocsMapa;
+        public static String edificio;
 
 
 }

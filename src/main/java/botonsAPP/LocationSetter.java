@@ -7,10 +7,10 @@ public class LocationSetter {
 
     LocationMap[] edificis;
 
-    public LocationSetter(PApplet processing, String[][] info){
+    public LocationSetter(PApplet processing, String[][] info, String[] img){
         edificis = new LocationMap[Setup.numLlocsMapa];
         for(int i = 0; i<Setup.numLlocsMapa; i++){
-            edificis[i] = new LocationMap(processing, info[i]);
+            edificis[i] = new LocationMap(processing, info[i], img);
         }
     }
 

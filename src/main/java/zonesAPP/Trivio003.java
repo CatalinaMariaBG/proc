@@ -6,6 +6,7 @@ import setupAPP.Setup;
 import bbdd.DataBase;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class Trivio003 extends PApplet {
 
@@ -30,7 +31,7 @@ public class Trivio003 extends PApplet {
         db = new DataBase("admin", "12345", "edificis");
         db.connect();
         gui.info = db.getInfoTaulaEdificio();
-        Setup.numLlocsMapa = db.getNumRowsTaula("EDIFICIO");
+        gui.imageEdificio = db.getImagenesEdificio(Setup.edificio);
     }
 
     public void draw() {
@@ -208,8 +209,16 @@ public class Trivio003 extends PApplet {
                 }
                 gui.selectDraw.conmutar();
             } else if(gui.bAddImage.mouseIntoButton(this) && gui.bAddImage.ences){
-                selectInput("Selecciona una imatge...", "fileSelected");
-            } else if(gui.selectPlantilla.mouseIntoSelect(this) && gui.selectPlantilla.ences){
+                gui.selectQuadrat = !gui.selectQuadrat;
+            } else if(gui.selectQuadratImage.mouseIntoSelect(this) && gui.selectQuadratImage.ences){
+                if(!gui.selectQuadratImage.plegat){
+                    gui.selectQuadratImage.update(this);
+                }
+                gui.selectQuadratImage.conmutar();
+            } else if(gui.bCercarImage.mouseIntoButton(this) && gui.bCercarImage.ences){
+                selectInput("Selecciona una imatge ...", "fileSelected");
+            }
+            else if(gui.selectPlantilla.mouseIntoSelect(this) && gui.selectPlantilla.ences){
                 if(!gui.selectPlantilla.plegat){
                     gui.selectPlantilla.update(this);
                 }
