@@ -404,7 +404,7 @@ processing.popStyle();
                 processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle + 250, 385, 250);
             }
         } else if(selectPlantilla.valorSelected == "DUES CASELLES"){
-            if(Objects.equals(b.valorSelected, "1")) {
+            if(Objects.equals(b.valorSelected, "1") && imageAddedCreate!=null) {
                 processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle, 385, 500);
             } else if(Objects.equals(b.valorSelected, "2")){
                 processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle, 385, 500);
