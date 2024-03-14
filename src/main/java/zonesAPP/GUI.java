@@ -394,33 +394,33 @@ processing.popStyle();
     }
     public void updateQuadrat(PApplet processing, ButtonSelect b){
         if(selectPlantilla.valorSelected == "QUATRE CASELLES"){
-            if(Objects.equals(b.valorSelected, "1")) {
+            if(Objects.equals(b.valorSelected, "1") && imageAddedCreate!=null) {
                 processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle, 385, 250);
-            } else if(Objects.equals(b.valorSelected, "2")){
+            } else if(Objects.equals(b.valorSelected, "2") && imageAddedCreate!=null){
                 processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle, 385, 250);
-            } else if(Objects.equals(b.valorSelected, "3")){
+            } else if(Objects.equals(b.valorSelected, "3") && imageAddedCreate!=null){
                 processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle + 250, 385, 250);
-            } else if(Objects.equals(b.valorSelected, "4")){
+            } else if(Objects.equals(b.valorSelected, "4") && imageAddedCreate!=null){
                 processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle + 250, 385, 250);
             }
         } else if(selectPlantilla.valorSelected == "DUES CASELLES"){
             if(Objects.equals(b.valorSelected, "1") && imageAddedCreate!=null) {
                 processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle, 385, 500);
-            } else if(Objects.equals(b.valorSelected, "2")){
+            } else if(Objects.equals(b.valorSelected, "2") && imageAddedCreate!=null){
                 processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle, 385, 500);
             }
         } else if(selectPlantilla.valorSelected == "SIS CASELLES"){
-            if(Objects.equals(b.valorSelected, "1")) {
+            if(Objects.equals(b.valorSelected, "1") && imageAddedCreate!=null) {
                 processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle, 385, (float) 500 /3);
-            } else if(Objects.equals(b.valorSelected, "2")){
+            } else if(Objects.equals(b.valorSelected, "2") && imageAddedCreate!=null){
                 processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle, 385, (float) 500 /3);
-            } else if(Objects.equals(b.valorSelected, "3")){
+            } else if(Objects.equals(b.valorSelected, "3") && imageAddedCreate!=null){
                 processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle + (float) 500 /3, 385, (float) 500 /3);
-            } else if(Objects.equals(b.valorSelected, "4")){
+            } else if(Objects.equals(b.valorSelected, "4") && imageAddedCreate!=null){
                 processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle + (float) 500 /3, 385, (float) 500 /3);
-            } else if(Objects.equals(b.valorSelected, "5")){
+            } else if(Objects.equals(b.valorSelected, "5")&& imageAddedCreate!=null){
                 processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle + (float) 2*((float) 500 /3), 385, (float) 500 /3);
-            }else if(Objects.equals(b.valorSelected, "6")){
+            }else if(Objects.equals(b.valorSelected, "6")&& imageAddedCreate!=null){
                 processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle + (float) 2*((float) 500 /3), 385, (float) 500 /3);
             }
         } else if(selectPlantilla.valorSelected == "UNA CASELLA") {
