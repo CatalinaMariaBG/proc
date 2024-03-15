@@ -67,7 +67,7 @@ public class TextList {
     }
 
     public void update(PApplet processing){
-        String searchFor = this.textField.text;
+        String searchFor = this.textField.getTextoEspecial();
         this.numMatchs = 0;
         this.buttons = new ArrayList<ButtonWords>();
 

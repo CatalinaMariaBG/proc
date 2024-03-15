@@ -4,22 +4,23 @@ import bbdd.DataBase;
 import botonsAPP.*;
 import processing.core.PApplet;
 
+import processing.core.PGraphics;
 import processing.core.PImage;
 
 import setupAPP.Setup;
 
 import java.io.File;
-import java.util.Objects;
+import funcionsAPP.Canvas;
 
 //mesures: 1440, 900
 public class GUI {
 
-    PImage imgAccount, imgFullCreate, imgMenosCreate, imageAddedCreate;
+    PImage imgAccount, imgFullCreate, imgMenosCreate;
 
     ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding,
     bInici, bNProjects, bLogOut, bTlist, bAddBuild, bSaveC, bSaveCfull, bAddImage, bColorCreate, bColorPersonal, bPinCreate,
             bErraseCreate, bSaveBuild, bCopyImageBuild, bReturnMap, bImportImage, bCreateBuilding, bNewProject, bSaveCreation,
-    bColorCreateFull, bErraseCreateFull, bAddImageFull, bPinFull, bCercarImage;
+    bColorCreateFull, bErraseCreateFull, bAddImageFull, bPinFull;
 
     ButtonPhotos bAccount, bFullCreate, bMenosCreate;
 
@@ -32,8 +33,8 @@ public class GUI {
     CarrouselFoto c;
     String[] nomsCarrousel, tipusDibuix, tipusPlantilla, nombreQuadrat;
 
-    TextList listEstil, listUse, listTipologia, listMaterial, buildEstil, buildUse, buildTipologia, buildMaterial;
-    String[][] valuesEstil = {{"0", "tipografia"}, {"1", "ladrillo"}, {"2", "lalala"}, {"3", "berta guapaa"}, {"4", "titita"}};
+    TextList listEstil, listTipologia, listMaterial, buildEstil, buildUse, buildTipologia, buildMaterial;
+
 
     ButtonSelect selectDraw, selectPlantilla, selectArxiu, selectDrawFull, selectPlantillaFull, selectQuadratImage;
 
@@ -50,13 +51,19 @@ public class GUI {
     ButtonSlide bSizeDraw, bRed, bGreen, bBlue, bSizeDrawFull;
 
     PaletaColors colorsCreate;
+    Canvas canvas;
+    PGraphics dibuix;
+    PImage lastImage;
 
 boolean menuOpen = false;
 boolean paletaOpen = false;
 boolean establishPersonalC = false;
-boolean selectQuadrat = false;
 
-    public GUI(PApplet processing){
+DataBase db;
+
+    public GUI(PApplet processing, DataBase db){
+
+        this.db = db;
 
         screenActual = SCREEN.LOGIN;
         //INICIAL
@@ -118,8 +125,8 @@ boolean selectQuadrat = false;
         bColorPersonal.setFillColor(0xFF8E8E90);
         bRed = new ButtonSlide(processing, "RED", Setup.xPaletaColors+100+Setup.edgeH, Setup.logoDistV+100+Setup.edgeV, 200, 80, 0, 255, 0);
         nombreQuadrat = new String[]{"1", "2", "3", "4", "5", "6"};
-        selectQuadratImage = new ButtonSelect(nombreQuadrat, Setup.xSecondMiddle + 385, Setup.ySecondMiddle + 100, Setup.wButtonsNewBuild, 60, "QUADRAT ON INSERIR");
-        bCercarImage = new ButtonWords(processing, "BUSCAR IMAGEN", Setup.xSecondMiddle + 385, Setup.ySecondMiddle + 250, Setup.wButtonsNewBuild, 60, 10, "CENTER");
+        canvas = new Canvas(Setup.xSecondMiddle, Setup.ySecondMiddle,770, 500);
+        dibuix = processing.createGraphics(770, 500);
 
         //BOTONS CREATE FULL SCREEN
         bSaveCfull = new ButtonWords(processing, "SAVE", Setup.edgeH, 818, Setup.ySecondMiddle, 60, 10, "CORNER");
@@ -143,13 +150,19 @@ boolean selectQuadrat = false;
         bLogOut = new ButtonWords(processing, "LOG OUT", processing.width/2 + 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
 
         // BOTONS MAP
+        String[][] valuesEstil = db.getEstilosEdificios();
+        String[][] valuesMaterial = db.getMaterialesEdificios();
+        String[][] valuesTipologia = db.getTipologiaEdificios();
+
+
         bTlist = new ButtonWords(processing, "APLICA", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10,"CORNER");
-        listMaterial = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, 650 + 30, Setup.wButtonMap, Setup.hButtonsMap);
-        listTipologia = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, 550 + 30, Setup.wButtonMap, Setup.hButtonsMap);
-        listUse = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, 450 + 30, Setup.wButtonMap, Setup.hButtonsMap);
+        listMaterial = new TextList(processing, valuesMaterial, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, 550 + 30, Setup.wButtonMap, Setup.hButtonsMap);
+        listTipologia = new TextList(processing, valuesTipologia, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, 450 + 30, Setup.wButtonMap, Setup.hButtonsMap);
         listEstil = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, Setup.ySecondMiddle + 30,Setup.wButtonMap, Setup.hButtonsMap);
 
         bAddBuild = new ButtonWords(processing, "ADD BUILDING", 1260, 375, 140, 30, 10, "CENTER");
+        info = db.getInfoTaulaEdificio();
+        //imageEdificio = db.getImagenesEdificio(info[]);
         llocsMap = new LocationSetter(processing, info, imageEdificio);
         selectedLloc = null;
         Setup.mapaIlles = processing.loadImage("mapaBalears.svg.png");
@@ -161,7 +174,7 @@ boolean selectQuadrat = false;
         buildEstil = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 150, Setup.wButtonsNewBuild, Setup.hButtonsMap);
         buildUse = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 225, Setup.wButtonsNewBuild, Setup.hButtonsMap);
         buildTipologia = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 300, Setup.wButtonsNewBuild, Setup.hButtonsMap);
-        buildMaterial = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 375, Setup.wButtonsNewBuild, Setup.hButtonsMap);
+        buildMaterial = new TextList(processing, valuesMaterial,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 375, Setup.wButtonsNewBuild, Setup.hButtonsMap);
         bSaveBuild = new ButtonWords(processing, "SAVE", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 450, 300, 30, 10,"CENTER");
 
         //BOTONS BUILDING INFO
@@ -315,6 +328,7 @@ processing.popStyle();
 
     //CREATE FUNCIÓ DE DIBUIXAR LÍNIES...
     public void updateDraw(PApplet processing, ButtonSelect b){
+        dibuix.beginDraw();
         if(mouseIntoCreate(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500) && processing.mousePressed){ //Coordenades del SecondMiddle
             if(b.valorSelected.equals("CERCLE")){
                 cercle(processing);
@@ -329,26 +343,33 @@ processing.popStyle();
                 bFullCreate.setEnces(true);
             }
         }
+        dibuix.endDraw();
     }
     public void cercle(PApplet processing){
+        dibuix.beginDraw();
         processing.pushStyle();
         processing.fill(Setup.colour);
         processing.ellipse(processing.mouseX, processing.mouseY, Setup.size, Setup.size);
         processing.popStyle();
+        dibuix.endDraw();
     }
     public void quadrat(PApplet processing){
+        dibuix.beginDraw();
         processing.pushStyle();
         processing.fill(Setup.colour);
         processing.rect(processing.mouseX, processing.mouseY, Setup.size, Setup.size);
         processing.popStyle();
+        dibuix.endDraw();
     }
     public void line(PApplet processing){
+        dibuix.beginDraw();
         processing.pushStyle();
         processing.fill(Setup.colour);
         processing.stroke(Setup.colour);
         processing.strokeWeight(Setup.size);
         processing.line(xLine, yLine, processing.mouseX, processing.mouseY);
         processing.popStyle();
+        dibuix.endDraw();
     }
 
     public boolean mouseIntoCreate(PApplet processing, float x, float y, float w, float h){
@@ -359,15 +380,20 @@ processing.popStyle();
     public void updatePlantilla(PApplet processing, ButtonSelect b){
         processing.pushStyle();
         processing.stroke(0); processing.strokeWeight(2);
-        if(b.valorSelected == "DUES CASELLES"){
+        if(b.valorSelected == "UNA CASELLA"){
+            canvas.setDistribucio(Canvas.DISTRIBUCIO.UNXUN);
+        } else if(b.valorSelected == "DUES CASELLES"){
             processing.line(955, Setup.ySecondMiddle, 955, 850);
+            canvas.setDistribucio(Canvas.DISTRIBUCIO.UNXDOS);
         } else if(b.valorSelected == "QUATRE CASELLES"){
             processing.line(955,Setup.ySecondMiddle, 955, 850);
             processing.line(Setup.xSecondMiddle, 600, 1340, 600);
+            canvas.setDistribucio(Canvas.DISTRIBUCIO.DOSXDOS);
         } else if(b.valorSelected == "SIS CASELLES"){
             processing.line(955,Setup.ySecondMiddle, 955, 850);
             processing.line(Setup.xSecondMiddle, 350 + Setup.divHsis, 1340, 350 + Setup.divHsis);
             processing.line(Setup.xSecondMiddle, 350 + 2*Setup.divHsis, 1340, 350 + 2*Setup.divHsis);
+            canvas.setDistribucio(Canvas.DISTRIBUCIO.TRESXDOS);
         }
         processing.popStyle();
     }
@@ -382,61 +408,8 @@ processing.popStyle();
     }
 
     //On carregar la imatge
-    public void fileSelected(PApplet processing, File selection){
-        if(selection == null){
-            processing.println("No s'ha seleccionat cap fitxer.");
-        } else {
-            String imageRuta = selection.getAbsolutePath();
 
-            imageAddedCreate = processing.loadImage(imageRuta);
-            titolFoto = selection.getName();
-        }
-    }
-    public void updateQuadrat(PApplet processing, ButtonSelect b){
-        if(selectPlantilla.valorSelected == "QUATRE CASELLES"){
-            if(Objects.equals(b.valorSelected, "1") && imageAddedCreate!=null) {
-                processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle, 385, 250);
-            } else if(Objects.equals(b.valorSelected, "2") && imageAddedCreate!=null){
-                processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle, 385, 250);
-            } else if(Objects.equals(b.valorSelected, "3") && imageAddedCreate!=null){
-                processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle + 250, 385, 250);
-            } else if(Objects.equals(b.valorSelected, "4") && imageAddedCreate!=null){
-                processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle + 250, 385, 250);
-            }
-        } else if(selectPlantilla.valorSelected == "DUES CASELLES"){
-            if(Objects.equals(b.valorSelected, "1") && imageAddedCreate!=null) {
-                processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle, 385, 500);
-            } else if(Objects.equals(b.valorSelected, "2") && imageAddedCreate!=null){
-                processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle, 385, 500);
-            }
-        } else if(selectPlantilla.valorSelected == "SIS CASELLES"){
-            if(Objects.equals(b.valorSelected, "1") && imageAddedCreate!=null) {
-                processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle, 385, (float) 500 /3);
-            } else if(Objects.equals(b.valorSelected, "2") && imageAddedCreate!=null){
-                processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle, 385, (float) 500 /3);
-            } else if(Objects.equals(b.valorSelected, "3") && imageAddedCreate!=null){
-                processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle + (float) 500 /3, 385, (float) 500 /3);
-            } else if(Objects.equals(b.valorSelected, "4") && imageAddedCreate!=null){
-                processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle + (float) 500 /3, 385, (float) 500 /3);
-            } else if(Objects.equals(b.valorSelected, "5")&& imageAddedCreate!=null){
-                processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle + (float) 2*((float) 500 /3), 385, (float) 500 /3);
-            }else if(Objects.equals(b.valorSelected, "6")&& imageAddedCreate!=null){
-                processing.image(imageAddedCreate, Setup.xSecondMiddle + 385, Setup.ySecondMiddle + (float) 2*((float) 500 /3), 385, (float) 500 /3);
-            }
-        } else if(selectPlantilla.valorSelected == "UNA CASELLA") {
-            processing.image(imageAddedCreate, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
-        }
-    }
-    public void drawSelectQuadrat(PApplet processing){
-        processing.pushStyle();
-        processing.rectMode(processing.CENTER);
-        processing.fill(255);
-        processing.rect(Setup.xSecondMiddle+385, Setup.ySecondMiddle+250, 500, 400, 10);
-        selectQuadratImage.display(processing);
-        updateQuadrat(processing, selectQuadratImage);
-        bCercarImage.display(processing);
-        processing.popStyle();
-    }
+
 
     //PANTALLES
     public void drawInicial(PApplet processing){
@@ -530,16 +503,13 @@ processing.popStyle();
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle,100, Setup.hButtonsMap, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450,100, Setup.hButtonsMap, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550,100, Setup.hButtonsMap, 10);
-        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 650,100, Setup.hButtonsMap, 10);
         processing.fill(0);
         processing.text("Estil: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
-        processing.text("Ús: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 450 + 30);
-        processing.text("Tipologia: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 550 + 30);
-        processing.text("Material: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 650 + 30);
+        processing.text("Tipologia: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 450 + 30);
+        processing.text("Material: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 550 + 30);
         bTlist.display(processing);
         listMaterial.display(processing);
         listTipologia.display(processing);
-        listUse.display(processing);
         listEstil.display(processing);
         processing.rectMode(processing.CORNER);
         processing.fill(0xFFDBD9D1);
@@ -654,6 +624,7 @@ processing.popStyle();
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "");
+        canvas.display(processing);
         drawNom(processing, "CREATE");
         processing.imageMode(processing.CENTER);
         bFullCreate.display(processing);
@@ -672,7 +643,6 @@ processing.popStyle();
         bSizeDraw.display(processing);
         selectDraw.display(processing);
         updatePlantilla(processing, selectPlantilla);
-        updateDraw(processing, selectDraw);
         updateSizeDraw();
         if(menuOpen){
             drawLateralBar(processing);
@@ -710,9 +680,8 @@ selectPlantilla.setEnces(false);
             colorsCreate.display(processing);
             bColorPersonal.display(processing);
         }
-
-        if(selectQuadrat){
-            drawSelectQuadrat(processing);
+        if(dibuix!=null){
+            processing.image(dibuix, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
         }
         processing.popStyle();
     }

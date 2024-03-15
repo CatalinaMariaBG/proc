@@ -11,14 +11,12 @@ public class LocationMap {
 
     PImage img;
     String nom;
-    String localitat;
     float lat, lng;
     float longMin, longMax, latMin, latMax;
     float r = 10;
 
-    public LocationMap(PApplet processing, String n, String l, float lat, float lng, String img) {
+    public LocationMap(PApplet processing, String n, float lat, float lng, String img) {
         this.nom = n;
-        this.localitat = l;
         this.lat = lat;
         this.lng = lng;
         this.img = processing.loadImage(img);
@@ -59,7 +57,7 @@ public class LocationMap {
         processing.fill(0); processing.textSize(18); processing.textAlign(processing.CENTER);
         processing.text(this.nom, x + w/2, y + w + 30);
 
-        processing.text("("+this.localitat+")", x + w/2, y + w + 30 + 18);
+        processing.text("("+this.nom+")", x + w/2, y + w + 30 + 18);
         processing.popStyle();
     }
 

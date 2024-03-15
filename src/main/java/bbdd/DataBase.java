@@ -1,10 +1,8 @@
 package bbdd;
 import processing.core.PImage;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
+
 public class DataBase {
 
         // Variable de connexió a la BBDD
@@ -106,6 +104,63 @@ public class DataBase {
                 return null;
             }
         }
+
+        public String[][] getEstilosEdificios(){
+            int numFiles = getNumRowsTaula("ESTILO");
+            int numCols = 2;
+String[][] estilos = new String[numFiles][numCols];
+try{
+    ResultSet rs = query.executeQuery("SELECT * FROM ESTILO");
+    int nr = 0;
+    while(rs.next()){
+        estilos[nr][0] = String.valueOf(rs.getString("ID_ESTILO"));
+        estilos[nr][1] = String.valueOf(rs.getString("NOMBRE_ESTILO"));
+        nr++;
+    }
+    return estilos;
+} catch (Exception e) {
+    System.out.println(e);
+    return null;
+}
+        }
+
+    public String[][] getMaterialesEdificios(){
+        int numFiles = getNumRowsTaula("MATERIAL");
+        int numCols = 2;
+        String[][] estilos = new String[numFiles][numCols];
+        try{
+            ResultSet rs = query.executeQuery("SELECT * FROM MATERIAL");
+            int nr = 0;
+            while(rs.next()){
+                estilos[nr][0] = String.valueOf(rs.getString("ID_MATERIAL"));
+                estilos[nr][1] = String.valueOf(rs.getString("NOMBRE_MATERIAL"));
+                nr++;
+            }
+            return estilos;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public String[][] getTipologiaEdificios(){
+        int numFiles = getNumRowsTaula("TIPOLOGIA");
+        int numCols = 2;
+        String[][] estilos = new String[numFiles][numCols];
+        try{
+            ResultSet rs = query.executeQuery("SELECT * FROM TIPOLOGIA");
+            int nr = 0;
+            while(rs.next()){
+                estilos[nr][0] = String.valueOf(rs.getString("ID_TIPOLOGIA"));
+                estilos[nr][1] = String.valueOf(rs.getString("NOMBRE_TIPOLOGIA"));
+                nr++;
+            }
+            return estilos;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
 
 
         public String[] getImagenesEdificio(String idEDIFICIO){

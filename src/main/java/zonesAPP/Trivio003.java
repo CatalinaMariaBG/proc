@@ -27,11 +27,10 @@ public class Trivio003 extends PApplet {
     public void setup(){
         noStroke();
         textAlign(CENTER); textSize(16);
-        gui = new GUI(this);
         db = new DataBase("admin", "12345", "edificis");
         db.connect();
-        gui.info = db.getInfoTaulaEdificio();
-        gui.imageEdificio = db.getImagenesEdificio(Setup.edificio);
+        gui = new GUI(this, db);
+
     }
 
     public void draw() {
@@ -85,11 +84,8 @@ public class Trivio003 extends PApplet {
         }
         if(gui.screenActual == GUI.SCREEN.MAP){
             if(gui.listEstil.getTextField().mouseIntoTextRect(this)) {
-                gui.listEstil.getTextField().keyPressed(key, (int)keyCode);
+                gui.listEstil.getTextField().keyPressed(key, (int) keyCode);
                 gui.listEstil.update(this);
-            } else if(gui.listUse.getTextField().mouseIntoTextRect(this)){
-                gui.listUse.getTextField().keyPressed(key, (int)keyCode);
-                gui.listUse.update(this);
             } else if(gui.listTipologia.getTextField().mouseIntoTextRect(this)) {
                 gui.listTipologia.getTextField().keyPressed(key, (int) keyCode);
                 gui.listTipologia.update(this);
@@ -177,9 +173,6 @@ public class Trivio003 extends PApplet {
             gui.listEstil.getTextField().pressedTrue(this);
             gui.listEstil.buttonPressed(this);
 
-            gui.listUse.getTextField().pressedTrue(this);
-            gui.listUse.buttonPressed(this);
-
             gui.listTipologia.getTextField().pressedTrue(this);
             gui.listTipologia.buttonPressed(this);
 
@@ -209,14 +202,10 @@ public class Trivio003 extends PApplet {
                 }
                 gui.selectDraw.conmutar();
             } else if(gui.bAddImage.mouseIntoButton(this) && gui.bAddImage.ences){
-                gui.selectQuadrat = !gui.selectQuadrat;
-            } else if(gui.selectQuadratImage.mouseIntoSelect(this) && gui.selectQuadratImage.ences){
-                if(!gui.selectQuadratImage.plegat){
-                    gui.selectQuadratImage.update(this);
-                }
-                gui.selectQuadratImage.conmutar();
-            } else if(gui.bCercarImage.mouseIntoButton(this) && gui.bCercarImage.ences){
                 selectInput("Selecciona una imatge ...", "fileSelected");
+            } else if(gui.bErraseCreate.mouseIntoButton(this) && gui.bErraseCreate.ences){
+                gui.dibuix = createGraphics(770, 500);
+                gui.canvas.resetCanvas();
             }
             else if(gui.selectPlantilla.mouseIntoSelect(this) && gui.selectPlantilla.ences){
                 if(!gui.selectPlantilla.plegat){
@@ -274,6 +263,8 @@ public class Trivio003 extends PApplet {
                 gui.bSizeDraw.checkSlider(this);
             } else if(gui.bRed.mouseIntoSlide(this) && gui.establishPersonalC){
                 gui.bRed.checkSlider(this);
+            } else if(gui.canvas.mouseOver(this)){
+                gui.updateDraw(this, gui.selectDraw);
             }
         }
         }
@@ -296,6 +287,16 @@ if(gui.bEnterAccount.mouseIntoButton(this) && gui.bName.text.equals("Name: catal
 }
     }
 
+
     //Carregar imatges
+    public void fileSelected(File selection){
+        if(selection == null){
+            println("No s'ha seleccionat cap fitxer.");
+        } else {
+            String imageRuta = selection.getAbsolutePath();
+            gui.lastImage = loadImage(imageRuta);
+            gui.canvas.addImage(this, gui.lastImage);
+        }
+    }
 
     }
