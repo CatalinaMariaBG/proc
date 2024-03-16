@@ -1,5 +1,6 @@
 package bbdd;
 import processing.core.PImage;
+import setupAPP.Setup;
 
 import java.sql.*;
 
@@ -105,6 +106,26 @@ public class DataBase {
             }
         }
 
+
+    public String[] getImagenesEdificio(String idEDIFICIO){
+        int numFiles = getNumRowsQuery("SELECT COUNT(*) AS n FROM IMAGEN img, EDIFICIO ed WHERE img.EDIFICIO=ed.ID_EDIFICIO AND ed.ID_EDIFICIO = '"+idEDIFICIO+"'");
+        String[] info = new String[numFiles];
+        try {
+            ResultSet rs = query.executeQuery( "SELECT img.NOMBRE_IMAGEN AS IMAGEN FROM IMAGEN img, EDIFICIO ed WHERE img.EDIFICIO=ed.ID_EDIFICIO AND ed.ID_EDIFICIO = '"+idEDIFICIO+"'");
+            int nr = 0;
+            while (rs.next()) {
+                info[nr]= rs.getString("NOMBRE_IMAGEN");
+                nr++;
+            }
+            return info;
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            return null;
+        }
+
+    }
+
         public String[][] getEstilosEdificios(){
             int numFiles = getNumRowsTaula("ESTILO");
             int numCols = 2;
@@ -162,26 +183,6 @@ try{
         }
     }
 
-
-        public String[] getImagenesEdificio(String idEDIFICIO){
-            int numFiles = getNumRowsQuery("SELECT COUNT(*) AS n FROM imagen img, edificio ed WHERE img.EDIFICIO=ed.ID_EDIFICIO AND ed.ID_EDIFICIO = '"+idEDIFICIO+"'");
-            String[] info = new String[numFiles];
-            try {
-                ResultSet rs = query.executeQuery( "SELECT img.NOMBRE_IMAGEN AS imagen FROM imagen img, edificio ed WHERE img.EDIFICIO=ed.ID_EDIFICIO AND ed.ID_EDIFICIO = '"+idEDIFICIO+"'");
-                int nr = 0;
-                while (rs.next()) {
-                    info[nr]= rs.getString("imagen");
-                    nr++;
-                }
-                return info;
-            }
-            catch(Exception e) {
-                System.out.println(e);
-                return null;
-            }
-
-        }
-
         // Retorna les dades de la columna NOM de la taula UNITAT
         public String[] getColumnaNomTaulaUnitat(){
             int numFiles = getNumRowsTaula("unitat");
@@ -214,11 +215,43 @@ try{
             }
         }
 
+        public int getIDEstil(String nomEstil){
+            try{
+                ResultSet rs = query.executeQuery("SELECT ESTILO FROM ESTILO WHERE ESTILO.NOMBRE_ESTILO = '"+nomEstil+"'");
+                rs.next();
+                return rs.getInt("ID_ESTILO");
+            }catch(Exception e) {
+                System.out.println(e);
+                return -1;
+            }
+        }
+
+    public int getIDMaterial(String nomMaterial){
+        try{
+            ResultSet rs = query.executeQuery("SELECT MATERIAL FROM MATERIAL WHERE MATERIAL.NOMBRE_MATERIAL = '"+nomMaterial+"'");
+            rs.next();
+            return rs.getInt("ID_MATERIAL");
+        }catch(Exception e) {
+            System.out.println(e);
+            return -1;
+        }
+    }
+
+    public int getIDTipologia(String nomTipologia){
+        try{
+            ResultSet rs = query.executeQuery("SELECT TIPOLOGIA FROM TIPOLOGIA WHERE TIPOLOGIA.NOMBRE_TIPOLOGIA = '"+nomTipologia+"'");
+            rs.next();
+            return rs.getInt("ID_TIPOLOGIA");
+        }catch(Exception e) {
+            System.out.println(e);
+            return -1;
+        }
+    }
+
 
         // INSERTS
 
         // Inserta les dades a la taula Unitat
-
         void insertInfoTaulaUnitat(String num, String nom){
             try {
                 String sNom = nom.replace("\'", "\\'");
@@ -227,6 +260,19 @@ try{
                 query.execute(q);
             }
             catch(Exception e) {
+                System.out.println(e);
+            }
+        }
+
+        public void insertInfoTaulaEdifici(String nom, float x, float y, String user, String estil, String material, String tipologia){
+            int c = getNumRowsTaula("EDIFICIO") + 1;
+            int estilID = getIDEstil(estil);
+            int materialID = getIDMaterial(material);
+            int tipologiaID = getIDTipologia(tipologia);
+            try{
+                String q = "INSERT INTO EDIFICIO (ID_EDIFICIO, DESCRIPCION, POSX, POSY, USUARIO, ESTILO, MATERIAL, TIPOLOGIA) VALUES ('"+c+"', '"+nom+"', '"+x+"', '"+y+"', '"+user+"', '"+estilID+"', '"+materialID+"', '"+tipologiaID+"')";
+                query.execute(q);
+            }catch(Exception e) {
                 System.out.println(e);
             }
         }

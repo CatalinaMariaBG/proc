@@ -57,8 +57,15 @@ public class ButtonInsertText {
         }
     }
 
+    public String getText(){
+        return this.text;
+    }
     public String getTextoEspecial(){
         return this.text.substring(1);
+    }
+
+    public String getTextoEspecial2(){
+        return this.text.substring(textoEstatico.length());
     }
 
     public void removeText(){

@@ -1,18 +1,18 @@
 package zonesAPP;
 
+import botonsAPP.ButtonInsertText;
 import processing.core.PApplet;
-import processing.core.PImage;
 import setupAPP.Setup;
 import bbdd.DataBase;
 
 import java.io.File;
-import java.util.Arrays;
+
+import botonsAPP.Pin;
 
 public class Trivio003 extends PApplet {
 
     GUI gui;
     DataBase db;
-
 
     public static void main(String[] args){
         PApplet.main("zonesAPP.Trivio003", args);
@@ -62,7 +62,17 @@ public class Trivio003 extends PApplet {
             if(!gui.c.checkKey(this) || !gui.c.chekButtons(this)){
                 gui.c.checkTimer(this);
             }
-
+} else if(gui.screenActual == GUI.SCREEN.CREATE){
+            gui.dibuix.beginDraw();
+            if(gui.pinText !=null){
+                for(int i = 0; i<gui.pinText.length; i++){
+                    if(gui.pinText[i]!=null){
+                        gui.pins[i].display(this);
+                        gui.pinText[i].display(this);
+                    }
+                }
+            }
+            gui.dibuix.endDraw();
         }
 
     }
@@ -72,7 +82,7 @@ public class Trivio003 extends PApplet {
     public void keyPressed(){
         //Botons TextField
         if(gui.screenActual == GUI.SCREEN.LOGIN) {
-            gui.bName.keyPressed(key, (int) keyCode);
+            gui.bName.keyPressed(key, keyCode);
             gui.bPassword.keyPressed(key, keyCode);
         } else if(gui.screenActual == GUI.SCREEN.INICIAL){
             gui.c.checkKey(this);
@@ -92,6 +102,29 @@ public class Trivio003 extends PApplet {
             } else if(gui.listMaterial.getTextField().mouseIntoTextRect(this)) {
                 gui.listMaterial.getTextField().keyPressed(key, (int) keyCode);
                 gui.listMaterial.update(this);
+            }
+        }
+        if(gui.screenActual == GUI.SCREEN.NEWBUILDING){
+            gui.bNameBuilding.keyPressed(key, keyCode);
+            gui.bPosXBuilding.keyPressed(key, keyCode);
+            gui.bPosYBuilding.keyPressed(key, keyCode);
+            if(gui.buildEstil.getTextField().mouseIntoTextRect(this)) {
+                gui.buildEstil.getTextField().keyPressed(key, (int) keyCode);
+                gui.buildEstil.update(this);
+            }else if(gui.buildTipologia.getTextField().mouseIntoTextRect(this)) {
+                gui.buildTipologia.getTextField().keyPressed(key, (int) keyCode);
+                gui.buildTipologia.update(this);
+            } else if(gui.buildMaterial.getTextField().mouseIntoTextRect(this)) {
+                gui.buildMaterial.getTextField().keyPressed(key, (int) keyCode);
+                gui.buildMaterial.update(this);
+            }
+        }
+
+        if(gui.screenActual == GUI.SCREEN.CREATE){
+            for(int i = 0; i<gui.pinText.length; i++){
+                if(gui.pinText[i]!=null){
+                    gui.pinText[i].keyPressed(key, keyCode);
+                }
             }
         }
     }
@@ -185,9 +218,32 @@ public class Trivio003 extends PApplet {
             }
 
         } else if(gui.screenActual == GUI.SCREEN.NEWBUILDING){
-            if(gui.bAccount.mouseIntoButton(this)){
+            if(gui.bAccount.mouseIntoButton(this) && gui.bAccount.ences){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
+            } else if(gui.bNameBuilding.mouseIntoTextRect(this)){
+                gui.bNameBuilding.pressedTrue(this);
+            } else if(gui.bPosXBuilding.mouseIntoTextRect(this)){
+                gui.bPosXBuilding.pressedTrue(this);
+            }else if(gui.bPosYBuilding.mouseIntoTextRect(this)){
+                gui.bPosYBuilding.pressedTrue(this);
+            } else if(gui.bSaveBuild.mouseIntoButton(this) && gui.bSaveBuild.ences){
+                String name = gui.bNameBuilding.getText();
+                float x = Float.parseFloat(gui.bPosXBuilding.getText());
+                float y = Float.parseFloat(gui.bPosYBuilding.getText());
+                String user = gui.bName.getTextoEspecial2();
+                String estil = gui.buildEstil.getValueSelected();
+                String tipologia = gui.buildTipologia.getValueSelected();
+                String material = gui.buildMaterial.getValueSelected();
+                db.insertInfoTaulaEdifici(name, x, y, user, estil, tipologia, material);
             }
+            gui.buildEstil.getTextField().pressedTrue(this);
+            gui.buildEstil.buttonPressed(this);
+
+            gui.buildTipologia.getTextField().pressedTrue(this);
+            gui.buildTipologia.buttonPressed(this);
+
+            gui.buildMaterial.getTextField().pressedTrue(this);
+            gui.buildMaterial.buttonPressed(this);
 
         } else if(gui.screenActual == GUI.SCREEN.CREATE){
             if(gui.bAccount.mouseIntoButton(this)){
@@ -222,6 +278,21 @@ public class Trivio003 extends PApplet {
                 }
             } else if(gui.bRed.mouseIntoSlide(this) && gui.establishPersonalC){
                 gui.bRed.checkSlider(this);
+            } else if(gui.bPinCreate.mouseIntoButton(this) && gui.bPinCreate.ences){
+                    for (int i = 0; i < gui.pinText.length; i++) {
+                        if (gui.pinText[i] == null) {
+                            gui.pins[i] = new Pin(this, gui.xLine, gui.yLine);
+                            gui.pinText[i] = new ButtonInsertText(this, (int) gui.xLine + (Setup.wButtonMap/2)/2 + 10, (int) gui.yLine - Setup.hButtonsMap/2, Setup.wButtonMap / 2, Setup.hButtonsMap, "", 10);
+                            break;
+                        }
+                    }
+            }
+            for(int i = 0; i<gui.pinText.length; i++){
+                if(gui.pinText[i] != null){
+                    if(gui.pinText[i].mouseIntoTextRect(this)){
+                        gui.pinText[i].pressedTrue(this);
+                    }
+                }
             }
 
         } else if(gui.screenActual == GUI.SCREEN.SAVECREATION){
@@ -253,8 +324,15 @@ public class Trivio003 extends PApplet {
             //BOTONS TEXTFIELD
             gui.bName.pressedTrue(this);
             gui.bPassword.pressedTrue(this);
-
-
+            gui.bNameBuilding.pressedTrue(this);
+            gui.bPosXBuilding.pressedTrue(this);
+            gui.bPosYBuilding.pressedTrue(this);
+            gui.saveCreationName.pressedTrue(this);
+            for(int i = 0; i<gui.pinText.length; i++){
+                if(gui.pinText[i] != null){
+                    gui.pinText[i].pressedTrue(this);
+                }
+            }
         }
 
         public void mouseDragged(){
@@ -280,7 +358,7 @@ public class Trivio003 extends PApplet {
     }
 
     public void comprovaLogin(){
-if(gui.bEnterAccount.mouseIntoButton(this) && gui.bName.text.equals("Name: catalina maria") && gui.bPassword.text.equals("Password: cccc")){
+if(gui.bEnterAccount.mouseIntoButton(this) && gui.bName.text.equals("Name: maria") && gui.bPassword.text.equals("Password: cccc")){
     gui.screenActual = GUI.SCREEN.INICIAL;
     gui.menuOpen = false;
     gui.c.setStart(this);

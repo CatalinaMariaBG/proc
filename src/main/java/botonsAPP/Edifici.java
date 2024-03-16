@@ -5,24 +5,23 @@ import processing.core.PImage;
 import setupAPP.Setup;
 
 import static java.lang.Float.parseFloat;
-import bbdd.DataBase;
 
-public class LocationMap {
+public class Edifici {
 
     PImage img;
-    String nom;
+    public String nom;
     float lat, lng;
     float longMin, longMax, latMin, latMax;
     float r = 10;
 
-    public LocationMap(PApplet processing, String n, float lat, float lng, String img) {
+    public Edifici(PApplet processing, String n, float lat, float lng, String img) {
         this.nom = n;
         this.lat = lat;
         this.lng = lng;
         this.img = processing.loadImage(img);
     }
 
-    public LocationMap(PApplet processing, String[] info, String[] img){
+    public Edifici(PApplet processing, String[] info, String[] img){
         this.nom = info[1];
         Setup.edificio = nom;
         this.lng = parseFloat(info[2]);
@@ -32,6 +31,10 @@ public class LocationMap {
         this.longMax = 4.89452897F;
         this.latMin = 38.54582099F;
         this.latMax = 40.167229F;
+    }
+
+    public void setImg(PImage img){
+        this.img = img;
     }
 
     public void displayLloc(PApplet processing, float x, float y, float w, float h){

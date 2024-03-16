@@ -18,16 +18,11 @@ public class Setup {
 
         public static float divHsis = 500/3;
 
+        public static int wButtonCreate = 400;
         public static int xPaletaColors = 570;
         public static int sizePaletaColors = 800;
-
-        public static String[][] info = {
-                {"Auditori de Manacor", "3.20971", "39.57551", "auditori-de-manacor.jpg"},
-                {"Edifici Casasayas", "2.64916", "39.5712", "edificiCasasayas.jpeg"},
-                {"Centre Nàutic Formentera", "1.41603", "38.73206", "clubNauticFormentera.jpg"}
-        };
-        public static int wButtonsNewBuild = 400;
-        public static int wButtonMap = 300;
+        public static int wButtonsNewBuild = 300;
+        public static int wButtonMap = 450;
         public static int hButtonsMap = 60;
         public static PImage mapaIlles;
         public static int xMap = 955;
@@ -45,6 +40,4 @@ public class Setup {
 
         public static int numLlocsMapa;
         public static String edificio;
-
-
 }

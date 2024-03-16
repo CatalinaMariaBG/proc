@@ -5,16 +5,16 @@ import setupAPP.Setup;
 
 public class LocationSetter {
 
-    LocationMap[] edificis;
+    Edifici[] edificis;
 
-    public LocationSetter(PApplet processing, String[][] info, String[] img){
-        edificis = new LocationMap[Setup.numLlocsMapa];
+    public LocationSetter(PApplet processing, String[][] info, String[][] img){
+        edificis = new Edifici[Setup.numLlocsMapa];
         for(int i = 0; i<Setup.numLlocsMapa; i++){
-            edificis[i] = new LocationMap(processing, info[i], img);
+            edificis[i] = new Edifici(processing, info[i], img[i]);
         }
     }
 
-    public LocationMap getLlocAt(int index){
+    public Edifici getLlocAt(int index){
         return this.edificis[index];
     }
 
