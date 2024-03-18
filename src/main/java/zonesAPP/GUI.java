@@ -55,6 +55,12 @@ public class GUI {
     ButtonInsertText[] pinText;
     Pin[] pins;
 
+    String infoMapa[][]= {
+            {"Madrid", "SPA", "-3.7176", "40.3919", "madrid.jpg"},
+            {"New York", "USA", "-74.005974", "40.712776", "nyc.jpg"},
+            {"Sidney", "AUS", "151.209290", "-33.868820", "sidney.jpg"},
+    };
+
 boolean menuOpen = false;
 boolean paletaOpen = false;
 boolean establishPersonalC = false;
@@ -165,14 +171,9 @@ DataBase db;
         listEstil = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, Setup.ySecondMiddle + 30,Setup.wButtonMap, Setup.hButtonsMap);
 
         bAddBuild = new ButtonWords(processing, "ADD BUILDING", 1260, 375, 140, 30, 10, "CENTER");
-        info = db.getInfoTaulaEdificio();
-        int numFilesInfo = db.getNumRowsTaula("EDIFICIO");
-        int numMaxImages = 10;
-        imageEdificio = new String[numFilesInfo][numMaxImages];
-        for(int i =0; i<numFilesInfo; i++){
-            imageEdificio[i] = db.getImagenesEdificio(info[i][0]);
-        }
-        llocsMap = new LocationSetter(processing, info, imageEdificio);
+        info = db.getInfoMapaEdificios();
+        db.printArray2D(info);
+        llocsMap = new LocationSetter(processing, info);
         selectedLloc = null;
         Setup.mapaIlles = processing.loadImage("mapaBalears.svg.png");
 

@@ -8,10 +8,18 @@ public class LocationSetter {
     Edifici[] edificis;
 
     public LocationSetter(PApplet processing, String[][] info, String[][] img){
-        edificis = new Edifici[Setup.numLlocsMapa];
-        for(int i = 0; i<Setup.numLlocsMapa; i++){
+        edificis = new Edifici[info.length];
+        for(int i = 0; i<info.length; i++){
             edificis[i] = new Edifici(processing, info[i], img[i]);
         }
+    }
+
+    public LocationSetter(PApplet processing, String[][] info){
+        edificis = new Edifici[info.length];
+        for(int i = 0; i<info.length; i++){
+            edificis[i] = new Edifici(processing, info[i]);
+        }
+        processing.println("EDIFICIS CREATS "+edificis.length);
     }
 
     public Edifici getLlocAt(int index){

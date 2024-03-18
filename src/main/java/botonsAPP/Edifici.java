@@ -33,6 +33,18 @@ public class Edifici {
         this.latMax = 40.167229F;
     }
 
+    public Edifici(PApplet processing, String[] info){
+        this.nom = info[1];
+        Setup.edificio = nom;
+        this.lng = parseFloat(info[2]);
+        this.lat = parseFloat(info[3]);
+        this.img = processing.loadImage(info[4]);
+        this.longMin = 0.49761425F;
+        this.longMax = 4.89452897F;
+        this.latMin = 38.54582099F;
+        this.latMax = 40.167229F;
+    }
+
     public void setImg(PImage img){
         this.img = img;
     }

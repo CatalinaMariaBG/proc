@@ -37,7 +37,5 @@ public class Setup {
         public static float red;
         public static float green;
         public static float blue;
-
-        public static int numLlocsMapa;
         public static String edificio;
 }

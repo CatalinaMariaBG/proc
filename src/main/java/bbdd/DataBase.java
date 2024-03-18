@@ -1,6 +1,4 @@
 package bbdd;
-import processing.core.PImage;
-import setupAPP.Setup;
 
 import java.sql.*;
 
@@ -107,6 +105,36 @@ public class DataBase {
         }
 
 
+    public String[][] getInfoMapaEdificios(){
+        String qN = "SELECT COUNT(*) AS n FROM EDIFICIO ed, IMAGEN img WHERE ed.ID_EDIFICIO=img.EDIFICIO AND img.MAPA='S'";
+        System.out.println(qN);
+        int numFiles = getNumRowsQuery(qN);
+        int numCols  = 5;
+        String[][] info = new String[numFiles][numCols];
+        try {
+            String q = "SELECT ed.ID_EDIFICIO AS ID, ed.DESCRIPCION AS NOMBRE, ed.POSX AS LNG, ed.POSY AS LAT, img.NOMBRE_IMAGEN AS IMAGEN " +
+                    " FROM EDIFICIO ed, IMAGEN img " +
+                    " WHERE ed.ID_EDIFICIO = img.EDIFICIO AND img.MAPA = 'S' " +
+                    " ORDER BY ed.ID_EDIFICIO ASC";
+            ResultSet rs = query.executeQuery( q);
+            int nr = 0;
+            while (rs.next()) {
+                info[nr][0] = String.valueOf(rs.getInt("ID"));
+                info[nr][1] = rs.getString("NOMBRE");
+                info[nr][2] = String.valueOf(rs.getFloat("LNG"));
+                info[nr][3] = String.valueOf(rs.getFloat("LAT"));
+                info[nr][4] = rs.getString("IMAGEN");
+                nr++;
+            }
+            return info;
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+
     public String[] getImagenesEdificio(String idEDIFICIO){
         int numFiles = getNumRowsQuery("SELECT COUNT(*) AS n FROM IMAGEN img, EDIFICIO ed WHERE img.EDIFICIO=ed.ID_EDIFICIO AND ed.ID_EDIFICIO = '"+idEDIFICIO+"'");
         String[] info = new String[numFiles];
@@ -114,7 +142,7 @@ public class DataBase {
             ResultSet rs = query.executeQuery( "SELECT img.NOMBRE_IMAGEN AS IMAGEN FROM IMAGEN img, EDIFICIO ed WHERE img.EDIFICIO=ed.ID_EDIFICIO AND ed.ID_EDIFICIO = '"+idEDIFICIO+"'");
             int nr = 0;
             while (rs.next()) {
-                info[nr]= rs.getString("NOMBRE_IMAGEN");
+                info[nr]= rs.getString("IMAGEN");
                 nr++;
             }
             return info;
@@ -304,6 +332,17 @@ try{
             }
             catch(Exception e) {
                 System.out.println(e);
+            }
+        }
+
+
+
+        public void printArray2D(String[][] info){
+            for(int f=0; f<info.length; f++){
+                for(int c=0; c<info[f].length; c++){
+                    System.out.print(info[f][c]+ "\t");
+                }
+                System.out.println();
             }
         }
     }
