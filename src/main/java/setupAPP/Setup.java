@@ -22,7 +22,7 @@ public class Setup {
         public static int xPaletaColors = 570;
         public static int sizePaletaColors = 800;
         public static int wButtonsNewBuild = 300;
-        public static int wButtonMap = 450;
+        public static int wButtonMap = 300;
         public static int hButtonsMap = 60;
         public static PImage mapaIlles;
         public static int xMap = 955;
@@ -38,4 +38,7 @@ public class Setup {
         public static float green;
         public static float blue;
         public static String edificio;
+
+        public static String titolConfirmNewBuild = "CONFIRMA L'ACCIÓ";
+        public static String messageConfirmNewBuild = "VOLS AFEGIR AQUEST NOU EDIFICI AL MAPA?";
 }

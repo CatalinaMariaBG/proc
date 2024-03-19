@@ -227,6 +227,8 @@ public class Trivio003 extends PApplet {
             }else if(gui.bPosYBuilding.mouseIntoTextRect(this)){
                 gui.bPosYBuilding.pressedTrue(this);
             } else if(gui.bSaveBuild.mouseIntoButton(this) && gui.bSaveBuild.ences){
+                gui.cNewBuild.setVisible(true);
+            } else if(gui.cNewBuild.bAceptar.mouseIntoButton(this) && gui.cNewBuild.bAceptar.ences){
                 String name = gui.bNameBuilding.getText();
                 float x = Float.parseFloat(gui.bPosXBuilding.getText());
                 float y = Float.parseFloat(gui.bPosYBuilding.getText());
@@ -234,7 +236,10 @@ public class Trivio003 extends PApplet {
                 String estil = gui.buildEstil.getValueSelected();
                 String tipologia = gui.buildTipologia.getValueSelected();
                 String material = gui.buildMaterial.getValueSelected();
-                db.insertInfoTaulaEdifici(name, x, y, user, estil, tipologia, material);
+                db.insertInfoTaulaEdifici(name, x, y, user, estil, material, tipologia);
+                gui.cNewBuild.setVisible(false);
+            } else if(gui.cNewBuild.bCancelar.mouseIntoButton(this) && gui.cNewBuild.bCancelar.ences){
+                gui.cNewBuild.setVisible(false);
             }
             gui.buildEstil.getTextField().pressedTrue(this);
             gui.buildEstil.buttonPressed(this);

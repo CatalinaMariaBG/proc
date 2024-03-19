@@ -70,9 +70,7 @@ public class Edifici {
         processing.image(this.img, x+5, y+5, w-10, w-10);
 
         processing.fill(0); processing.textSize(18); processing.textAlign(processing.CENTER);
-        processing.text(this.nom, x + w/2, y + w + 30);
-
-        processing.text("("+this.nom+")", x + w/2, y + w + 30 + 18);
+        processing.text(this.nom, x + w/2, y + w + 35);
         processing.popStyle();
     }
 

@@ -21,7 +21,7 @@ public class GUI {
             bErraseCreate, bSaveBuild, bCopyImageBuild, bReturnMap, bImportImage, bCreateBuilding, bNewProject, bSaveCreation,
     bColorCreateFull, bErraseCreateFull, bAddImageFull, bPinFull;
 
-    ButtonPhotos bAccount, bFullCreate, bMenosCreate;
+    ButtonPhotos bAccount, bFullCreate, bMenosCreate, bAddImageBuild;
 
     ButtonInsertText bPassword, bName, bNameBuilding, bPosXBuilding, bPosYBuilding, saveCreationName;
 
@@ -54,12 +54,7 @@ public class GUI {
     PImage lastImage;
     ButtonInsertText[] pinText;
     Pin[] pins;
-
-    String infoMapa[][]= {
-            {"Madrid", "SPA", "-3.7176", "40.3919", "madrid.jpg"},
-            {"New York", "USA", "-74.005974", "40.712776", "nyc.jpg"},
-            {"Sidney", "AUS", "151.209290", "-33.868820", "sidney.jpg"},
-    };
+    Confirm cNewBuild;
 
 boolean menuOpen = false;
 boolean paletaOpen = false;
@@ -186,6 +181,8 @@ DataBase db;
         buildTipologia = new TextList(processing, valuesTipologia,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 300, Setup.wButtonsNewBuild, Setup.hButtonsMap);
         buildMaterial = new TextList(processing, valuesMaterial,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 375, Setup.wButtonsNewBuild, Setup.hButtonsMap);
         bSaveBuild = new ButtonWords(processing, "SAVE", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 +50, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 450, 300, 30, 10,"CENTER");
+        cNewBuild = new Confirm(processing, Setup.titolConfirmNewBuild, Setup.messageConfirmNewBuild, processing.width/2, processing.height/2, 420, 300);
+        //bAddImageBuild = new ButtonPhotos(processing, )
 
         //BOTONS BUILDING INFO
         bCopyImageBuild = new ButtonWords(processing, "COPY THE IMAGE", 100, Setup.ySecondMiddle + 450, 190, 30, 10,"CORNER");
@@ -541,7 +538,7 @@ processing.popStyle();
         bLogo.display(processing);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
-        drawSecondMiddle(processing, "BUILDING IMAGE");
+        drawSecondMiddle(processing, "ADD IMAGE");
         drawNom(processing, "BUILDING INFORMATION");
         processing.rectMode(processing.CORNER);
         processing.fill(0xFFDBD9D1);
@@ -593,10 +590,10 @@ processing.popStyle();
         bNameBuilding.display(processing);
         bPosXBuilding.display(processing);
         bPosYBuilding.display(processing);
-        buildEstil.display(processing);
-        buildTipologia.display(processing);
-        buildMaterial.display(processing);
         bSaveBuild.display(processing);
+        buildMaterial.display(processing);
+        buildTipologia.display(processing);
+        buildEstil.display(processing);
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -605,6 +602,7 @@ processing.popStyle();
             bLogo.setEnces(true);
             bAccount.setEnces(true);
         }
+        cNewBuild.display(processing);
         processing.popStyle();
     }
 

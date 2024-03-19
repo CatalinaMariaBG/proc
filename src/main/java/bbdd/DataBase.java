@@ -245,7 +245,7 @@ try{
 
         public int getIDEstil(String nomEstil){
             try{
-                ResultSet rs = query.executeQuery("SELECT ESTILO FROM ESTILO WHERE ESTILO.NOMBRE_ESTILO = '"+nomEstil+"'");
+                ResultSet rs = query.executeQuery("SELECT ID_ESTILO FROM ESTILO WHERE ESTILO.NOMBRE_ESTILO = '"+nomEstil+"'");
                 rs.next();
                 return rs.getInt("ID_ESTILO");
             }catch(Exception e) {
@@ -256,7 +256,9 @@ try{
 
     public int getIDMaterial(String nomMaterial){
         try{
-            ResultSet rs = query.executeQuery("SELECT MATERIAL FROM MATERIAL WHERE MATERIAL.NOMBRE_MATERIAL = '"+nomMaterial+"'");
+            String q = "SELECT ID_MATERIAL FROM MATERIAL WHERE MATERIAL.NOMBRE_MATERIAL = '"+nomMaterial+"'";
+            System.out.println(q);
+            ResultSet rs = query.executeQuery(q);
             rs.next();
             return rs.getInt("ID_MATERIAL");
         }catch(Exception e) {
@@ -267,7 +269,7 @@ try{
 
     public int getIDTipologia(String nomTipologia){
         try{
-            ResultSet rs = query.executeQuery("SELECT TIPOLOGIA FROM TIPOLOGIA WHERE TIPOLOGIA.NOMBRE_TIPOLOGIA = '"+nomTipologia+"'");
+            ResultSet rs = query.executeQuery("SELECT ID_TIPOLOGIA FROM TIPOLOGIA WHERE TIPOLOGIA.NOMBRE_TIPOLOGIA = '"+nomTipologia+"'");
             rs.next();
             return rs.getInt("ID_TIPOLOGIA");
         }catch(Exception e) {
@@ -299,6 +301,7 @@ try{
             int tipologiaID = getIDTipologia(tipologia);
             try{
                 String q = "INSERT INTO EDIFICIO (ID_EDIFICIO, DESCRIPCION, POSX, POSY, USUARIO, ESTILO, MATERIAL, TIPOLOGIA) VALUES ('"+c+"', '"+nom+"', '"+x+"', '"+y+"', '"+user+"', '"+estilID+"', '"+materialID+"', '"+tipologiaID+"')";
+                System.out.println(q);
                 query.execute(q);
             }catch(Exception e) {
                 System.out.println(e);
