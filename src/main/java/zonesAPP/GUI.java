@@ -23,7 +23,7 @@ public class GUI {
 
     ButtonPhotos bAccount, bFullCreate, bMenosCreate, bAddImageBuild;
 
-    ButtonInsertText bPassword, bName, bNameBuilding, bPosXBuilding, bPosYBuilding, saveCreationName;
+    ButtonTextoEstatico bPassword, bName, bNameBuilding, bPosXBuilding, bPosYBuilding, saveCreationName;
 
     public enum SCREEN{LOGIN, INICIAL, MYACCOUNT, MAP, BUILDING, NEWBUILDING, ARCHIVE, CREATE, SAVECREATION, CREATEFULLSCREEN};
 
@@ -52,7 +52,7 @@ public class GUI {
     Canvas canvas;
     PGraphics dibuix;
     PImage lastImage;
-    ButtonInsertText[] pinText;
+    ButtonTextoEstatico[] pinText;
     Pin[] pins;
     Confirm cNewBuild;
 
@@ -91,8 +91,8 @@ DataBase db;
             // processing.rectMode(processing.CORNER);
         //        processing.fill(67, 83, 96);
         //        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle,100, Setup.hButtonsMap, 10);
-        bName = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 50, 450, Setup.hButtonsMap, "Name: ", 16);
-        bPassword = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 150, 450, Setup.hButtonsMap, "Password: ", 16);
+        bName = new ButtonTextoEstatico(processing, processing.width/2, processing.height/2 + 50, 450, Setup.hButtonsMap, "Name: ", 16);
+        bPassword = new ButtonTextoEstatico(processing, processing.width/2, processing.height/2 + 150, 450, Setup.hButtonsMap, "Password: ", 16);
 
         //BOTONS BARRA LATERAL
         bLateralBar = new ButtonWords(processing, "LOGO", 160 - Setup.logoW/2, Setup.logoDistV, Setup.logoW, Setup.logoH, 0, "CORNER");
@@ -128,7 +128,7 @@ DataBase db;
         bColorPersonal = new ButtonWords(processing, "PERSONALITZAR", Setup.xPaletaColors + Setup.sizePaletaColors/2, Setup.logoDistV + Setup.sizePaletaColors - 30, 400, 40, 10, "CENTER");
         bColorPersonal.setFillColor(0xFF8E8E90);
         bRed = new ButtonSlide(processing, "RED", Setup.xPaletaColors+100+Setup.edgeH, Setup.logoDistV+100+Setup.edgeV, 200, 80, 0, 255, 0);
-        pinText = new ButtonInsertText[5];
+        pinText = new ButtonTextoEstatico[5];
         pins = new Pin[5];
         canvas = new Canvas(Setup.xSecondMiddle, Setup.ySecondMiddle,770, 500);
         dibuix = processing.createGraphics(770, 500);
@@ -167,16 +167,15 @@ DataBase db;
 
         bAddBuild = new ButtonWords(processing, "ADD BUILDING", 1260, 375, 140, 30, 10, "CENTER");
         info = db.getInfoMapaEdificios();
-        db.printArray2D(info);
         llocsMap = new LocationSetter(processing, info);
         selectedLloc = null;
         Setup.mapaIlles = processing.loadImage("mapaBalears.svg.png");
 
 
         //BOTONS NEW BUILDING
-        bNameBuilding = new ButtonInsertText(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2) + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2, Setup.wButtonsNewBuild, Setup.hButtonsMap, "", 16);
-        bPosXBuilding = new ButtonInsertText(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2) + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 75, Setup.wButtonsNewBuild, Setup.hButtonsMap, "", 16);
-        bPosYBuilding = new ButtonInsertText(processing,(int)(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 + 100), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 150, Setup.wButtonsNewBuild, Setup.hButtonsMap, "", 16);
+        bNameBuilding = new ButtonTextoEstatico(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2) + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2, Setup.wButtonsNewBuild, Setup.hButtonsMap, "", 16);
+        bPosXBuilding = new ButtonTextoEstatico(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2) + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 75, Setup.wButtonsNewBuild, Setup.hButtonsMap, "", 16);
+        bPosYBuilding = new ButtonTextoEstatico(processing,(int)(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 + 100), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 150, Setup.wButtonsNewBuild, Setup.hButtonsMap, "", 16);
         buildEstil = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 225, Setup.wButtonsNewBuild, Setup.hButtonsMap);
         buildTipologia = new TextList(processing, valuesTipologia,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 300, Setup.wButtonsNewBuild, Setup.hButtonsMap);
         buildMaterial = new TextList(processing, valuesMaterial,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 375, Setup.wButtonsNewBuild, Setup.hButtonsMap);
@@ -195,7 +194,7 @@ DataBase db;
         bNewProject = new ButtonWords(processing, "NEW CREATION", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 700, 400, 60, 10, "CORNER");
 
         //BOTONS SAVE CREATION
-        saveCreationName = new ButtonInsertText(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 80, Setup.wButtonsNewBuild, Setup.hButtonsMap, "Name: ", 16);
+        saveCreationName = new ButtonTextoEstatico(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 80, Setup.wButtonsNewBuild, Setup.hButtonsMap, "Name: ", 16);
         bSaveCreation = new ButtonWords(processing, "SAVE", (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 160, Setup.wButtonsNewBuild, Setup.hButtonsMap, 10, "CENTER");
     }
 

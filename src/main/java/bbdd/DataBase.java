@@ -109,10 +109,10 @@ public class DataBase {
         String qN = "SELECT COUNT(*) AS n FROM EDIFICIO ed, IMAGEN img WHERE ed.ID_EDIFICIO=img.EDIFICIO AND img.MAPA='S'";
         System.out.println(qN);
         int numFiles = getNumRowsQuery(qN);
-        int numCols  = 5;
+        int numCols  = 8;
         String[][] info = new String[numFiles][numCols];
         try {
-            String q = "SELECT ed.ID_EDIFICIO AS ID, ed.DESCRIPCION AS NOMBRE, ed.POSX AS LNG, ed.POSY AS LAT, img.NOMBRE_IMAGEN AS IMAGEN " +
+            String q = "SELECT ed.ID_EDIFICIO AS ID, ed.DESCRIPCION AS NOMBRE, ed.POSX AS LNG, ed.POSY AS LAT, ed.ESTILO AS estil, ed.MATERIAL AS material, ed.TIPOLOGIA AS tipo, img.NOMBRE_IMAGEN AS IMAGEN " +
                     " FROM EDIFICIO ed, IMAGEN img " +
                     " WHERE ed.ID_EDIFICIO = img.EDIFICIO AND img.MAPA = 'S' " +
                     " ORDER BY ed.ID_EDIFICIO ASC";
@@ -123,7 +123,34 @@ public class DataBase {
                 info[nr][1] = rs.getString("NOMBRE");
                 info[nr][2] = String.valueOf(rs.getFloat("LNG"));
                 info[nr][3] = String.valueOf(rs.getFloat("LAT"));
-                info[nr][4] = rs.getString("IMAGEN");
+                //Estil
+                info[nr][4] = rs.getString(getNomEstil(rs.getInt("estil")));
+                //Material
+                info[nr][5] = rs.getString(getNomMaterial(rs.getInt("material")));
+                //Tipologia
+                info[nr][6] = rs.getString(getNomTipologia(rs.getInt("tipo")));
+                info[nr][7] = rs.getString("IMAGEN");
+                nr++;
+            }
+            return info;
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public String[][] getQualitiesEdificios(String nomEdificio){
+        int numFiles = 1;
+        int numCols  = 3;
+        String[][] info = new String[numFiles][numCols];
+        try {
+            ResultSet rs = query.executeQuery( "SELECT * FROM EDIFICIO WHERE DESCRIPCION = '"+nomEdificio+"'");
+            int nr = 0;
+            while (rs.next()) {
+                info[nr][0] = String.valueOf(rs.getInt("ESTILO"));
+                info[nr][1] = String.valueOf(rs.getInt("MATERIAL"));
+                info[nr][2] = String.valueOf(rs.getInt("TIPOLOGIA"));
                 nr++;
             }
             return info;
@@ -254,6 +281,19 @@ try{
             }
         }
 
+    public String getNomEstil(int id){
+        try{
+            String q = "SELECT NOMBRE_ESTILO FROM ESTILO WHERE ESTILO.ID_ESTILO = '"+id+"'";
+            System.out.println(q);
+            ResultSet rs = query.executeQuery(q);
+            rs.next();
+            return rs.getString("ID_ESTILO");
+        }catch(Exception e) {
+            System.out.println(e);
+            return "null";
+        }
+    }
+
     public int getIDMaterial(String nomMaterial){
         try{
             String q = "SELECT ID_MATERIAL FROM MATERIAL WHERE MATERIAL.NOMBRE_MATERIAL = '"+nomMaterial+"'";
@@ -267,6 +307,19 @@ try{
         }
     }
 
+    public String getNomMaterial(int id){
+            try{
+                String q = "SELECT NOMBRE_MATERIAL FROM MATERIAL WHERE MATERIAL.ID_MATERIAL = '"+id+"'";
+                System.out.println(q);
+                ResultSet rs = query.executeQuery(q);
+                rs.next();
+                return rs.getString("NOMBRE_MATERIAL");
+            }catch(Exception e) {
+                System.out.println(e);
+                return "null";
+            }
+            }
+
     public int getIDTipologia(String nomTipologia){
         try{
             ResultSet rs = query.executeQuery("SELECT ID_TIPOLOGIA FROM TIPOLOGIA WHERE TIPOLOGIA.NOMBRE_TIPOLOGIA = '"+nomTipologia+"'");
@@ -275,6 +328,19 @@ try{
         }catch(Exception e) {
             System.out.println(e);
             return -1;
+        }
+    }
+
+    public String getNomTipologia(int id){
+        try{
+            String q = "SELECT NOMBRE_TIPOLOGIA FROM TIPOLOGIA WHERE TIPOLOGIA.ID_TIPOLOGIA = '"+id+"'";
+            System.out.println(q);
+            ResultSet rs = query.executeQuery(q);
+            rs.next();
+            return rs.getString("ID_TIPOLOGIA");
+        }catch(Exception e) {
+            System.out.println(e);
+            return "null";
         }
     }
 

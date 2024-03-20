@@ -49,4 +49,16 @@ public class LocationSetter {
             edificis[i].displayLloc(processing, x, y, w, h);
         }
     }
+
+    public boolean BuildInfo(PApplet processing) {
+        if (mouseIntoLocations(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500)) {
+            for (int i = 0; i < edificis.length; i++) {
+                if (edificis[i].b.mouseIntoButton(processing)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
 }

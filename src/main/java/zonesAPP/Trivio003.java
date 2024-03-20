@@ -1,6 +1,6 @@
 package zonesAPP;
 
-import botonsAPP.ButtonInsertText;
+import botonsAPP.ButtonTextoEstatico;
 import processing.core.PApplet;
 import setupAPP.Setup;
 import bbdd.DataBase;
@@ -200,9 +200,12 @@ public class Trivio003 extends PApplet {
             } else {
                 gui.selectedLloc = null;
             }
-            if(gui.bTlist.mouseIntoButton(this) && gui.bTlist.ences){
 
-            }
+                /*gui.screenActual = GUI.SCREEN.BUILDING;
+                String name = gui.selectedLloc.nom;
+                String[][] qualities = db.getQualitiesEdificios(name);
+                db.printArray2D(qualities);
+                String estilBuild = gui.selectedLloc.*/
             gui.listEstil.getTextField().pressedTrue(this);
             gui.listEstil.buttonPressed(this);
 
@@ -287,7 +290,7 @@ public class Trivio003 extends PApplet {
                     for (int i = 0; i < gui.pinText.length; i++) {
                         if (gui.pinText[i] == null) {
                             gui.pins[i] = new Pin(this, gui.xLine, gui.yLine);
-                            gui.pinText[i] = new ButtonInsertText(this, (int) gui.xLine + (Setup.wButtonMap/2)/2 + 10, (int) gui.yLine - Setup.hButtonsMap/2, Setup.wButtonMap / 2, Setup.hButtonsMap, "", 10);
+                            gui.pinText[i] = new ButtonTextoEstatico(this, (int) gui.xLine + (Setup.wButtonMap/2)/2 + 10, (int) gui.yLine - Setup.hButtonsMap/2, Setup.wButtonMap / 2, Setup.hButtonsMap, "", 10);
                             break;
                         }
                     }

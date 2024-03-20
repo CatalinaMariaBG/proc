@@ -7,9 +7,9 @@ import setupAPP.Setup;
 import static java.lang.Float.parseFloat;
 
 public class Edifici {
-
+public ButtonWords b;
     PImage img;
-    public String nom;
+    public String nom, estil, material, tipologia;
     float lat, lng;
     float longMin, longMax, latMin, latMax;
     float r = 10;
@@ -70,7 +70,10 @@ public class Edifici {
         processing.image(this.img, x+5, y+5, w-10, w-10);
 
         processing.fill(0); processing.textSize(18); processing.textAlign(processing.CENTER);
-        processing.text(this.nom, x + w/2, y + w + 35);
+        b = new ButtonWords(processing, this.nom, x + w/2, y + w + 35, w, 30, 10, "CENTER");
+        b.setFillColor(processing.color(0xFF8E8E90));
+        b.setFillColorOver(processing.color(67, 83, 96));
+        b.display(processing);
         processing.popStyle();
     }
 
