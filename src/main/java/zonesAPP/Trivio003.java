@@ -6,6 +6,7 @@ import setupAPP.Setup;
 import bbdd.DataBase;
 
 import java.io.File;
+import java.util.Arrays;
 
 import botonsAPP.Pin;
 
@@ -194,6 +195,16 @@ public class Trivio003 extends PApplet {
             } else if(gui.bAddBuild.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.NEWBUILDING;
             }
+            if(gui.selectedLloc!=null && gui.selectedLloc.b.mouseIntoButton(this)){
+                String name = gui.selectedLloc.nom;
+                String[] informacion = db.getInfoTotalEdificios(name);
+                String imagen = db.getImagenEdificio(db.getIDEdificio(name));
+                for(int i = 0; i<informacion.length; i++) {
+                    System.out.println(informacion[i]);
+                }
+                System.out.println(imagen);
+                gui.screenActual = GUI.SCREEN.BUILDING;
+            }
             int nl = gui.llocsMap.getSelect(this, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
             if(nl!=-1){
                 gui.selectedLloc = gui.llocsMap.getLlocAt(nl);
@@ -201,11 +212,6 @@ public class Trivio003 extends PApplet {
                 gui.selectedLloc = null;
             }
 
-                /*gui.screenActual = GUI.SCREEN.BUILDING;
-                String name = gui.selectedLloc.nom;
-                String[][] qualities = db.getQualitiesEdificios(name);
-                db.printArray2D(qualities);
-                String estilBuild = gui.selectedLloc.*/
             gui.listEstil.getTextField().pressedTrue(this);
             gui.listEstil.buttonPressed(this);
 
@@ -243,6 +249,8 @@ public class Trivio003 extends PApplet {
                 gui.cNewBuild.setVisible(false);
             } else if(gui.cNewBuild.bCancelar.mouseIntoButton(this) && gui.cNewBuild.bCancelar.ences){
                 gui.cNewBuild.setVisible(false);
+            } else if(gui.bAddImgNewBuild.mouseIntoButton(this)){
+                selectInput("Seleccions una imatge...", "imageSelected");
             }
             gui.buildEstil.getTextField().pressedTrue(this);
             gui.buildEstil.buttonPressed(this);
@@ -270,6 +278,8 @@ public class Trivio003 extends PApplet {
             } else if(gui.bErraseCreate.mouseIntoButton(this) && gui.bErraseCreate.ences){
                 gui.dibuix = createGraphics(770, 500);
                 gui.canvas.resetCanvas();
+                // esborrar dibuix
+                gui.pinText = new ButtonTextoEstatico[5];
             }
             else if(gui.selectPlantilla.mouseIntoSelect(this) && gui.selectPlantilla.ences){
                 if(!gui.selectPlantilla.plegat){
@@ -289,8 +299,8 @@ public class Trivio003 extends PApplet {
             } else if(gui.bPinCreate.mouseIntoButton(this) && gui.bPinCreate.ences){
                     for (int i = 0; i < gui.pinText.length; i++) {
                         if (gui.pinText[i] == null) {
-                            gui.pins[i] = new Pin(this, gui.xLine, gui.yLine);
-                            gui.pinText[i] = new ButtonTextoEstatico(this, (int) gui.xLine + (Setup.wButtonMap/2)/2 + 10, (int) gui.yLine - Setup.hButtonsMap/2, Setup.wButtonMap / 2, Setup.hButtonsMap, "", 10);
+                            gui.pins[i] = new Pin(this, gui.xPin, gui.yPin);
+                            gui.pinText[i] = new ButtonTextoEstatico(this, (int) gui.xPin + (Setup.wButtonMap/2)/2 + 10, (int) gui.yPin - Setup.hButtonsMap/2, Setup.wButtonMap / 2, Setup.hButtonsMap, "", 10);
                             break;
                         }
                     }
@@ -354,10 +364,27 @@ public class Trivio003 extends PApplet {
             }
         }
         }
+    public void mouseReleased(){
+        if(gui.canvas.mouseOver(this) && gui.screenActual == GUI.SCREEN.CREATE && gui.selectDraw.valorSelected == "LÍNIA"){
+            if(gui.numPoints<2) {
+                gui.xPoints[gui.numPoints] = mouseX;
+                gui.yPoints[gui.numPoints] = mouseY;
+                gui.numPoints++;
+                System.out.println(gui.numPoints);
+            }
+            else {
+                for(int i=0; i<2; i++) {
+                    System.out.println(gui.xPoints[i]+" , " +gui.yPoints[i]);
+                }
+            }
+
+        }
+    }
+
     public void mouseClicked(){
-        if(gui.mouseIntoCreate(this, 570, 350, 770, 500) && gui.screenActual == GUI.SCREEN.CREATE){
-            gui.xLine = mouseX;
-            gui.yLine = mouseY;
+        if(gui.canvas.mouseOver(this) && gui.screenActual == GUI.SCREEN.CREATE){
+            gui.xPin = mouseX;
+            gui.yPin = mouseY;
         }
     }
 
@@ -382,6 +409,16 @@ if(gui.bEnterAccount.mouseIntoButton(this) && gui.bName.text.equals("Name: maria
             String imageRuta = selection.getAbsolutePath();
             gui.lastImage = loadImage(imageRuta);
             gui.canvas.addImage(this, gui.lastImage);
+        }
+    }
+
+    public void imageSelected(File selection){
+        if(selection == null){
+            println("No s'ha seleccionat cap fitxer.");
+        } else {
+            String imageRuta = selection.getAbsolutePath();
+            gui.imgNewBuild = loadImage(imageRuta);
+            gui.titolFoto = selection.getName();
         }
     }
 

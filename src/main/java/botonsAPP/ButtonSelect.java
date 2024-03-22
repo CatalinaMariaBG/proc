@@ -22,6 +22,7 @@ public class ButtonSelect {
         this.ences = true;
         this.plegat = true;
         this.textDefault = tDefault;
+        this.valorSelected= tDefault;
         this.fillColor = 0xFFDBD9D1;
     }
 
@@ -46,7 +47,9 @@ this.plegat = !this.plegat;
 
    public void update(PApplet processing){
         int option = clickedOption(processing);
-        valorSelected = texts[option];
+        if(option!=-1) {
+            valorSelected = texts[option];
+        }
    }
 
   public void display(PApplet processing){

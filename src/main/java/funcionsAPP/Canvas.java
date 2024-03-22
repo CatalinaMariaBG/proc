@@ -88,6 +88,7 @@ updateCanvas(processing, imgs, distribucio);
         processing.pushStyle();
         processing.fill(0xFFDBD9D1);
         processing.rect(x, y, w, h, 10);
+        processing.imageMode(processing.CORNER);
         if(canvas!= null){
             processing.image(canvas, x, y, w, h);
         }

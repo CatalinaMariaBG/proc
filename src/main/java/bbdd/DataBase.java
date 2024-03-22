@@ -105,14 +105,70 @@ public class DataBase {
         }
 
 
+    public String[] getInfoTotalEdificios(String nom){
+        int llargaria = 9;
+        String[] info = new String[llargaria];
+        try {
+            String q = "SELECT * FROM EDIFICIO WHERE DESCRIPCION = '"+nom+"'";
+            ResultSet rs = query.executeQuery(q);
+            int nr = 0;
+            while (rs.next()) {
+                info[0] = String.valueOf(rs.getInt("ID_EDIFICIO"));
+                info[1] = rs.getString("DESCRIPCION");
+                info[2] = String.valueOf(rs.getFloat("POSX"));
+                info[3] = String.valueOf(rs.getFloat("POSY"));
+                info[4] = rs.getString("USUARIO");
+                //Estil
+                info[5] = rs.getString(getNomEstil(rs.getInt("ESTIL")));
+                //Material
+                info[6] = rs.getString(getNomMaterial(rs.getInt("MATERIAL")));
+                //Tipologia
+                info[7] = rs.getString(getNomTipologia(rs.getInt("TIPOLOGIA")));
+                //info[7] = rs.getString("IMAGEN");
+                nr++;
+            }
+            return info;
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public int getIDEdificio(String nom){
+            try{
+                String q = "SELECT EDIFICIO.ID_EDIFICIO FROM EDIFICIO WHERE EDIFICIO.DESCRIPCION = '"+nom+"'";
+                ResultSet rs = query.executeQuery(q);
+                rs.next();
+                return rs.getInt("ID_EDIFICIO");
+            }
+            catch (Exception e){
+                System.out.println(e);
+                return -1;
+            }
+    }
+
+    public String getImagenEdificio(int idEdificio){
+        try {
+            String q = "SELECT IMAGEN.NOMBRE_IMAGEN FROM IMAGEN WHERE IMAGEN.EDIFICIO ='"+idEdificio+"'";
+            ResultSet rs = query.executeQuery(q);
+            rs.next();
+            return rs.getString("NOMBRE_IMAGEN");
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
     public String[][] getInfoMapaEdificios(){
         String qN = "SELECT COUNT(*) AS n FROM EDIFICIO ed, IMAGEN img WHERE ed.ID_EDIFICIO=img.EDIFICIO AND img.MAPA='S'";
         System.out.println(qN);
         int numFiles = getNumRowsQuery(qN);
-        int numCols  = 8;
+        int numCols  = 5;
         String[][] info = new String[numFiles][numCols];
         try {
-            String q = "SELECT ed.ID_EDIFICIO AS ID, ed.DESCRIPCION AS NOMBRE, ed.POSX AS LNG, ed.POSY AS LAT, ed.ESTILO AS estil, ed.MATERIAL AS material, ed.TIPOLOGIA AS tipo, img.NOMBRE_IMAGEN AS IMAGEN " +
+            String q = "SELECT  ed.ID_EDIFICIO AS ID, ed.DESCRIPCION AS NOMBRE, ed.POSX AS LNG, ed.POSY AS LAT, img.NOMBRE_IMAGEN AS IMAGEN " +
                     " FROM EDIFICIO ed, IMAGEN img " +
                     " WHERE ed.ID_EDIFICIO = img.EDIFICIO AND img.MAPA = 'S' " +
                     " ORDER BY ed.ID_EDIFICIO ASC";
@@ -123,13 +179,7 @@ public class DataBase {
                 info[nr][1] = rs.getString("NOMBRE");
                 info[nr][2] = String.valueOf(rs.getFloat("LNG"));
                 info[nr][3] = String.valueOf(rs.getFloat("LAT"));
-                //Estil
-                info[nr][4] = rs.getString(getNomEstil(rs.getInt("estil")));
-                //Material
-                info[nr][5] = rs.getString(getNomMaterial(rs.getInt("material")));
-                //Tipologia
-                info[nr][6] = rs.getString(getNomTipologia(rs.getInt("tipo")));
-                info[nr][7] = rs.getString("IMAGEN");
+                info[nr][4] = rs.getString("IMAGEN");
                 nr++;
             }
             return info;

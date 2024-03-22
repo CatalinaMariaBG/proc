@@ -17,7 +17,7 @@ public class LocationSetter {
     public LocationSetter(PApplet processing, String[][] info){
         edificis = new Edifici[info.length];
         for(int i = 0; i<info.length; i++){
-            edificis[i] = new Edifici(processing, info[i]);
+            edificis[i] = new Edifici(processing, info[i], Setup.xSecondMiddle + 10, Setup.ySecondMiddle + 10, 200, 260);
         }
         processing.println("EDIFICIS CREATS "+edificis.length);
     }

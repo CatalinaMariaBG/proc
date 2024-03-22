@@ -9,7 +9,7 @@ import static java.lang.Float.parseFloat;
 public class Edifici {
 public ButtonWords b;
     PImage img;
-    public String nom, estil, material, tipologia;
+    public String nom;
     float lat, lng;
     float longMin, longMax, latMin, latMax;
     float r = 10;
@@ -33,7 +33,7 @@ public ButtonWords b;
         this.latMax = 40.167229F;
     }
 
-    public Edifici(PApplet processing, String[] info){
+    public Edifici(PApplet processing, String[] info, float x, float y, float w, float h){
         this.nom = info[1];
         Setup.edificio = nom;
         this.lng = parseFloat(info[2]);
@@ -43,6 +43,9 @@ public ButtonWords b;
         this.longMax = 4.89452897F;
         this.latMin = 38.54582099F;
         this.latMax = 40.167229F;
+        b = new ButtonWords(processing, this.nom, x, y + h - 35, w, 30, 10, "CORNER");
+        b.setFillColor(processing.color(0xFF8E8E90));
+        b.setFillColorOver(processing.color(67, 83, 96));
     }
 
     public void setImg(PImage img){
@@ -70,9 +73,6 @@ public ButtonWords b;
         processing.image(this.img, x+5, y+5, w-10, w-10);
 
         processing.fill(0); processing.textSize(18); processing.textAlign(processing.CENTER);
-        b = new ButtonWords(processing, this.nom, x + w/2, y + w + 35, w, 30, 10, "CENTER");
-        b.setFillColor(processing.color(0xFF8E8E90));
-        b.setFillColorOver(processing.color(67, 83, 96));
         b.display(processing);
         processing.popStyle();
     }
