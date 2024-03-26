@@ -106,26 +106,27 @@ public class DataBase {
 
 
     public String[] getInfoTotalEdificios(String nom){
-        int llargaria = 9;
+        int llargaria = 8;
         String[] info = new String[llargaria];
         try {
             String q = "SELECT * FROM EDIFICIO WHERE DESCRIPCION = '"+nom+"'";
+            System.out.println(q);
             ResultSet rs = query.executeQuery(q);
-            int nr = 0;
-            while (rs.next()) {
+            rs.next();
                 info[0] = String.valueOf(rs.getInt("ID_EDIFICIO"));
-                info[1] = rs.getString("DESCRIPCION");
+                info[1] = nom;
                 info[2] = String.valueOf(rs.getFloat("POSX"));
                 info[3] = String.valueOf(rs.getFloat("POSY"));
                 info[4] = rs.getString("USUARIO");
                 //Estil
-                info[5] = rs.getString(getNomEstil(rs.getInt("ESTIL")));
+                info[5] = getNomEstil(rs.getInt("ESTILO"));
                 //Material
-                info[6] = rs.getString(getNomMaterial(rs.getInt("MATERIAL")));
+                info[6] = getNomMaterial(rs.getInt("MATERIAL"));
                 //Tipologia
-                info[7] = rs.getString(getNomTipologia(rs.getInt("TIPOLOGIA")));
-                //info[7] = rs.getString("IMAGEN");
-                nr++;
+                info[7] = getNomTipologia(rs.getInt("TIPOLOGIA"));
+
+            for(int i = 0; i<info.length; i++) {
+                System.out.println(info[i]);
             }
             return info;
         }
@@ -335,9 +336,10 @@ try{
         try{
             String q = "SELECT NOMBRE_ESTILO FROM ESTILO WHERE ESTILO.ID_ESTILO = '"+id+"'";
             System.out.println(q);
+            Statement query = c.createStatement();
             ResultSet rs = query.executeQuery(q);
             rs.next();
-            return rs.getString("ID_ESTILO");
+            return rs.getString("NOMBRE_ESTILO");
         }catch(Exception e) {
             System.out.println(e);
             return "null";
@@ -361,18 +363,22 @@ try{
             try{
                 String q = "SELECT NOMBRE_MATERIAL FROM MATERIAL WHERE MATERIAL.ID_MATERIAL = '"+id+"'";
                 System.out.println(q);
+                Statement query = c.createStatement();
                 ResultSet rs = query.executeQuery(q);
                 rs.next();
                 return rs.getString("NOMBRE_MATERIAL");
-            }catch(Exception e) {
+            }
+            catch(Exception e) {
                 System.out.println(e);
                 return "null";
             }
-            }
+        }
 
     public int getIDTipologia(String nomTipologia){
         try{
-            ResultSet rs = query.executeQuery("SELECT ID_TIPOLOGIA FROM TIPOLOGIA WHERE TIPOLOGIA.NOMBRE_TIPOLOGIA = '"+nomTipologia+"'");
+            String q = "SELECT ID_TIPOLOGIA FROM TIPOLOGIA WHERE TIPOLOGIA.NOMBRE_TIPOLOGIA = '"+nomTipologia+"'";
+            System.out.println(q);
+            ResultSet rs = query.executeQuery(q);
             rs.next();
             return rs.getInt("ID_TIPOLOGIA");
         }catch(Exception e) {
@@ -385,12 +391,32 @@ try{
         try{
             String q = "SELECT NOMBRE_TIPOLOGIA FROM TIPOLOGIA WHERE TIPOLOGIA.ID_TIPOLOGIA = '"+id+"'";
             System.out.println(q);
+            Statement query = c.createStatement();
             ResultSet rs = query.executeQuery(q);
             rs.next();
-            return rs.getString("ID_TIPOLOGIA");
+            return rs.getString("NOMBRE_TIPOLOGIA");
         }catch(Exception e) {
             System.out.println(e);
             return "null";
+        }
+    }
+
+    public String[][] getUsuaris(){
+        int numFiles = getNumRowsTaula("USUARIO");
+        int numCols = 2;
+        String[][] usuarios = new String[numFiles][numCols];
+        try{
+            ResultSet rs = query.executeQuery("SELECT * FROM USUARIO");
+            int nr = 0;
+            while(rs.next()){
+                usuarios[nr][0] = rs.getString("ID_USUARIO");
+                usuarios[nr][1] = rs.getString("PASSWORD");
+                nr++;
+            }
+            return usuarios;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
         }
     }
 

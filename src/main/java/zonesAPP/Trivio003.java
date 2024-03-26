@@ -1,12 +1,11 @@
 package zonesAPP;
 
-import botonsAPP.ButtonTextoEstatico;
+import botonsAPP.ButtonInsertText;
 import processing.core.PApplet;
 import setupAPP.Setup;
 import bbdd.DataBase;
 
 import java.io.File;
-import java.util.Arrays;
 
 import botonsAPP.Pin;
 
@@ -198,10 +197,11 @@ public class Trivio003 extends PApplet {
             if(gui.selectedLloc!=null && gui.selectedLloc.b.mouseIntoButton(this)){
                 String name = gui.selectedLloc.nom;
                 String[] informacion = db.getInfoTotalEdificios(name);
-                String imagen = db.getImagenEdificio(db.getIDEdificio(name));
                 for(int i = 0; i<informacion.length; i++) {
                     System.out.println(informacion[i]);
                 }
+                String imagen = db.getImagenEdificio(db.getIDEdificio(name));
+
                 System.out.println(imagen);
                 gui.screenActual = GUI.SCREEN.BUILDING;
             }
@@ -279,7 +279,7 @@ public class Trivio003 extends PApplet {
                 gui.dibuix = createGraphics(770, 500);
                 gui.canvas.resetCanvas();
                 // esborrar dibuix
-                gui.pinText = new ButtonTextoEstatico[5];
+                gui.pinText = new ButtonInsertText[5];
             }
             else if(gui.selectPlantilla.mouseIntoSelect(this) && gui.selectPlantilla.ences){
                 if(!gui.selectPlantilla.plegat){
@@ -300,7 +300,7 @@ public class Trivio003 extends PApplet {
                     for (int i = 0; i < gui.pinText.length; i++) {
                         if (gui.pinText[i] == null) {
                             gui.pins[i] = new Pin(this, gui.xPin, gui.yPin);
-                            gui.pinText[i] = new ButtonTextoEstatico(this, (int) gui.xPin + (Setup.wButtonMap/2)/2 + 10, (int) gui.yPin - Setup.hButtonsMap/2, Setup.wButtonMap / 2, Setup.hButtonsMap, "", 10);
+                            gui.pinText[i] = new ButtonInsertText(this, (int) gui.xPin + (Setup.wButtonMap/2)/2 + 10, (int) gui.yPin - Setup.hButtonsMap/2, Setup.wButtonMap / 2, Setup.hButtonsMap, "", 10);
                             break;
                         }
                     }
@@ -393,7 +393,15 @@ public class Trivio003 extends PApplet {
     }
 
     public void comprovaLogin(){
-if(gui.bEnterAccount.mouseIntoButton(this) && gui.bName.text.equals("Name: maria") && gui.bPassword.text.equals("Password: cccc")){
+        boolean entrar = false;
+        String[][] usuaris= db.getUsuaris();
+        for(int f = 0; f< usuaris.length; f++){
+                if(gui.bName.text.equals("Name: "+usuaris[f][0]) && gui.bPassword.text.equals("Password: "+usuaris[f][1])){
+                    entrar = true;
+                    break;
+                }
+        }
+if(gui.bEnterAccount.mouseIntoButton(this) && entrar){
     gui.screenActual = GUI.SCREEN.INICIAL;
     gui.menuOpen = false;
     gui.c.setStart(this);

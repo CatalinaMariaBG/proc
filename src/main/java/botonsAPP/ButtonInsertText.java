@@ -4,7 +4,7 @@ import processing.core.PApplet;
 
 import static processing.core.PConstants.BACKSPACE;
 
-public class ButtonTextoEstatico {
+public class ButtonInsertText {
     int x, y, w, h;
     int colorRect, colorText, colorSelected, colorBorder;
     int weightBorder = 1;
@@ -13,7 +13,7 @@ public class ButtonTextoEstatico {
     int textSize;
     boolean selected = false;
 
-    public ButtonTextoEstatico(PApplet processing, int x, int y, int width, int height, String tS, int textSize){
+    public ButtonInsertText(PApplet processing, int x, int y, int width, int height, String tS, int textSize){
         this.x = x; this.y = y; this.w = width; this.h = height;
         this.colorRect = processing.color(219, 217, 209);
         this.colorText = processing.color(0);
