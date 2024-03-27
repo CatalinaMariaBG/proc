@@ -13,6 +13,14 @@ public class ButtonPhotos {
 
     public boolean ences;
 
+    /**
+     * Constructor clase ButtonPhotos (botón con una foto)
+     * @param processing PApplet
+     * @param imatge Imagen del botón
+     * @param x Coordenada x donde se quiere dibujar el botón
+     * @param y Coordenada y donde se quiere dibujar el botón
+     * @param r Radio del botón (tienen forma redonda)
+     */
     public ButtonPhotos(PApplet processing, PImage imatge, float x, float y, float r) {
         this.imatge = imatge;
         this.x = x;

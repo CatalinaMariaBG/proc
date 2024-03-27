@@ -120,10 +120,10 @@ public class DataBase {
                 info[4] = rs.getString("USUARIO");
                 //Estil
                 info[5] = getNomEstil(rs.getInt("ESTILO"));
-                //Material
-                info[6] = getNomMaterial(rs.getInt("MATERIAL"));
                 //Tipologia
-                info[7] = getNomTipologia(rs.getInt("TIPOLOGIA"));
+                info[6] = getNomTipologia(rs.getInt("TIPOLOGIA"));
+                //Material
+                info[7] = getNomMaterial(rs.getInt("MATERIAL"));
 
             for(int i = 0; i<info.length; i++) {
                 System.out.println(info[i]);
@@ -283,6 +283,27 @@ try{
                 nr++;
             }
             return estilos;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public String[][] getMapaQualitats(){
+            int numFiles = getNumRowsTaula("EDIFICIO");
+            int numCols = 4;
+            String[][] info = new String[numFiles][numCols];
+        try{
+            ResultSet rs = query.executeQuery("SELECT * FROM EDIFICIO");
+            int nr = 0;
+            while(rs.next()){
+                info[nr][0] = String.valueOf(rs.getString("ID_EDIFICIO"));
+                info[nr][1] = getNomEstil(rs.getInt("ESTILO"));
+                info[nr][2] = getNomMaterial(rs.getInt("MATERIAL"));
+                info[nr][3] = getNomTipologia(rs.getInt("TIPOLOGIA"));
+                nr++;
+            }
+            return info;
         } catch (Exception e) {
             System.out.println(e);
             return null;
@@ -450,6 +471,18 @@ try{
             }
         }
 
+        public void insertImageEdificio(String edificio, String nomImatge){
+            int c = getNumRowsTaula("IMAGEN") + 1;
+            int ed = getIDEdificio(edificio);
+            try{
+                String q = "INSERT INTO IMAGEN (ID_IMAGEN, NOMBRE_IMAGEN, EDIFICIO, MAPA) VALUES ('"+c+"', '"+nomImatge+"','"+ed+"','S')";
+                System.out.println(q);
+                query.execute(q);
+            }catch(Exception e) {
+                System.out.println(e);
+            }
+        }
+
 
         // UPDATES
 
@@ -458,6 +491,27 @@ try{
         void updateInfoTaulaUnitat(String id, String num, String nom){
             try {
                 String q = "UPDATE unitat SET numero='"+num+"', nom='"+nom+"' WHERE numero='"+id+"'";
+                System.out.println(q);
+                query.execute(q);
+            }
+            catch(Exception e) {
+                System.out.println(e);
+            }
+        }
+
+        public void updateinfoMapa(int ed){
+            try {
+                String q = "UPDATE IMAGEN SET MAPA ='N' WHERE EDIFICIO ='"+ed+"'";
+                query.execute(q);
+            }
+            catch(Exception e) {
+                System.out.println(e);
+            }
+        }
+
+        public void resetInfoMapa(){
+            try {
+                String q = "UPDATE IMAGEN SET MAPA = 'S'";
                 System.out.println(q);
                 query.execute(q);
             }

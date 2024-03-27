@@ -1,11 +1,13 @@
 package zonesAPP;
 
-import botonsAPP.ButtonInsertText;
+import botonsAPP.ButtonTextoEstatico;
+import botonsAPP.LocationSetter;
 import processing.core.PApplet;
 import setupAPP.Setup;
 import bbdd.DataBase;
 
 import java.io.File;
+import java.util.Objects;
 
 import botonsAPP.Pin;
 
@@ -89,8 +91,6 @@ public class Trivio003 extends PApplet {
         }
         if(gui.screenActual == GUI.SCREEN.LOGIN && keyCode == '1'){
             gui.screenActual = GUI.SCREEN.INICIAL;
-        } else if(keyCode == '2'){
-            gui.screenActual = GUI.SCREEN.BUILDING;
         }
         if(gui.screenActual == GUI.SCREEN.MAP){
             if(gui.listEstil.getTextField().mouseIntoTextRect(this)) {
@@ -191,18 +191,26 @@ public class Trivio003 extends PApplet {
         } else if(gui.screenActual == GUI.SCREEN.MAP){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
+                resetMap();
             } else if(gui.bAddBuild.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.NEWBUILDING;
+                resetMap();
+            } else if(gui.menuOpen && gui.bInici.mouseIntoButton(this)){
+                resetMap();
+            } else if(gui.menuOpen && gui.bCreate.mouseIntoButton(this)){
+                resetMap();
+            } else if(gui.menuOpen && gui.bArchive.mouseIntoButton(this)){
+                resetMap();
+            } else if(gui.menuOpen && gui.bNewBuilding.mouseIntoButton(this)){
+                resetMap();
             }
             if(gui.selectedLloc!=null && gui.selectedLloc.b.mouseIntoButton(this)){
-                String name = gui.selectedLloc.nom;
-                String[] informacion = db.getInfoTotalEdificios(name);
-                for(int i = 0; i<informacion.length; i++) {
-                    System.out.println(informacion[i]);
+                gui.nomBuildingInto = gui.selectedLloc.nom;
+                gui.infoBuilding = db.getInfoTotalEdificios(gui.nomBuildingInto);
+                for(int i = 0; i<gui.infoBuilding.length; i++) {
+                    System.out.println(gui.infoBuilding[i]);
                 }
-                String imagen = db.getImagenEdificio(db.getIDEdificio(name));
-
-                System.out.println(imagen);
+                gui.nomImgBuildInto = db.getImagenEdificio(db.getIDEdificio(gui.nomBuildingInto));
                 gui.screenActual = GUI.SCREEN.BUILDING;
             }
             int nl = gui.llocsMap.getSelect(this, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
@@ -211,7 +219,23 @@ public class Trivio003 extends PApplet {
             } else {
                 gui.selectedLloc = null;
             }
-
+            if(gui.bAplicaMap.mouseIntoButton(this)){
+                String estilSelected = gui.listEstil.getValueSelected();
+                String tipologiaSelected = gui.listTipologia.getValueSelected();
+                String materialSelected = gui.listMaterial.getValueSelected();
+                String[][] info = db.getMapaQualitats();
+                for(int f = 0; f<info.length; f++){
+                    if(!Objects.equals(estilSelected, "") && !Objects.equals(info[f][1], estilSelected)){
+                        db.updateinfoMapa(Integer.parseInt(info[f][0]));
+                    } else if(!Objects.equals(tipologiaSelected, "") && !Objects.equals(info[f][3], tipologiaSelected)){
+                        db.updateinfoMapa(Integer.parseInt(info[f][0]));
+                    } else if(!Objects.equals(materialSelected, "") && !Objects.equals(info[f][2], materialSelected)){
+                        db.updateinfoMapa(Integer.parseInt(info[f][0]));
+                    }
+                }
+                gui.info = db.getInfoMapaEdificios();
+                gui.llocsMap = new LocationSetter(this, gui.info);
+            }
             gui.listEstil.getTextField().pressedTrue(this);
             gui.listEstil.buttonPressed(this);
 
@@ -224,8 +248,9 @@ public class Trivio003 extends PApplet {
         } else if(gui.screenActual == GUI.SCREEN.BUILDING){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
+            } else if(gui.bReturnMap.mouseIntoButton(this)){
+                gui.screenActual = GUI.SCREEN.MAP;
             }
-
         } else if(gui.screenActual == GUI.SCREEN.NEWBUILDING){
             if(gui.bAccount.mouseIntoButton(this) && gui.bAccount.ences){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
@@ -246,7 +271,13 @@ public class Trivio003 extends PApplet {
                 String tipologia = gui.buildTipologia.getValueSelected();
                 String material = gui.buildMaterial.getValueSelected();
                 db.insertInfoTaulaEdifici(name, x, y, user, estil, material, tipologia);
+                if(gui.imgNewBuild!=null) {
+                    db.insertImageEdificio(name, gui.titolFoto);
+                }
+                gui.info = db.getInfoMapaEdificios();
+                gui.llocsMap = new LocationSetter(this, gui.info);
                 gui.cNewBuild.setVisible(false);
+                gui.screenActual = GUI.SCREEN.MAP;
             } else if(gui.cNewBuild.bCancelar.mouseIntoButton(this) && gui.cNewBuild.bCancelar.ences){
                 gui.cNewBuild.setVisible(false);
             } else if(gui.bAddImgNewBuild.mouseIntoButton(this)){
@@ -279,7 +310,7 @@ public class Trivio003 extends PApplet {
                 gui.dibuix = createGraphics(770, 500);
                 gui.canvas.resetCanvas();
                 // esborrar dibuix
-                gui.pinText = new ButtonInsertText[5];
+                gui.pinText = new ButtonTextoEstatico[5];
             }
             else if(gui.selectPlantilla.mouseIntoSelect(this) && gui.selectPlantilla.ences){
                 if(!gui.selectPlantilla.plegat){
@@ -300,7 +331,7 @@ public class Trivio003 extends PApplet {
                     for (int i = 0; i < gui.pinText.length; i++) {
                         if (gui.pinText[i] == null) {
                             gui.pins[i] = new Pin(this, gui.xPin, gui.yPin);
-                            gui.pinText[i] = new ButtonInsertText(this, (int) gui.xPin + (Setup.wButtonMap/2)/2 + 10, (int) gui.yPin - Setup.hButtonsMap/2, Setup.wButtonMap / 2, Setup.hButtonsMap, "", 10);
+                            gui.pinText[i] = new ButtonTextoEstatico(this, (int) gui.xPin + (Setup.wButtonMap/2)/2 + 10, (int) gui.yPin - Setup.hButtonsMap/2, Setup.wButtonMap / 2, Setup.hButtonsMap, "", 10);
                             break;
                         }
                     }
@@ -428,6 +459,13 @@ if(gui.bEnterAccount.mouseIntoButton(this) && entrar){
             gui.imgNewBuild = loadImage(imageRuta);
             gui.titolFoto = selection.getName();
         }
+    }
+
+    public void resetMap(){
+        db.resetInfoMapa();
+        gui.listEstil.setValueSelected("");
+        gui.listTipologia.setValueSelected("");
+        gui.listMaterial.setValueSelected("");
     }
 
     }
