@@ -191,18 +191,8 @@ public class Trivio003 extends PApplet {
         } else if(gui.screenActual == GUI.SCREEN.MAP){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-                resetMap();
             } else if(gui.bAddBuild.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.NEWBUILDING;
-                resetMap();
-            } else if(gui.menuOpen && gui.bInici.mouseIntoButton(this)){
-                resetMap();
-            } else if(gui.menuOpen && gui.bCreate.mouseIntoButton(this)){
-                resetMap();
-            } else if(gui.menuOpen && gui.bArchive.mouseIntoButton(this)){
-                resetMap();
-            } else if(gui.menuOpen && gui.bNewBuilding.mouseIntoButton(this)){
-                resetMap();
             }
             if(gui.selectedLloc!=null && gui.selectedLloc.b.mouseIntoButton(this)){
                 gui.nomBuildingInto = gui.selectedLloc.nom;
@@ -235,6 +225,10 @@ public class Trivio003 extends PApplet {
                 }
                 gui.info = db.getInfoMapaEdificios();
                 gui.llocsMap = new LocationSetter(this, gui.info);
+            } else if(gui.bResetMap.mouseIntoButton(this)){
+                resetMap();
+                gui.info = db.getInfoMapaEdificios();
+                gui.llocsMap = new LocationSetter(this, gui.info);
             }
             gui.listEstil.getTextField().pressedTrue(this);
             gui.listEstil.buttonPressed(this);
@@ -249,6 +243,12 @@ public class Trivio003 extends PApplet {
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
             } else if(gui.bReturnMap.mouseIntoButton(this)){
+                gui.screenActual = GUI.SCREEN.MAP;
+            } else if(gui.bDeleteBuild.mouseIntoButton(this)){
+                db.deleteEdificio(gui.nomBuildingInto);
+                db.deleteImagen(gui.nomBuildingInto);
+                gui.info = db.getInfoMapaEdificios();
+                gui.llocsMap = new LocationSetter(this, gui.info);
                 gui.screenActual = GUI.SCREEN.MAP;
             }
         } else if(gui.screenActual == GUI.SCREEN.NEWBUILDING){
@@ -359,6 +359,11 @@ public class Trivio003 extends PApplet {
         } else if(gui.screenActual == GUI.SCREEN.ARCHIVE){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
+            } else if(gui.selectArxiu.mouseIntoSelect(this) && gui.selectArxiu.ences){
+                if(!gui.selectArxiu.plegat){
+                    gui.selectArxiu.update(this);
+                }
+                gui.selectArxiu.conmutar();
             }
         }
 

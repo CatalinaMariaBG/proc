@@ -440,8 +440,6 @@ try{
             return null;
         }
     }
-
-
         // INSERTS
 
         // Inserta les dades a la taula Unitat
@@ -512,7 +510,6 @@ try{
         public void resetInfoMapa(){
             try {
                 String q = "UPDATE IMAGEN SET MAPA = 'S'";
-                System.out.println(q);
                 query.execute(q);
             }
             catch(Exception e) {
@@ -526,6 +523,29 @@ try{
         void deleteInfoTaulaUnitat(String id){
             try {
                 String q = "DELETE FROM unitat WHERE numero='"+id+"'";
+                System.out.println(q);
+                query.execute(q);
+            }
+            catch(Exception e) {
+                System.out.println(e);
+            }
+        }
+
+        public void deleteEdificio(String nom){
+            try {
+                String q = "DELETE FROM EDIFICIO WHERE DESCRIPCION ='"+nom+"'";
+                System.out.println(q);
+                query.execute(q);
+            }
+            catch(Exception e) {
+                System.out.println(e);
+            }
+        }
+
+        public void deleteImagen(String ed){
+            int edificioID = getIDEdificio(ed);
+            try {
+                String q = "DELETE FROM IMAGEN WHERE EDIFICIO ='"+edificioID+"'";
                 System.out.println(q);
                 query.execute(q);
             }

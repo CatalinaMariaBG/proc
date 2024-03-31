@@ -14,14 +14,14 @@ import funcionsAPP.Canvas;
 //mesures: 1440, 900
 public class GUI {
 
-    PImage imgAccount, imgFullCreate, imgMenosCreate, imgBuildInto;
+    PImage imgAccount, imgFullCreate, imgMenosCreate, imgBuildInto, imgNextArxiu, imgAtrasArxiu;
 
     ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding,
     bInici, bNProjects, bLogOut, bAplicaMap, bAddBuild, bSaveC, bSaveCfull, bAddImage, bColorCreate, bColorPersonal, bPinCreate,
-    bErraseCreate, bSaveBuild, bCopyImageBuild, bReturnMap, bImportImage, bCreateBuilding, bNewProject, bSaveCreation,
-    bColorCreateFull, bErraseCreateFull, bAddImageFull, bPinFull, bAddImgNewBuild;
+    bErraseCreate, bSaveBuild, bDeleteBuild, bReturnMap, bCreateBuilding, bNewProject, bSaveCreation,
+    bColorCreateFull, bErraseCreateFull, bAddImageFull, bPinFull, bAddImgNewBuild, bResetMap;
 
-    ButtonPhotos bAccount, bFullCreate, bMenosCreate;
+    ButtonPhotos bAccount, bFullCreate, bMenosCreate, bNextArxiu, bAtrasArxiu;
 
     ButtonTextoEstatico bPassword, bName, bNameBuilding, bPosXBuilding, bPosYBuilding, saveCreationName;
 
@@ -30,7 +30,7 @@ public class GUI {
     public SCREEN screenActual;
 
     CarrouselFoto c;
-    String[] nomsCarrousel, tipusDibuix, tipusPlantilla, infoBuilding;
+    String[] nomsCarrousel, tipusDibuix, tipusPlantilla, infoBuilding, tipusArxiu;
 
     TextList listEstil, listTipologia, listMaterial, buildEstil, buildTipologia, buildMaterial;
     ButtonSelect selectDraw, selectPlantilla, selectArxiu, selectDrawFull, selectPlantillaFull;
@@ -52,8 +52,7 @@ public class GUI {
     ButtonTextoEstatico[] pinText;
     Pin[] pins;
     Confirm cNewBuild;
-
-
+    Arxiu archivo;
     float[] xPoints, yPoints;
     int numPoints = 0;
 
@@ -163,8 +162,8 @@ DataBase db;
         String[][] valuesMaterial = db.getMaterialesEdificios();
         String[][] valuesTipologia = db.getTipologiaEdificios();
 
-
-        bAplicaMap = new ButtonWords(processing, "APLICA", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 750, 300, 60, 10,"CORNER");
+        bResetMap = new ButtonWords(processing, "LLEVA FILTRES",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 750, 300, 60, 10,"CORNER" );
+        bAplicaMap = new ButtonWords(processing, "APLICA", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 660, 300, 60, 10,"CORNER");
         listMaterial = new TextList(processing, valuesMaterial, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, 550 + 30, Setup.wButtonMap, Setup.hButtonsMap);
         listTipologia = new TextList(processing, valuesTipologia, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, 450 + 30, Setup.wButtonMap, Setup.hButtonsMap);
         listEstil = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, Setup.ySecondMiddle + 30,Setup.wButtonMap, Setup.hButtonsMap);
@@ -188,14 +187,19 @@ DataBase db;
         bAddImgNewBuild = new ButtonWords(processing, "Afegeix imatge", 570+(770/2), (float) processing.height /2 + 150, Setup.wButtonsNewBuild, Setup.hButtonsMap, 10, "CENTER");
 
         //BOTONS BUILDING INFO
-        bCopyImageBuild = new ButtonWords(processing, "COPY THE IMAGE", 100, Setup.ySecondMiddle + 450, 190, 30, 10,"CORNER");
+        bDeleteBuild = new ButtonWords(processing, "DELETE BUILDING", 100, Setup.ySecondMiddle + 450, 190, 30, 10,"CORNER");
         bReturnMap = new ButtonWords(processing, "RETURN TO MAP", 310, Setup.ySecondMiddle + 450, 190, 30, 10,"CORNER");
 
         //BOTONS ARXIU
-        selectArxiu = new ButtonSelect(tipusPlantilla, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, 400,60,"TIPUS D'ARXIU");
-        bImportImage = new ButtonWords(processing,"IMPORT IMAGE",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 500, 400, 60, 10, "CORNER");
-        bCreateBuilding = new ButtonWords(processing, "NEW BUILDING",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 600, 400, 60, 10, "CORNER");
-        bNewProject = new ButtonWords(processing, "NEW CREATION", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 700, 400, 60, 10, "CORNER");
+        archivo = new Arxiu(7, 3);
+        imgNextArxiu = processing.loadImage("Next_Arrow.svg.png");
+        imgAtrasArxiu = processing.loadImage("2048px-Back_Arrow.svg.png");
+        //bNextArxiu = new ButtonPhotos(processing, imgNextArxiu, );
+        //bAtrasArxiu
+        tipusArxiu = new String[]{"TOT","EDIFICIO","PROYECTO"};
+        selectArxiu = new ButtonSelect(tipusArxiu, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, 400,60,"TIPUS D'ARXIU");
+        bCreateBuilding = new ButtonWords(processing,"NUEVO EDIFICIO",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 500, 400, 60, 10, "CORNER");
+        bNewProject = new ButtonWords(processing, "NUEVO PROYECTO",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 600, 400, 60, 10, "CORNER");
 
         //BOTONS SAVE CREATION
         saveCreationName = new ButtonTextoEstatico(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 80, Setup.wButtonsNewBuild, Setup.hButtonsMap, "Name: ", 16);
@@ -515,6 +519,7 @@ processing.popStyle();
         processing.text("Estil: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
         processing.text("Tipologia: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 450 + 30);
         processing.text("Material: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 550 + 30);
+        bResetMap.display(processing);
         bAplicaMap.display(processing);
         listMaterial.display(processing);
         listTipologia.display(processing);
@@ -584,7 +589,7 @@ processing.popStyle();
             imgBuildInto = processing.loadImage(nomImgBuildInto);
             processing.image(imgBuildInto,Setup.xSecondMiddle, Setup.ySecondMiddle,770, 500);
         }
-        bCopyImageBuild.display(processing);
+        bDeleteBuild.display(processing);
         bReturnMap.display(processing);
         if(menuOpen){
             drawLateralBar(processing);
@@ -656,10 +661,9 @@ processing.popStyle();
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "ELEMENTS OF THE ARCHIVE");
         drawNom(processing, "ARCHIVE");
-        selectArxiu.display(processing);
-        bImportImage.display(processing);
         bCreateBuilding.display(processing);
         bNewProject.display(processing);
+        selectArxiu.display(processing);
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
