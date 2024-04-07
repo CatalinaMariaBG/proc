@@ -24,7 +24,8 @@ public class DataBase {
 
         public void connect(){
             try {
-                c = DriverManager.getConnection("jdbc:mysql://localhost:8889/"+databaseName, user, password);
+                Class.forName("com.mysql.jdbc.Driver");
+                c = DriverManager.getConnection("jdbc:mysql://localhost:8889/"+databaseName+ "?useTimezone=true&serverTimezone=UTC", user, password);
                 query = c.createStatement();
                 System.out.println("Connectat a la BBDD! :) ");
                 connectat = true;
@@ -440,6 +441,40 @@ try{
             return null;
         }
     }
+
+    public String[][] getProyectos(){
+        int numFiles = getNumRowsTaula("PROYECTO");
+        int numCols = 3;
+        String[][] proyectos = new String[numFiles][numCols];
+        try{
+            ResultSet rs = query.executeQuery("SELECT * FROM PROYECTO");
+            int nr = 0;
+            while(rs.next()){
+                proyectos[nr][0] = rs.getString("DESCRIPCION");
+                proyectos[nr][1] = rs.getString("FECHA_FINAL");
+                proyectos[nr][2] = rs.getString("ID_PROYECTO");
+                nr++;
+            }
+            return proyectos;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+        //getNumMuros(rs.getInt("ID_PROYECTO"))
+    }
+
+    public int getNumMuros(int idProyecto){
+        try{
+            String q = "SELECT COUNT(*) AS n FROM MURO_PROYECTO m, PROYECTO p WHERE m.PROYECTO_ID=p.ID_PROYECTO AND p.ID_PROYECTO = '"+idProyecto+"'";
+            ResultSet rs = query.executeQuery(q);
+            rs.next();
+            return rs.getInt("n");
+        }catch(Exception e) {
+            System.out.println(e);
+            return -1;
+        }
+
+    }
         // INSERTS
 
         // Inserta les dades a la taula Unitat
@@ -455,13 +490,24 @@ try{
             }
         }
 
+        public void insertProject(String nom, String date, String user){
+            int c = getNumRowsTaula("PROYECTO") +1;
+            try{
+                String q = "INSERT INTO PROYECTO (ID_PROYECTO, DESCRIPCION, FECHA_FINAL, USUARIO) VALUES('"+c+"', '"+nom+"', '"+date+"', '"+user+"')";
+                query.execute(q);
+            }catch(Exception e) {
+                System.out.println(e);
+            }
+        }
+
         public void insertInfoTaulaEdifici(String nom, float x, float y, String user, String estil, String material, String tipologia){
             int c = getNumRowsTaula("EDIFICIO") + 1;
             int estilID = getIDEstil(estil);
             int materialID = getIDMaterial(material);
             int tipologiaID = getIDTipologia(tipologia);
             try{
-                String q = "INSERT INTO EDIFICIO (ID_EDIFICIO, DESCRIPCION, POSX, POSY, USUARIO, ESTILO, MATERIAL, TIPOLOGIA) VALUES ('"+c+"', '"+nom+"', '"+x+"', '"+y+"', '"+user+"', '"+estilID+"', '"+materialID+"', '"+tipologiaID+"')";
+                String q = "INSERT INTO EDIFICIO (ID_EDIFICIO, DESCRIPCION, POSX, POSY, USUARIO, ESTILO, MATERIAL, TIPOLOGIA) VALUES ('"+c+"', '"+nom+"', '"+x+"', " +
+                        "'"+y+"', '"+user+"', '"+estilID+"', '"+materialID+"', '"+tipologiaID+"')";
                 System.out.println(q);
                 query.execute(q);
             }catch(Exception e) {

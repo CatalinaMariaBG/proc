@@ -63,7 +63,7 @@ this.plegat = !this.plegat;
         processing.fill(0xFFDBD9D1); processing.stroke(0); processing.strokeWeight(2);
         processing.triangle(x + w - 25, y+5, x + w - 15, y + 25, x + w - 5 , y+5);
 
-      processing.fill(0); processing.textSize(16); processing.textAlign(processing.CENTER); processing.noStroke();
+      processing.fill(0); processing.textSize(20); processing.textAlign(processing.CENTER); processing.noStroke();
         if(valorSelected!=null){
             processing.text(valorSelected, x + w/2, y + h/2);
         } else{

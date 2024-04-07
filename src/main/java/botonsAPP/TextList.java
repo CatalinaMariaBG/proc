@@ -6,7 +6,7 @@ import processing.core.PApplet;
 public class TextList {
     float x, y, w, h;
     String [][] texts;
-    ButtonTextoEstatico textField;
+    ButtonInsertText textField;
     int filaSelected;
     String idSelected;
     String valueSelected;
@@ -23,14 +23,14 @@ public class TextList {
         this.h = h;
         this.ences = true;
 
-        this.textField = new ButtonTextoEstatico(processing, (int) x, (int) y, (int) w, (int) h, "", 16);
+        this.textField = new ButtonInsertText(processing, (int) x, (int) y, (int) w, (int) h, "", 16);
         this.buttons = new ArrayList<ButtonWords>();
     }
 
     public String getValueSelected(){
         return this.valueSelected;
     }
-    public ButtonTextoEstatico getTextField(){
+    public ButtonInsertText getTextField(){
         return this.textField;
     }
 

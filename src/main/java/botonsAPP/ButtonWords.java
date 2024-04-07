@@ -1,6 +1,7 @@
 package botonsAPP;
 
 import processing.core.PApplet;
+import processing.core.PFont;
 public class ButtonWords {
 
     //Propietats del botó
@@ -10,9 +11,8 @@ public class ButtonWords {
     int fillColorOver, fillColorOff;
     String textButton;
     public boolean ences; //estat del botó, encés o apagat
-
    String mode;
-
+PFont font;
     public ButtonWords(PApplet processing, String text, float x, float y, float w, float h, float angle, String mode){
         this.textButton = text;
         this.x = x;
@@ -25,6 +25,7 @@ public class ButtonWords {
         this.fillColorOver = processing.color(67, 83, 96);
         this.fillColorOff = processing.color(244, 93, 1);
         this.mode = mode;
+        font = processing.createFont("AppleGaramond-Light.ttf", 20);
     }
 
     public void setEnces(boolean ences){
@@ -37,6 +38,8 @@ public class ButtonWords {
 
     public void setFillColor(int c){this.fillColor = c;}
     public void setFillColorOver(int c){this.fillColorOver = c;}
+
+    public void setFont(PFont f){this.font = f;}
 
     public void display(PApplet processing){
         processing.pushStyle();
@@ -55,7 +58,7 @@ public class ButtonWords {
 
             //Text
             processing.fill(0); processing.textAlign(processing.CENTER);
-            processing.textSize(16);
+            processing.textSize(20);
             processing.text(textButton, this.x + this.w / 2, this.y + this.h / 2);
         } else if(mode.equals("CENTER")){
             processing.strokeWeight(2);
@@ -64,8 +67,9 @@ public class ButtonWords {
 
             //Text
             processing.fill(0); processing.textAlign(processing.CENTER);
-            processing.textSize(16);
+            processing.textSize(20);
             processing.textAlign(processing.CENTER);
+            processing.textFont(font);
             processing.text(textButton, this.x, this.y);
         }
         processing.popStyle();

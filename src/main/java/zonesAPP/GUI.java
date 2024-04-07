@@ -2,6 +2,7 @@ package zonesAPP;
 
 import bbdd.DataBase;
 import botonsAPP.*;
+import fontsAPP.Tipus_font;
 import processing.core.PApplet;
 
 import processing.core.PGraphics;
@@ -13,27 +14,27 @@ import funcionsAPP.Canvas;
 
 //mesures: 1440, 900
 public class GUI {
-
+    Tipus_font lletres;
     PImage imgAccount, imgFullCreate, imgMenosCreate, imgBuildInto, imgNextArxiu, imgAtrasArxiu;
 
     ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding,
     bInici, bNProjects, bLogOut, bAplicaMap, bAddBuild, bSaveC, bSaveCfull, bAddImage, bColorCreate, bColorPersonal, bPinCreate,
-    bErraseCreate, bSaveBuild, bDeleteBuild, bReturnMap, bCreateBuilding, bNewProject, bSaveCreation,
-    bColorCreateFull, bErraseCreateFull, bAddImageFull, bPinFull, bAddImgNewBuild, bResetMap;
+    bErraseCreate, bSaveBuild, bDeleteBuild, bReturnMap, bSaveCreation,
+    bColorCreateFull, bErraseCreateFull, bAddImageFull, bPinFull, bAddImgNewBuild, bResetMap, bAceptarP, bNoP, bCreateProject;
 
     ButtonPhotos bAccount, bFullCreate, bMenosCreate, bNextArxiu, bAtrasArxiu;
 
-    ButtonTextoEstatico bPassword, bName, bNameBuilding, bPosXBuilding, bPosYBuilding, saveCreationName;
+    ButtonInsertText bPassword, bName, bNameBuilding, bPosXBuilding, bPosYBuilding, saveCreationName, nomProject, dataProject;
 
     public enum SCREEN{LOGIN, INICIAL, MYACCOUNT, MAP, BUILDING, NEWBUILDING, ARCHIVE, CREATE, SAVECREATION, CREATEFULLSCREEN};
 
     public SCREEN screenActual;
 
-    CarrouselFoto c;
-    String[] nomsCarrousel, tipusDibuix, tipusPlantilla, infoBuilding, tipusArxiu;
+    CarrouselFoto carrouselFoto;
+    String[] nomsCarrousel, tipusDibuix, tipusPlantilla, infoBuilding, tipusCreate, columnesArxiu;
 
-    TextList listEstil, listTipologia, listMaterial, buildEstil, buildTipologia, buildMaterial;
-    ButtonSelect selectDraw, selectPlantilla, selectArxiu, selectDrawFull, selectPlantillaFull;
+    TextList listEstil, listTipologia, listMaterial, buildEstil, buildTipologia, buildMaterial, listProyecto;
+    ButtonSelect selectDraw, selectPlantilla, selectCreate, selectDrawFull, selectPlantillaFull;
 
     LocationSetter llocsMap;
     Edifici selectedLloc;
@@ -49,16 +50,17 @@ public class GUI {
     Canvas canvas;
     PGraphics dibuix;
     PImage lastImage, imgNewBuild;
-    ButtonTextoEstatico[] pinText;
+    ButtonInsertText[] pinText;
     Pin[] pins;
     Confirm cNewBuild;
     Arxiu archivo;
-    float[] xPoints, yPoints;
+    float[] xPoints, yPoints, columnesArxiuAmplada;
     int numPoints = 0;
 
 boolean menuOpen = false;
 boolean paletaOpen = false;
 boolean establishPersonalC = false;
+boolean newProject = false;
 
 DataBase db;
 
@@ -68,22 +70,23 @@ DataBase db;
 
         xPoints = new float[2];
         yPoints = new float[2];
-
+        lletres = new Tipus_font(processing);
         screenActual = SCREEN.LOGIN;
         //INICIAL
         b1 = new ButtonWords(processing, "CREAR", 190, Setup.yButtonInicial, 180, 80, 10, "CORNER");
         b2 = new ButtonWords(processing, "MAPA", 490, Setup.yButtonInicial, 180, 80, 10, "CORNER");
-        b3 = new ButtonWords(processing , "ARXIUS", 790, Setup.yButtonInicial, 180, 80, 10, "CORNER");
-        b4 = new ButtonWords(processing, "NOU EDIFICI", 1090, Setup.yButtonInicial, 180, 80, 10, "CORNER");
+        b3 = new ButtonWords(processing , "ARCHIVO", 790, Setup.yButtonInicial, 180, 80, 10, "CORNER");
+        b4 = new ButtonWords(processing, "NUEVO EDIFICIO", 1090, Setup.yButtonInicial, 180, 80, 10, "CORNER");
 
-       c = new CarrouselFoto(80, 310, processing.width - 2*Setup.logoW, 580, 2);
+       carrouselFoto = new CarrouselFoto(80, 310, processing.width - 2*Setup.logoW, 580, 2);
         nomsCarrousel = new String[]{ "auditori-de-manacor.jpg", "edificiCasasayas.jpeg","casalBalaguer.jpg", "MACE.jpg", "ciudadBlanca.jpg"};
-        c.setImatges(processing, nomsCarrousel);
-        c.setButtons(processing, "2048px-Back_Arrow.svg.png", "Next_Arrow.svg.png");
-        c.setTimer(processing, 10);
+        carrouselFoto.setImatges(processing, nomsCarrousel);
+        carrouselFoto.setButtons(processing, "2048px-Back_Arrow.svg.png", "Next_Arrow.svg.png");
+        carrouselFoto.setTimer(processing, 10);
         //GENERAL
         bLogo = new ButtonWords(processing, "LOGO", Setup.logoDistH, Setup.logoDistV, Setup.logoW, Setup.logoH, 0, "CORNER");
             bLogo.setFillColor(0xFFF4562A);
+            bLogo.setFont(lletres.getFontNormal());
         imgAccount = processing.loadImage("data/userLogo.png");
         bAccount = new ButtonPhotos(processing, imgAccount, processing.width - Setup.logoDistH - Setup.logoW/2, Setup.logoDistV + Setup.logoH/2, Setup.logoW);
 
@@ -94,17 +97,17 @@ DataBase db;
             // processing.rectMode(processing.CORNER);
         //        processing.fill(67, 83, 96);
         //        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle,100, Setup.hButtonsMap, 10);
-        bName = new ButtonTextoEstatico(processing, processing.width/2, processing.height/2 + 50, 450, Setup.hButtonsMap, "Name: ", 16);
-        bPassword = new ButtonTextoEstatico(processing, processing.width/2, processing.height/2 + 150, 450, Setup.hButtonsMap, "Password: ", 16);
+        bName = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 50, 450, Setup.hButtonsMap, "Nombre: ", 16);
+        bPassword = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 150, 450, Setup.hButtonsMap, "Clave: ", 16);
 
         //BOTONS BARRA LATERAL
         bLateralBar = new ButtonWords(processing, "LOGO", 160 - Setup.logoW/2, Setup.logoDistV, Setup.logoW, Setup.logoH, 0, "CORNER");
             bLateralBar.mouseIntoButton(processing);
-            bInici = new ButtonWords(processing, "INICI", Setup.edgeH, Setup.edgeV + Setup.logoW + 100, 280, 80, 10, "CORNER");
+            bInici = new ButtonWords(processing, "INICIO", Setup.edgeH, Setup.edgeV + Setup.logoW + 100, 280, 80, 10, "CORNER");
         bCreate = new ButtonWords(processing, "CREAR", Setup.edgeH, Setup.edgeV + Setup.logoW + 250 , 280, 80, 10, "CORNER");
         bMap = new ButtonWords(processing, "MAPA", Setup.edgeH, Setup.edgeV + Setup.logoW + 400, 280, 80, 10, "CORNER");
-        bArchive = new ButtonWords(processing, "ARXIUS", Setup.edgeH, Setup.edgeV + Setup.logoW + 550, 280, 80, 10, "CORNER");
-        bNewBuilding = new ButtonWords(processing, "NOU EDIFICI", Setup.edgeH, Setup.edgeV + Setup.logoW + 700, 280, 80, 10, "CORNER");
+        bArchive = new ButtonWords(processing, "ARCHIVO", Setup.edgeH, Setup.edgeV + Setup.logoW + 550, 280, 80, 10, "CORNER");
+        bNewBuilding = new ButtonWords(processing, "NUEVO EDIFICIO", Setup.edgeH, Setup.edgeV + Setup.logoW + 700, 280, 80, 10, "CORNER");
 
         //BOTONS CREATE
         imgFullCreate = processing.loadImage("data/fullScreen.png");
@@ -114,33 +117,33 @@ DataBase db;
         bMenosCreate = new ButtonPhotos(processing, imgMenosCreate, processing.width - 3* Setup.edgeH, processing.height - 3* Setup.edgeV, Setup.fullScreenW);
         bMenosCreate.setColors(255, 0,0xFFDBD9D1);
         bSaveC = new ButtonWords(processing, "GUARDAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 820, 300, 30, 10, "CORNER");
-        tipusDibuix = new String[]{"DIBUIXA","CERCLE", "QUADRAT", "LÍNIA"};
-        selectDraw = new ButtonSelect(tipusDibuix, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, (float)192.5, 60, "DIBUIXA");
-        bAddImage = new ButtonWords(processing, "AFEGEIX IMATGE", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, Setup.wButtonCreate, 60, 10, "CORNER");
+        tipusDibuix = new String[]{"DIBUJAR","CÍRCULO", "CUADRADO", "LÍNEA"};
+        selectDraw = new ButtonSelect(tipusDibuix, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, (float)192.5, 60, "DIBUJA");
+        bAddImage = new ButtonWords(processing, "AÑADIR IMAGEN", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, Setup.wButtonCreate, 60, 10, "CORNER");
         bAddImage.setFillColor(processing.color(219, 217, 209));
         bErraseCreate = new ButtonWords(processing, "BORRAR",(float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 444F, (float)192.5, 60, 10, "CORNER");
         bErraseCreate.setFillColor(processing.color(219, 217, 209));
         bPinCreate = new ButtonWords(processing, "PIN",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 726, Setup.wButtonCreate, 60, 10, "CORNER");
         bPinCreate.setFillColor(processing.color(219, 217, 209));
-        tipusPlantilla = new String[]{"UNA CASELLA","DUES CASELLES", "QUATRE CASELLES", "SIS CASELLES"};
+        tipusPlantilla = new String[]{"UNA CASILLA","DOS CASILLAS", "CUATRO CASILLAS", "SEIS CASILLAS"};
         selectPlantilla = new ButtonSelect(tipusPlantilla, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, Setup.wButtonCreate, 60, "PLANTILLA");
-        bSizeDraw = new ButtonSlide(processing, "MIDA", (float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), Setup.ySecondMiddle, (float)192.5, 60F, standardSize, 50,10);
+        bSizeDraw = new ButtonSlide(processing, "MEDIDA", (float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), Setup.ySecondMiddle, (float)192.5, 60F, standardSize, 50,10);
         colorsCreate = new PaletaColors(processing, Setup.xPaletaColors, (int)Setup.logoDistV, Setup.sizePaletaColors, Setup.sizePaletaColors, 5, 4);
         bColorCreate = new ButtonWords(processing, "COLOR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 444, (float)192.5, 60, 10, "CORNER");
         bColorCreate.setFillColor(processing.color(219, 217, 209));
-        bColorPersonal = new ButtonWords(processing, "PERSONALITZAR", Setup.xPaletaColors + Setup.sizePaletaColors/2, Setup.logoDistV + Setup.sizePaletaColors - 30, 400, 40, 10, "CENTER");
+        bColorPersonal = new ButtonWords(processing, "PERSONALIZAR", Setup.xPaletaColors + Setup.sizePaletaColors/2, Setup.logoDistV + Setup.sizePaletaColors - 30, 400, 40, 10, "CENTER");
         bColorPersonal.setFillColor(0xFF8E8E90);
-        bRed = new ButtonSlide(processing, "RED", Setup.xPaletaColors+100+Setup.edgeH, Setup.logoDistV+100+Setup.edgeV, 200, 80, 0, 255, 0);
-        pinText = new ButtonTextoEstatico[5];
+        bRed = new ButtonSlide(processing, "ROJO", Setup.xPaletaColors+100+Setup.edgeH, Setup.logoDistV+100+Setup.edgeV, 200, 80, 0, 255, 0);
+        pinText = new ButtonInsertText[5];
         pins = new Pin[5];
         canvas = new Canvas(Setup.xSecondMiddle, Setup.ySecondMiddle,770, 500);
         dibuix = processing.createGraphics(770, 500);
 
         //BOTONS CREATE FULL SCREEN
-        bSaveCfull = new ButtonWords(processing, "SAVE", Setup.edgeH, 818, Setup.ySecondMiddle, 60, 10, "CORNER");
+        bSaveCfull = new ButtonWords(processing, "GUARDAR", Setup.edgeH, 818, Setup.ySecondMiddle, 60, 10, "CORNER");
         selectDrawFull = new ButtonSelect(tipusDibuix, Setup.edgeH, Setup.edgeV, Setup.ySecondMiddle, 60, "DIBUIXA");
         selectDrawFull.setFillColor(processing.color(255, 255, 255));
-        bSizeDrawFull = new ButtonSlide(processing, "MIDA",Setup.edgeH, 134, Setup.ySecondMiddle, 60, standardSize, 50, 10);
+        bSizeDrawFull = new ButtonSlide(processing, "MEDIDA",Setup.edgeH, 134, Setup.ySecondMiddle, 60, standardSize, 50, 10);
         bSizeDrawFull.setcolor(processing.color(255, 255, 255));
         bColorCreateFull = new ButtonWords(processing, "COLOR", Setup.edgeH, 248, Setup.ySecondMiddle, 60, 10, "CORNER");
         bColorCreateFull.setFillColor(0xFF8E8E90);
@@ -148,13 +151,13 @@ DataBase db;
         bErraseCreateFull.setFillColor(0xFF8E8E90);
         selectPlantillaFull = new ButtonSelect(tipusPlantilla, Setup.edgeH, 476, Setup.ySecondMiddle, 60, "PLANTILLA");
         selectPlantillaFull.setFillColor(processing.color(255, 255, 255));
-        bAddImageFull = new ButtonWords(processing, "AFEGEIX IMATGE", Setup.edgeH, 590, Setup.ySecondMiddle, 60, 10, "CORNER");
+        bAddImageFull = new ButtonWords(processing, "AÑADIR IMAGEN", Setup.edgeH, 590, Setup.ySecondMiddle, 60, 10, "CORNER");
         bAddImageFull.setFillColor(0xFF8E8E90);
         bPinFull = new ButtonWords(processing, "PIN", Setup.edgeH, 704, Setup.ySecondMiddle, 60, 10, "CORNER");
         bPinFull.setFillColor(0xFF8E8E90);
 
         // BOTONS ACCOUNT
-        bNProjects = new ButtonWords(processing, "SEE PROJECTS", processing.width/2 - 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
+        bNProjects = new ButtonWords(processing, "VER PROYECTOS", processing.width/2 - 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
         bLogOut = new ButtonWords(processing, "LOG OUT", processing.width/2 + 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
 
         // BOTONS MAP
@@ -162,13 +165,13 @@ DataBase db;
         String[][] valuesMaterial = db.getMaterialesEdificios();
         String[][] valuesTipologia = db.getTipologiaEdificios();
 
-        bResetMap = new ButtonWords(processing, "LLEVA FILTRES",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 750, 300, 60, 10,"CORNER" );
-        bAplicaMap = new ButtonWords(processing, "APLICA", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 660, 300, 60, 10,"CORNER");
+        bResetMap = new ButtonWords(processing, "BORRAR FILTROS",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 750, 300, 60, 10,"CORNER" );
+        bAplicaMap = new ButtonWords(processing, "APLICAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 660, 300, 60, 10,"CORNER");
         listMaterial = new TextList(processing, valuesMaterial, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, 550 + 30, Setup.wButtonMap, Setup.hButtonsMap);
         listTipologia = new TextList(processing, valuesTipologia, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, 450 + 30, Setup.wButtonMap, Setup.hButtonsMap);
         listEstil = new TextList(processing, valuesEstil, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, Setup.ySecondMiddle + 30,Setup.wButtonMap, Setup.hButtonsMap);
 
-        bAddBuild = new ButtonWords(processing, "ADD BUILDING", 1260, 375, 140, 30, 10, "CENTER");
+        bAddBuild = new ButtonWords(processing, "AÑADIR EDIFICIO", 1260, 375, 140, 30, 10, "CENTER");
         info = db.getInfoMapaEdificios();
         llocsMap = new LocationSetter(processing, info);
         selectedLloc = null;
@@ -176,43 +179,80 @@ DataBase db;
 
 
         //BOTONS NEW BUILDING
-        bNameBuilding = new ButtonTextoEstatico(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2) + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2, Setup.wButtonsNewBuild, Setup.hButtonsMap, "", 16);
-        bPosXBuilding = new ButtonTextoEstatico(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2) + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 75, Setup.wButtonsNewBuild, Setup.hButtonsMap, "", 16);
-        bPosYBuilding = new ButtonTextoEstatico(processing,(int)(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 + 100), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 150, Setup.wButtonsNewBuild, Setup.hButtonsMap, "", 16);
+        bNameBuilding = new ButtonInsertText(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2) + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2, Setup.wButtonsNewBuild, Setup.hButtonsMap, "", 16);
+        bPosXBuilding = new ButtonInsertText(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2) + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 75, Setup.wButtonsNewBuild, Setup.hButtonsMap, "", 16);
+        bPosYBuilding = new ButtonInsertText(processing,(int)(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 + 100), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 150, Setup.wButtonsNewBuild, Setup.hButtonsMap, "", 16);
         buildEstil = new TextList(processing, valuesEstil,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 225, Setup.wButtonsNewBuild, Setup.hButtonsMap);
         buildTipologia = new TextList(processing, valuesTipologia,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 300, Setup.wButtonsNewBuild, Setup.hButtonsMap);
         buildMaterial = new TextList(processing, valuesMaterial,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 + 100, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 375, Setup.wButtonsNewBuild, Setup.hButtonsMap);
-        bSaveBuild = new ButtonWords(processing, "SAVE", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 +50, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 450, 300, 30, 10,"CENTER");
+        bSaveBuild = new ButtonWords(processing, "GUARDAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2 +50, Setup.ySecondMiddle + Setup.hButtonsMap/2 + 450, 300, 30, 10,"CENTER");
         cNewBuild = new Confirm(processing, Setup.titolConfirmNewBuild, Setup.messageConfirmNewBuild, processing.width/2, processing.height/2, 420, 300);
-        bAddImgNewBuild = new ButtonWords(processing, "Afegeix imatge", 570+(770/2), (float) processing.height /2 + 150, Setup.wButtonsNewBuild, Setup.hButtonsMap, 10, "CENTER");
+        bAddImgNewBuild = new ButtonWords(processing, "Añadir imagen", 570+(770/2), (float) processing.height /2 + 150, Setup.wButtonsNewBuild, Setup.hButtonsMap, 10, "CENTER");
 
         //BOTONS BUILDING INFO
-        bDeleteBuild = new ButtonWords(processing, "DELETE BUILDING", 100, Setup.ySecondMiddle + 450, 190, 30, 10,"CORNER");
-        bReturnMap = new ButtonWords(processing, "RETURN TO MAP", 310, Setup.ySecondMiddle + 450, 190, 30, 10,"CORNER");
+        bDeleteBuild = new ButtonWords(processing, "ELIMINAR EDIFICIO", 100, Setup.ySecondMiddle + 450, 190, 30, 10,"CORNER");
+        bReturnMap = new ButtonWords(processing, "MAPA", 310, Setup.ySecondMiddle + 450, 190, 30, 10,"CORNER");
 
-        //BOTONS ARXIU
+        //BOTONS ARCHIVO
         archivo = new Arxiu(7, 3);
         imgNextArxiu = processing.loadImage("Next_Arrow.svg.png");
         imgAtrasArxiu = processing.loadImage("2048px-Back_Arrow.svg.png");
-        //bNextArxiu = new ButtonPhotos(processing, imgNextArxiu, );
-        //bAtrasArxiu
-        tipusArxiu = new String[]{"TOT","EDIFICIO","PROYECTO"};
-        selectArxiu = new ButtonSelect(tipusArxiu, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, 400,60,"TIPUS D'ARXIU");
-        bCreateBuilding = new ButtonWords(processing,"NUEVO EDIFICIO",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 500, 400, 60, 10, "CORNER");
-        bNewProject = new ButtonWords(processing, "NUEVO PROYECTO",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 600, 400, 60, 10, "CORNER");
+        bNextArxiu = new ButtonPhotos(processing, imgNextArxiu, Setup.xSecondMiddle + 770, Setup.ySecondMiddle+250, 40);
+        bAtrasArxiu = new ButtonPhotos(processing, imgAtrasArxiu, Setup.xSecondMiddle,Setup.ySecondMiddle+250, 40);
+        columnesArxiu = new String[]{"Nombre","Fecha final", "Número de muros de inspiración"};
+        columnesArxiuAmplada = new float[]{30, 30, 40};
+        archivo.setHeaders(columnesArxiu);
+        archivo.setData(db.getProyectos());
+        archivo.setColumnWidths(columnesArxiuAmplada);
+        tipusCreate = new String[]{"CREAR", "NUEVO EDIFICIO", "NUEVO PROYECTO", "NUEVO MURO DE INSPIRACIÓN"};
+        selectCreate = new ButtonSelect(tipusCreate, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, 400, 60, "CREAR");
+        nomProject = new ButtonInsertText(processing, Setup.xSecondMiddle + 193, Setup.ySecondMiddle + 110, 346, Setup.hButtonsMap,"Nombre: ",20);
+        bAceptarP = new ButtonWords(processing,"CREAR",Setup.xSecondMiddle + 20, Setup.ySecondMiddle + 260, 163, 40, 10, "CORNER");
+        bNoP = new ButtonWords(processing, "CANCELAR", Setup.xSecondMiddle + 203, Setup.ySecondMiddle + 260, 163, 40, 10, "CORNER");
+        dataProject = new ButtonInsertText(processing, Setup.xSecondMiddle + 193, Setup.ySecondMiddle + 210, 346, Setup.hButtonsMap, "Finalización: ", 20);
 
         //BOTONS SAVE CREATION
-        saveCreationName = new ButtonTextoEstatico(processing, (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 80, Setup.wButtonsNewBuild, Setup.hButtonsMap, "Name: ", 16);
-        bSaveCreation = new ButtonWords(processing, "SAVE", (int) ((int) Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonsNewBuild /2), Setup.ySecondMiddle + Setup.hButtonsMap/2 + 160, Setup.wButtonsNewBuild, Setup.hButtonsMap, 10, "CENTER");
+        bSaveCreation = new ButtonWords(processing, "GUARDAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 660, 300, 60, 10,"CORNER");
+        bCreateProject = new ButtonWords(processing, "CREAR PROYECTO",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 750, 300, 60, 10,"CORNER");
+        String[][] valuesProyecto = db.getProyectos();
+        listProyecto = new TextList(processing, valuesProyecto, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, Setup.ySecondMiddle + 30,Setup.wButtonMap, Setup.hButtonsMap);
+        saveCreationName = new ButtonInsertText(processing, (int)(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250), 450 + 30, Setup.wButtonMap, Setup.hButtonsMap, "", 20);
     }
 
 
     //DIFERENTS ZONES
+    public void drawNewProject(PApplet processing){
+        processing.pushStyle();
+        processing.rectMode(processing.CORNER);
+        processing.fill(0xFFDBD9D1);
+        processing.rect(Setup.xSecondMiddle, Setup.ySecondMiddle,386, 300, 10);
+        processing.fill(67, 83, 96);
+        processing.rect(Setup.xSecondMiddle, Setup.ySecondMiddle, 386, 60, 10);
+        processing.fill(0);
+        processing.textFont(lletres.getFontNormal());
+        processing.text("CREAR PROYECTO", Setup.xSecondMiddle + 193, Setup.ySecondMiddle + 30);
+        nomProject.display(processing);
+        dataProject.display(processing);
+        bAceptarP.display(processing);
+        bNoP.display(processing);
+        processing.popStyle();
+    }
+
+    public void canviarArchive(){
+        if(selectCreate.valorSelected.equals("NUEVO EDIFICIO")){
+            screenActual = GUI.SCREEN.NEWBUILDING;
+        } else if(selectCreate.valorSelected.equals("NUEVO PROYECTO")){
+            newProject = true;
+        }else if(selectCreate.valorSelected.equals("NUEVO MURO DE INSPIRACIÓN")){
+            screenActual = GUI.SCREEN.CREATE;
+        }
+    }
     public void drawLateralBar(PApplet processing){
         processing.pushStyle();
         processing.fill(219, 217, 209);
         processing.rectMode(processing.CORNER);
         processing.rect(0, 0, 4*Setup.logoW, processing.height, 10);
+        processing.textFont(lletres.getFontNormal());
         bLateralBar.display(processing);
         bLateralBar.setFillColor(0xFFF4562A);
         processing.stroke(0);processing.strokeWeight(3);
@@ -250,9 +290,9 @@ DataBase db;
         processing.fill(0xFF8E8E90);
         processing.rect(Setup.edgeH, Setup.edgeV, processing.width - 2*Setup.edgeH, Setup.bannerH, 10);
         processing.fill(0);
-        processing.textSize(30);
+        processing.textFont(lletres.getFontTitol());
         processing.textMode(processing.CORNER);
-        processing.text("NAME OF THE COMPANY", Setup.lletresBannerW, Setup.logoDistV + Setup.bannerH/2);
+        processing.text("INSP-ARCH", Setup.lletresBannerW, Setup.logoDistV + Setup.bannerH/2);
         processing.popStyle();
     }
 
@@ -262,9 +302,10 @@ DataBase db;
         processing.fill(0xFF8E8E90);
         processing.rect((float)processing.width/2, Setup.edgeV + Setup.bannerH + Setup.nomH, Setup.nomW, Setup.nomH, 10);
         processing.fill(0);
-        processing.textSize(18);
+        processing.textFont(lletres.getFontTitol());
         processing.textMode(processing.CENTER);
-        processing.text(x, processing.width/2, Setup.edgeV + Setup.bannerH + Setup.nomH);
+        processing.textSize(40);
+        processing.text(x, processing.width/2, Setup.edgeV + Setup.bannerH + Setup.nomH + 10);
         processing.popStyle();
     }
 
@@ -303,7 +344,7 @@ processing.popStyle();
         processing.fill(0xFFF4562A);
         processing.rectMode(processing.CORNER);
         processing.rect(Setup.logoDistH, Setup.logoDistV, Setup.logoW, Setup.logoH);
-        processing.textAlign(processing.CENTER); processing.textSize(16); processing.fill(0);
+        processing.textFont(lletres.getFontNormal());processing.textAlign(processing.CENTER); processing.textSize(16); processing.fill(0);
         processing.text("LOGO", Setup.logoDistH + Setup.logoW/2, Setup.logoDistV + Setup.logoH/2);
         processing.popStyle();
     }
@@ -323,9 +364,9 @@ processing.popStyle();
         //Number of projects
         processing.fill(219, 217, 209);
         processing.rect(processing.width / 2, processing.height / 2 + 150, 450, 60, 10);
-
+        processing.textFont(lletres.getFontNormal());
         processing.fill(0);
-        processing.text("Number of projects: ", processing.width / 2 - 220, processing.height / 2 + 150);
+        processing.text("Número de proyectos: ", processing.width / 2 - 220, processing.height / 2 + 150);
         processing.popStyle();
     }
 
@@ -344,13 +385,13 @@ processing.popStyle();
     public void updateDraw(PApplet processing, ButtonSelect b){
         dibuix.beginDraw();
         if(mouseIntoCreate(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500) && processing.mousePressed){ //Coordenades del SecondMiddle
-            if(b.valorSelected.equals("CERCLE")){
+            if(b.valorSelected.equals("CÍRCULO")){
                 cercle(dibuix, processing);
                 bFullCreate.setEnces(false);
-            }  else if(b.valorSelected.equals("QUADRAT")){
+            }  else if(b.valorSelected.equals("CUADRADO")){
                 quadrat(dibuix, processing);
                 bFullCreate.setEnces(false);
-            } else if(b.valorSelected.equals("LÍNIA")){
+            } else if(b.valorSelected.equals("LÍNEA")){
                 line(dibuix);
                 bFullCreate.setEnces(false);
             } else{
@@ -392,16 +433,16 @@ processing.popStyle();
     public void updatePlantilla(PApplet processing, ButtonSelect b){
         processing.pushStyle();
         processing.stroke(0); processing.strokeWeight(2);
-        if(b.valorSelected == "UNA CASELLA"){
+        if(b.valorSelected == "UNA CASILLA"){
             canvas.setDistribucio(Canvas.DISTRIBUCIO.UNXUN);
-        } else if(b.valorSelected == "DUES CASELLES"){
+        } else if(b.valorSelected == "DOS CASILLAS"){
             processing.line(955, Setup.ySecondMiddle, 955, 850);
             canvas.setDistribucio(Canvas.DISTRIBUCIO.UNXDOS);
-        } else if(b.valorSelected == "QUATRE CASELLES"){
+        } else if(b.valorSelected == "CUATRO CASILLAS"){
             processing.line(955,Setup.ySecondMiddle, 955, 850);
             processing.line(Setup.xSecondMiddle, 600, 1340, 600);
             canvas.setDistribucio(Canvas.DISTRIBUCIO.DOSXDOS);
-        } else if(b.valorSelected == "SIS CASELLES"){
+        } else if(b.valorSelected == "SEIS CASILLAS"){
             processing.line(955,Setup.ySecondMiddle, 955, 850);
             processing.line(Setup.xSecondMiddle, 350 + Setup.divHsis, 1340, 350 + Setup.divHsis);
             processing.line(Setup.xSecondMiddle, 350 + 2*Setup.divHsis, 1340, 350 + 2*Setup.divHsis);
@@ -428,13 +469,14 @@ processing.popStyle();
         processing.pushStyle();
         processing.background(219, 217, 209);
         drawBanner(processing);
+        processing.textFont(lletres.getFontNormal());
         bAccount.display(processing);
-       b1.display(processing);
+        b1.display(processing);
         b2.display(processing);
         b3.display(processing);
         b4.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, "Imatges");
-        c.display(processing);
+        carrouselFoto.display(processing);
         bLogo.display(processing);
         if(menuOpen){
             drawLateralBar(processing);
@@ -463,6 +505,7 @@ processing.popStyle();
         drawLogo(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawNom(processing, "LOG IN");
+        processing.textFont(lletres.getFontNormal());
         drawAccountSymbol(processing);
         bName.display(processing);
         bPassword.display(processing);
@@ -479,8 +522,9 @@ processing.popStyle();
         drawBanner(processing);
         bLogo.display(processing);
         bAccount.display(processing);
-        drawMiddle(processing, processing.width - 2*Setup.logoW, "My Account");
-        drawNom(processing, "MY ACCOUNT");
+        drawMiddle(processing, processing.width - 2*Setup.logoW, "Mi Cuenta");
+        drawNom(processing, "MI CUENTA");
+        processing.textFont(lletres.getFontNormal());
         drawAccountSymbol(processing);
         drawAccountInfo(processing);
         processing.rectMode(processing.CENTER);
@@ -507,7 +551,8 @@ processing.popStyle();
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "");
-        drawNom(processing, "MAP");
+        drawNom(processing, "MAPA");
+        processing.textFont(lletres.getFontNormal());
         bAddBuild.display(processing);
 
         processing.rectMode(processing.CORNER);
@@ -516,8 +561,8 @@ processing.popStyle();
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450,100, Setup.hButtonsMap, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 550,100, Setup.hButtonsMap, 10);
         processing.fill(0);
-        processing.text("Estil: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
-        processing.text("Tipologia: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 450 + 30);
+        processing.text("Estilo: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
+        processing.text("Tipología: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 450 + 30);
         processing.text("Material: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 550 + 30);
         bResetMap.display(processing);
         bAplicaMap.display(processing);
@@ -550,8 +595,9 @@ processing.popStyle();
         bLogo.display(processing);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
-        drawSecondMiddle(processing, "ADD IMAGE");
-        drawNom(processing, "BUILDING INFORMATION");
+        drawSecondMiddle(processing, "AÑADIR IMAGEN");
+        drawNom(processing, "INFO. EDIFICIO");
+        processing.textFont(lletres.getFontNormal());
         processing.rectMode(processing.CORNER);
         processing.fill(67, 83, 96);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle,100, Setup.hButtonsMap, 10);
@@ -561,11 +607,11 @@ processing.popStyle();
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle + 300,100, Setup.hButtonsMap, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle + 375,100, Setup.hButtonsMap, 10);
         processing.fill(0);
-        processing.text("Nom: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
+        processing.text("Nombre: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
         processing.text("Longitud: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 105);
         processing.text("Latitud: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 180);
-        processing.text("Estil: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 255);
-        processing.text("Tipologia: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 330);
+        processing.text("Estilo: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 255);
+        processing.text("Tipología: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 330);
         processing.text("Material: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 405);
         processing.fill(0xFFDBD9D1);
         processing.rectMode(processing.CENTER);
@@ -611,7 +657,8 @@ processing.popStyle();
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "BUILDING IMAGE");
-        drawNom(processing, "NEW BUILDING");
+        drawNom(processing, "NUEVO EDIFICIO");
+        processing.textFont(lletres.getFontNormal());
         processing.rectMode(processing.CORNER);
         processing.fill(67, 83, 96);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle,100, Setup.hButtonsMap, 10);
@@ -621,11 +668,11 @@ processing.popStyle();
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle + 300,100, Setup.hButtonsMap, 10);
         processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle + 375,100, Setup.hButtonsMap, 10);
         processing.fill(0);
-        processing.text("Nom: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
+        processing.text("Nombre: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
         processing.text("Longitud: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 105);
         processing.text("Latitud: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 180);
-        processing.text("Estil: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 255);
-        processing.text("Tipologia: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 330);
+        processing.text("Estilo: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 255);
+        processing.text("Tipología: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 330);
         processing.text("Material: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 405);
         processing.fill(0xFFDBD9D1);
         bNameBuilding.display(processing);
@@ -659,11 +706,14 @@ processing.popStyle();
         bLogo.display(processing);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
-        drawSecondMiddle(processing, "ELEMENTS OF THE ARCHIVE");
-        drawNom(processing, "ARCHIVE");
-        bCreateBuilding.display(processing);
-        bNewProject.display(processing);
-        selectArxiu.display(processing);
+        drawSecondMiddle(processing, "");
+        drawNom(processing, "ARCHIVO");
+        processing.textFont(lletres.getFontNormal());
+        selectCreate.display(processing);
+        processing.textMode(processing.CORNER);
+        archivo.display(processing,Setup.xSecondMiddle, Setup.ySecondMiddle,770, 500);
+        bNextArxiu.display(processing);
+        bAtrasArxiu.display(processing);
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -671,6 +721,9 @@ processing.popStyle();
         } else {
             bLogo.setEnces(true);
             bAccount.setEnces(true);
+        }
+        if(newProject){
+            drawNewProject(processing);
         }
         processing.popStyle();
     }
@@ -684,7 +737,8 @@ processing.popStyle();
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "");
-        drawNom(processing, "CREATE");
+        drawNom(processing, "CREAR");
+        processing.textFont(lletres.getFontNormal());
         processing.imageMode(processing.CENTER);
         canvas.display(processing);
         if(dibuix!=null){
@@ -752,7 +806,17 @@ selectPlantilla.setEnces(false);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "PREVIEW OF THE INSPIRATIONAL WALL");
-        drawNom(processing, "NEW INSPIRATIONAL WALL");
+        drawNom(processing, "NUEVA INSPO");
+        processing.textFont(lletres.getFontNormal());
+        processing.rectMode(processing.CORNER);
+        processing.fill(67, 83, 96);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle,100, Setup.hButtonsMap, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450,100, Setup.hButtonsMap, 10);
+        processing.fill(0);
+        processing.text("Proyecto: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
+        processing.text("Nombre: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 450 + 30);
+        listProyecto.display(processing);
+        bCreateProject.display(processing);
         saveCreationName.display(processing);
         bSaveCreation.display(processing);
         if(menuOpen){
@@ -763,10 +827,14 @@ selectPlantilla.setEnces(false);
             bLogo.setEnces(true);
             bAccount.setEnces(true);
         }
+        if(newProject){
+            drawNewProject(processing);
+        }
         processing.popStyle();
     }
     public void drawCreateFullScreen(PApplet processing) {
         processing.pushStyle();
+        processing.textFont(lletres.getFontNormal());
         processing.background(0xFFDBD9D1);
         processing.rectMode(processing.CORNER);
         selectDrawFull.display(processing);

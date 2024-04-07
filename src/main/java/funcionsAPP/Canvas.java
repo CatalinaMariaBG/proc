@@ -6,15 +6,18 @@ import processing.core.PImage;
 
 public class Canvas {
 
+    int x, y, w, h; //Posición y dimensiones
+    PImage[] imgs;//Array de imágenes
+    int numImatge = 0;//Contador de imágenes cargadas
+
+    //Variable de las distribuciones para añadir imágenes
     public enum DISTRIBUCIO{UNXUN, UNXDOS, DOSXDOS, TRESXDOS};
+
+    //Distribución por defecto
     DISTRIBUCIO distribucio = DISTRIBUCIO.TRESXDOS;
+    PGraphics canvas;//Clase de Processing para dibujar fuera de una area común
 
-    PGraphics canvas;
-    PImage[] imgs;
-    int numImatge = 0;
-
-    int x, y, w, h;
-
+    //Constructor
     public Canvas(int x, int y, int w, int h){
         this.x = x;
         this.y = y;
@@ -24,14 +27,17 @@ public class Canvas {
         this.imgs = new PImage[6];
     }
 
+    //Setters
     public void setDistribucio (DISTRIBUCIO d){
         this.distribucio = d;
     }
 
+    //Getters
     public String getDistribucio(){
         return this.distribucio.toString();
     }
 
+    //Añadir Imagen
     public void addImage(PApplet processing, PImage img){
         if(numImatge<imgs.length){
             imgs[numImatge] = img;
@@ -40,10 +46,12 @@ updateCanvas(processing, imgs, distribucio);
         }
     }
 
+    //Cursor dentro de Canvas
     public boolean mouseOver(PApplet processing){
         return processing.mouseX>= x && processing.mouseY>= y && processing.mouseX<= x+w && processing.mouseY<=y+h;
     }
 
+    //Donde cargar las imágenes
     public void updateCanvas(PApplet processing, PImage[] imgs, DISTRIBUCIO dist){
         canvas = processing.createGraphics(w, h);
         canvas.beginDraw();
@@ -78,12 +86,14 @@ updateCanvas(processing, imgs, distribucio);
         canvas.endDraw();
     }
 
+    //Borrar el Canvas
     public void resetCanvas(){
         imgs = new PImage[6];
         canvas = null;
         numImatge = 0;
     }
 
+    //Dibujar el Canvas
     public void display(PApplet processing){
         processing.pushStyle();
         processing.fill(0xFFDBD9D1);

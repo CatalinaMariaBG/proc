@@ -1,6 +1,6 @@
 package zonesAPP;
 
-import botonsAPP.ButtonTextoEstatico;
+import botonsAPP.ButtonInsertText;
 import botonsAPP.LocationSetter;
 import processing.core.PApplet;
 import setupAPP.Setup;
@@ -32,7 +32,6 @@ public class Trivio003 extends PApplet {
         db = new DataBase("admin", "12345", "edificis");
         db.connect();
         gui = new GUI(this, db);
-
     }
 
     public void draw() {
@@ -61,8 +60,8 @@ public class Trivio003 extends PApplet {
         }
 
         if(gui.screenActual == GUI.SCREEN.INICIAL){
-            if(!gui.c.checkKey(this) || !gui.c.chekButtons(this)){
-                gui.c.checkTimer(this);
+            if(!gui.carrouselFoto.checkKey(this) || !gui.carrouselFoto.chekButtons(this)){
+                gui.carrouselFoto.checkTimer(this);
             }
 } else if(gui.screenActual == GUI.SCREEN.CREATE){
             gui.dibuix.beginDraw();
@@ -87,7 +86,7 @@ public class Trivio003 extends PApplet {
             gui.bName.keyPressed(key, keyCode);
             gui.bPassword.keyPressed(key, keyCode);
         } else if(gui.screenActual == GUI.SCREEN.INICIAL){
-            gui.c.checkKey(this);
+            gui.carrouselFoto.checkKey(this);
         }
         if(gui.screenActual == GUI.SCREEN.LOGIN && keyCode == '1'){
             gui.screenActual = GUI.SCREEN.INICIAL;
@@ -127,6 +126,24 @@ public class Trivio003 extends PApplet {
                 }
             }
         }
+
+    if(gui.screenActual == GUI.SCREEN.ARCHIVE){
+        if(gui.newProject) {
+            gui.nomProject.keyPressed(key, keyCode);
+            gui.dataProject.keyPressed(key, keyCode);
+        }
+    }
+    if(gui.screenActual == GUI.SCREEN.SAVECREATION){
+        gui.saveCreationName.keyPressed(key,keyCode);
+        if(gui.newProject) {
+            gui.nomProject.keyPressed(key, keyCode);
+            gui.dataProject.keyPressed(key, keyCode);
+        }
+        if(gui.listProyecto.getTextField().mouseIntoTextRect(this)) {
+            gui.listProyecto.getTextField().keyPressed(key, (int) keyCode);
+            gui.listProyecto.update(this);
+        }
+    }
     }
 
     //MOUSE INTERACTION
@@ -150,7 +167,7 @@ public class Trivio003 extends PApplet {
             } else if(gui.bInici.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.INICIAL;
                 gui.menuOpen = false;
-                gui.c.setStart(this);
+                gui.carrouselFoto.setStart(this);
             }
         }
 
@@ -174,8 +191,8 @@ public class Trivio003 extends PApplet {
             } else if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
             }
-            gui.c.chekButtons(this);
-            gui.c.checkCursor(this);
+            gui.carrouselFoto.chekButtons(this);
+            gui.carrouselFoto.checkCursor(this);
 
         } else if(gui.screenActual == GUI.SCREEN.MYACCOUNT){
              if(gui.bAccount.mouseIntoButton(this)){
@@ -310,7 +327,7 @@ public class Trivio003 extends PApplet {
                 gui.dibuix = createGraphics(770, 500);
                 gui.canvas.resetCanvas();
                 // esborrar dibuix
-                gui.pinText = new ButtonTextoEstatico[5];
+                gui.pinText = new ButtonInsertText[5];
             }
             else if(gui.selectPlantilla.mouseIntoSelect(this) && gui.selectPlantilla.ences){
                 if(!gui.selectPlantilla.plegat){
@@ -331,7 +348,7 @@ public class Trivio003 extends PApplet {
                     for (int i = 0; i < gui.pinText.length; i++) {
                         if (gui.pinText[i] == null) {
                             gui.pins[i] = new Pin(this, gui.xPin, gui.yPin);
-                            gui.pinText[i] = new ButtonTextoEstatico(this, (int) gui.xPin + (Setup.wButtonMap/2)/2 + 10, (int) gui.yPin - Setup.hButtonsMap/2, Setup.wButtonMap / 2, Setup.hButtonsMap, "", 10);
+                            gui.pinText[i] = new ButtonInsertText(this, (int) gui.xPin + (Setup.wButtonMap/2)/2 + 10, (int) gui.yPin - Setup.hButtonsMap/2, Setup.wButtonMap / 2, Setup.hButtonsMap, "", 10);
                             break;
                         }
                     }
@@ -347,7 +364,22 @@ public class Trivio003 extends PApplet {
         } else if(gui.screenActual == GUI.SCREEN.SAVECREATION){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
+            } else if(gui.bCreateProject.mouseIntoButton(this)){
+                gui.newProject = true;
+            }else if(gui.saveCreationName.mouseIntoTextRect(this)){
+                gui.saveCreationName.pressedTrue(this);
+            } else if(gui.newProject && gui.bNoP.mouseIntoButton(this)){
+                gui.newProject = false;
+            } else if(gui.newProject && gui.bAceptarP.mouseIntoButton(this)){
+                db.insertProject(gui.nomProject.getTextoEspecial2(), gui.dataProject.getTextoEspecial2(), gui.bName.getTextoEspecial2());
+                gui.newProject = false;
+            } else if(gui.newProject && gui.nomProject.mouseIntoTextRect(this)){
+                gui.nomProject.pressedTrue(this);
+            } else if(gui.newProject && gui.dataProject.mouseIntoTextRect(this)){
+                gui.dataProject.pressedTrue(this);
             }
+            gui.listProyecto.getTextField().pressedTrue(this);
+            gui.listProyecto.buttonPressed(this);
 
         } else if(gui.screenActual == GUI.SCREEN.CREATEFULLSCREEN){
             if(gui.bMenosCreate.mouseIntoButton(this)) {
@@ -359,11 +391,21 @@ public class Trivio003 extends PApplet {
         } else if(gui.screenActual == GUI.SCREEN.ARCHIVE){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-            } else if(gui.selectArxiu.mouseIntoSelect(this) && gui.selectArxiu.ences){
-                if(!gui.selectArxiu.plegat){
-                    gui.selectArxiu.update(this);
+            } else if(gui.newProject && gui.bNoP.mouseIntoButton(this)){
+                gui.newProject = false;
+            } else if(gui.newProject && gui.bAceptarP.mouseIntoButton(this)){
+                db.insertProject(gui.nomProject.getTextoEspecial2(), gui.dataProject.getTextoEspecial2(), gui.bName.getTextoEspecial2());
+                gui.newProject = false;
+            } else if(gui.newProject && gui.nomProject.mouseIntoTextRect(this)){
+                gui.nomProject.pressedTrue(this);
+            } else if(gui.newProject && gui.dataProject.mouseIntoTextRect(this)){
+                gui.dataProject.pressedTrue(this);
+            }else if(gui.selectCreate.mouseIntoSelect(this) && gui.selectCreate.ences) {
+                if (!gui.selectCreate.plegat) {
+                    gui.selectCreate.update(this);
+                    gui.canviarArchive();
                 }
-                gui.selectArxiu.conmutar();
+                gui.selectCreate.conmutar();
             }
         }
 
@@ -382,6 +424,8 @@ public class Trivio003 extends PApplet {
             gui.bPosXBuilding.pressedTrue(this);
             gui.bPosYBuilding.pressedTrue(this);
             gui.saveCreationName.pressedTrue(this);
+            gui.nomProject.pressedTrue(this);
+            gui.dataProject.pressedTrue(this);
             for(int i = 0; i<gui.pinText.length; i++){
                 if(gui.pinText[i] != null){
                     gui.pinText[i].pressedTrue(this);
@@ -432,7 +476,7 @@ public class Trivio003 extends PApplet {
         boolean entrar = false;
         String[][] usuaris= db.getUsuaris();
         for(int f = 0; f< usuaris.length; f++){
-                if(gui.bName.text.equals("Name: "+usuaris[f][0]) && gui.bPassword.text.equals("Password: "+usuaris[f][1])){
+                if(gui.bName.text.equals("Nombre: "+usuaris[f][0]) && gui.bPassword.text.equals("Clave: "+usuaris[f][1])){
                     entrar = true;
                     break;
                 }
@@ -440,7 +484,7 @@ public class Trivio003 extends PApplet {
 if(gui.bEnterAccount.mouseIntoButton(this) && entrar){
     gui.screenActual = GUI.SCREEN.INICIAL;
     gui.menuOpen = false;
-    gui.c.setStart(this);
+    gui.carrouselFoto.setStart(this);
 }
     }
 

@@ -22,15 +22,15 @@ public class Trivio002 extends PApplet {
     public void draw(){
         background(255);
 
-    textFont(fontsA.getFontOne());
+    textFont(fontsA.getFontTitol());
     text("Titol de la solucio informatica", 50, 200);
 
     fill(55, 0, 0);
-    textFont(fontsA.getFontTwo());
+    textFont(fontsA.getFontNormal());
     text("Paràgrafs de la solució informàtica", 50, 400);
 
-        textFont(fontsA.getFontThree());
-        text("Nom de les pantalles", 50, 300);
+    textFont(fontsA.getFontTitol());
+    text("Nom de les pantalles", 50, 300);
 
     //mostra totes les fonts de l'App
     fontsA.displayFonts(this, 100, 400, 50);
