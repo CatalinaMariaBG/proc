@@ -47,21 +47,22 @@ public class GUI {
 
     ButtonSlide bSizeDraw, bRed, bGreen, bBlue, bSizeDrawFull;
     PaletaColors colorsCreate;
-    Canvas canvas;
-    PGraphics dibuix;
-    PImage lastImage, imgNewBuild;
+    Canvas canvas, canvasFull;
+    PGraphics dibuix, dibuixFull;
+    PImage lastImage, imgNewBuild, imgSaved;
     ButtonInsertText[] pinText;
     Pin[] pins;
     Confirm cNewBuild;
     Arxiu archivo;
-    float[] xPoints, yPoints, columnesArxiuAmplada;
+    float[] xPoints, yPoints, xPointsFull, yPointsFull, columnesArxiuAmplada;
     int numPoints = 0;
+    int numPointsFull = 0;
 
 boolean menuOpen = false;
 boolean paletaOpen = false;
 boolean establishPersonalC = false;
 boolean newProject = false;
-
+boolean newCreate = true;
 DataBase db;
 
     public GUI(PApplet processing, DataBase db){
@@ -155,6 +156,7 @@ DataBase db;
         bAddImageFull.setFillColor(0xFF8E8E90);
         bPinFull = new ButtonWords(processing, "PIN", Setup.edgeH, 704, Setup.ySecondMiddle, 60, 10, "CORNER");
         bPinFull.setFillColor(0xFF8E8E90);
+        canvasFull = new Canvas(410, (int)Setup.edgeV, 1010, 860);
 
         // BOTONS ACCOUNT
         bNProjects = new ButtonWords(processing, "VER PROYECTOS", processing.width/2 - 150, processing.height/2 + 250, 180, 60, 10, "CENTER");
@@ -214,18 +216,17 @@ DataBase db;
         //BOTONS SAVE CREATION
         bSaveCreation = new ButtonWords(processing, "GUARDAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 660, 300, 60, 10,"CORNER");
         bCreateProject = new ButtonWords(processing, "CREAR PROYECTO",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 750, 300, 60, 10,"CORNER");
-        String[][] valuesProyecto = db.getProyectos();
+        String[][] valuesProyecto = db.getSelectProyectos();
         listProyecto = new TextList(processing, valuesProyecto, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, Setup.ySecondMiddle + 30,Setup.wButtonMap, Setup.hButtonsMap);
         saveCreationName = new ButtonInsertText(processing, (int)(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250), 450 + 30, Setup.wButtonMap, Setup.hButtonsMap, "", 20);
     }
-
 
     //DIFERENTS ZONES
     public void drawNewProject(PApplet processing){
         processing.pushStyle();
         processing.rectMode(processing.CORNER);
         processing.fill(0xFFDBD9D1);
-        processing.rect(Setup.xSecondMiddle, Setup.ySecondMiddle,386, 300, 10);
+        processing.rect(Setup.xSecondMiddle, Setup.ySecondMiddle,386, 320, 10);
         processing.fill(67, 83, 96);
         processing.rect(Setup.xSecondMiddle, Setup.ySecondMiddle, 386, 60, 10);
         processing.fill(0);
@@ -366,7 +367,8 @@ processing.popStyle();
         processing.rect(processing.width / 2, processing.height / 2 + 150, 450, 60, 10);
         processing.textFont(lletres.getFontNormal());
         processing.fill(0);
-        processing.text("Número de proyectos: ", processing.width / 2 - 220, processing.height / 2 + 150);
+        int numProyecto = db.getNumProyectosUser(bName.getTextoEspecial2());
+        processing.text("Número de proyectos: "+numProyecto, processing.width / 2 - 220, processing.height / 2 + 150);
         processing.popStyle();
     }
 
@@ -384,7 +386,7 @@ processing.popStyle();
     //CREATE FUNCIÓ DE DIBUIXAR LÍNIES...
     public void updateDraw(PApplet processing, ButtonSelect b){
         dibuix.beginDraw();
-        if(mouseIntoCreate(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500) && processing.mousePressed){ //Coordenades del SecondMiddle
+        if(mouseIntoCreate(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500) && processing.mousePressed && screenActual == SCREEN.CREATE){ //Coordenades del SecondMiddle
             if(b.valorSelected.equals("CÍRCULO")){
                 cercle(dibuix, processing);
                 bFullCreate.setEnces(false);
@@ -400,27 +402,64 @@ processing.popStyle();
         }
         dibuix.endDraw();
     }
+
+    public void updateDrawFull(PApplet processing, ButtonSelect b){
+        dibuixFull.beginDraw();
+        if(mouseIntoCreate(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500) && processing.mousePressed && screenActual == SCREEN.CREATE){ //Coordenades del SecondMiddle
+            if(b.valorSelected.equals("CÍRCULO")){
+                cercle(dibuixFull, processing);
+                bFullCreate.setEnces(false);
+            }  else if(b.valorSelected.equals("CUADRADO")){
+                quadrat(dibuixFull, processing);
+                bFullCreate.setEnces(false);
+            } else if(b.valorSelected.equals("LÍNEA")){
+                line(dibuixFull);
+                bFullCreate.setEnces(false);
+            } else{
+                bFullCreate.setEnces(true);
+            }
+        }
+        dibuixFull.endDraw();
+    }
     public void cercle(PGraphics dibuix, PApplet processing){
         dibuix.pushStyle();
-        dibuix.fill(Setup.colour);
         dibuix.noStroke();
-        dibuix.ellipse(processing.mouseX - Setup.xSecondMiddle, processing.mouseY - Setup.ySecondMiddle, Setup.size, Setup.size);
+        if(screenActual == SCREEN.CREATE) {
+            dibuix.fill(Setup.colour);
+            dibuix.ellipse(processing.mouseX - Setup.xSecondMiddle, processing.mouseY - Setup.ySecondMiddle, Setup.size, Setup.size);
+        }else if(screenActual == SCREEN.CREATEFULLSCREEN){
+            //410, Setup.edgeV, 1010, 860, 10
+            dibuix.fill(Setup.colourFull);
+            dibuix.ellipse(processing.mouseX - 410, processing.mouseY - Setup.edgeV, Setup.sizeFull, Setup.sizeFull);
+        }
         dibuix.popStyle();
     }
     public void quadrat(PGraphics dibuix, PApplet processing){
         dibuix.pushStyle();
-        dibuix.fill(Setup.colour);
         dibuix.noStroke();
-        dibuix.rect(processing.mouseX - Setup.xSecondMiddle, processing.mouseY - Setup.ySecondMiddle, Setup.size, Setup.size);
+        if(screenActual == SCREEN.CREATE) {
+            dibuix.fill(Setup.colour);
+            dibuix.rect(processing.mouseX - Setup.xSecondMiddle, processing.mouseY - Setup.ySecondMiddle, Setup.size, Setup.size);
+        } else if(screenActual == SCREEN.CREATEFULLSCREEN){
+            dibuix.fill(Setup.colour);
+            dibuix.rect(processing.mouseX - 410, processing.mouseY - Setup.edgeV, Setup.sizeFull, Setup.sizeFull);
+        }
         dibuix.popStyle();
     }
     public void line(PGraphics dibuix){
-        if(numPoints==2) {
+        if(numPoints==2 && screenActual == SCREEN.CREATE) {
             dibuix.pushStyle();
-            dibuix.fill(255,0,0);
-            dibuix.stroke(255,0,0);
+            dibuix.fill(Setup.colour);
+            dibuix.stroke(Setup.colour);
             dibuix.strokeWeight(Setup.size);
             dibuix.line(xPoints[0] - Setup.xSecondMiddle, yPoints[0] - Setup.ySecondMiddle, xPoints[1] - Setup.xSecondMiddle, yPoints[1] - Setup.ySecondMiddle);
+            dibuix.popStyle();
+        } else if(numPointsFull == 2 && screenActual == SCREEN.CREATEFULLSCREEN){
+            dibuix.pushStyle();
+            dibuix.fill(Setup.colourFull);
+            dibuix.stroke(Setup.colourFull);
+            dibuix.strokeWeight(Setup.sizeFull);
+            dibuix.line(xPointsFull[0] - 410, yPointsFull[0] - Setup.edgeV, xPointsFull[1] - 410, yPointsFull[1] - Setup.edgeV);
             dibuix.popStyle();
         }
     }
@@ -435,18 +474,38 @@ processing.popStyle();
         processing.stroke(0); processing.strokeWeight(2);
         if(b.valorSelected == "UNA CASILLA"){
             canvas.setDistribucio(Canvas.DISTRIBUCIO.UNXUN);
+            canvasFull.setDistribucio(Canvas.DISTRIBUCIO.UNXUN);
         } else if(b.valorSelected == "DOS CASILLAS"){
-            processing.line(955, Setup.ySecondMiddle, 955, 850);
+            if(screenActual == SCREEN.CREATE) {
+                processing.line(955, Setup.ySecondMiddle, 955, 850);
+            } else if(screenActual == SCREEN.CREATEFULLSCREEN){
+                processing.line(915, (int)Setup.edgeV, 915, 880);
+            }
             canvas.setDistribucio(Canvas.DISTRIBUCIO.UNXDOS);
+            canvasFull.setDistribucio(Canvas.DISTRIBUCIO.UNXDOS);
         } else if(b.valorSelected == "CUATRO CASILLAS"){
-            processing.line(955,Setup.ySecondMiddle, 955, 850);
-            processing.line(Setup.xSecondMiddle, 600, 1340, 600);
+            if(screenActual == SCREEN.CREATE) {
+                processing.line(955, Setup.ySecondMiddle, 955, 850);
+                processing.line(Setup.xSecondMiddle, 600, 1340, 600);
+            } else if(screenActual == SCREEN.CREATEFULLSCREEN){
+                processing.line(915, (int)Setup.edgeV, 915, 880);
+                //410, (int)Setup.edgeV, 1010, 860
+                processing.line(410, 450, 1420, 450);
+            }
             canvas.setDistribucio(Canvas.DISTRIBUCIO.DOSXDOS);
+            canvasFull.setDistribucio(Canvas.DISTRIBUCIO.DOSXDOS);
         } else if(b.valorSelected == "SEIS CASILLAS"){
-            processing.line(955,Setup.ySecondMiddle, 955, 850);
-            processing.line(Setup.xSecondMiddle, 350 + Setup.divHsis, 1340, 350 + Setup.divHsis);
-            processing.line(Setup.xSecondMiddle, 350 + 2*Setup.divHsis, 1340, 350 + 2*Setup.divHsis);
+            if(screenActual == SCREEN.CREATE) {
+                processing.line(955, Setup.ySecondMiddle, 955, 850);
+                processing.line(Setup.xSecondMiddle, 350 + Setup.divHsis, 1340, 350 + Setup.divHsis);
+                processing.line(Setup.xSecondMiddle, 350 + 2 * Setup.divHsis, 1340, 350 + 2 * Setup.divHsis);
+            } else if(screenActual == SCREEN.CREATEFULLSCREEN){
+                processing.line(915, Setup.edgeV, 915, 880);
+                processing.line(410, Setup.edgeV + 860/3, 1420,Setup.edgeV + 860/3);
+                processing.line(410, Setup.edgeV + (float) (2 * 860) /3, 1420,Setup.edgeV + (float) (2 * 860) /3);
+            }
             canvas.setDistribucio(Canvas.DISTRIBUCIO.TRESXDOS);
+            canvasFull.setDistribucio(Canvas.DISTRIBUCIO.TRESXDOS);
         }
         processing.popStyle();
     }
@@ -460,8 +519,17 @@ processing.popStyle();
         Setup.red = bRed.getValue();
     }
 
-    //On carregar la imatge
-
+    //Guardar imatge mur
+    public void saveImatgeMur(PApplet processing, Canvas c, PGraphics dibuix,
+                              String ruta, String nomImage){
+        PGraphics imgSave = processing.createGraphics(770, 500);
+        imgSave.beginDraw();
+        processing.imageMode(processing.CORNER);
+        imgSave.image(c.getCanvas(), 0, 0);
+        imgSave.image(dibuix, 0, 0);
+        imgSave.endDraw();
+        imgSave.save(ruta +"/" +nomImage+".jpg");
+    }
 
 
     //PANTALLES
@@ -710,7 +778,6 @@ processing.popStyle();
         drawNom(processing, "ARCHIVO");
         processing.textFont(lletres.getFontNormal());
         selectCreate.display(processing);
-        processing.textMode(processing.CORNER);
         archivo.display(processing,Setup.xSecondMiddle, Setup.ySecondMiddle,770, 500);
         bNextArxiu.display(processing);
         bAtrasArxiu.display(processing);
@@ -745,19 +812,39 @@ processing.popStyle();
             processing.imageMode(processing.CORNER);
             processing.image(dibuix, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
         }
-        bFullCreate.display(processing);
-        bSaveC.display(processing);
-        processing.rectMode(processing.CORNER);
-        processing.fill(0xFFDBD9D1);
-        bPinCreate.display(processing);
-        bColorCreate.display(processing);
-        bErraseCreate.display(processing);
-        bAddImage.display(processing);
-        selectPlantilla.display(processing);
-        bSizeDraw.display(processing);
-        selectDraw.display(processing);
-        updatePlantilla(processing, selectPlantilla);
-        updateSizeDraw();
+        if(newCreate) {
+            bFullCreate.display(processing);
+            bSaveC.display(processing);
+            processing.rectMode(processing.CORNER);
+            processing.fill(0xFFDBD9D1);
+            bPinCreate.display(processing);
+            bColorCreate.display(processing);
+            bErraseCreate.display(processing);
+            bAddImage.display(processing);
+            selectPlantilla.display(processing);
+            bSizeDraw.display(processing);
+            selectDraw.display(processing);
+            updatePlantilla(processing, selectPlantilla);
+            updateSizeDraw();
+        } else if(!newCreate){
+            processing.rectMode(processing.CORNER);
+            processing.fill(67, 83, 96);
+            processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle,100, Setup.hButtonsMap, 10);
+            processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 450,100, Setup.hButtonsMap, 10);
+            processing.fill(0);
+            processing.text("Proyecto: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
+            processing.text("Nombre: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 450 + 30);
+            bCreateProject.display(processing);
+            saveCreationName.display(processing);
+            bSaveCreation.display(processing);
+            listProyecto.display(processing);
+            if(newProject){
+                drawNewProject(processing);
+            }
+            /*if(imgSaved!=null){
+                processing.image(imgSaved, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
+            }*/
+        }
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -805,7 +892,7 @@ selectPlantilla.setEnces(false);
         bLogo.display(processing);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
-        drawSecondMiddle(processing, "PREVIEW OF THE INSPIRATIONAL WALL");
+        drawSecondMiddle(processing, "APARECERÁ LA IMAGEN DEL MURO DE INSPIRACIÓN \n" + "UNA VEZ GUARDADO");
         drawNom(processing, "NUEVA INSPO");
         processing.textFont(lletres.getFontNormal());
         processing.rectMode(processing.CORNER);
@@ -815,10 +902,10 @@ selectPlantilla.setEnces(false);
         processing.fill(0);
         processing.text("Proyecto: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
         processing.text("Nombre: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 450 + 30);
-        listProyecto.display(processing);
         bCreateProject.display(processing);
         saveCreationName.display(processing);
         bSaveCreation.display(processing);
+        listProyecto.display(processing);
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -827,9 +914,6 @@ selectPlantilla.setEnces(false);
             bLogo.setEnces(true);
             bAccount.setEnces(true);
         }
-        if(newProject){
-            drawNewProject(processing);
-        }
         processing.popStyle();
     }
     public void drawCreateFullScreen(PApplet processing) {
@@ -837,16 +921,17 @@ selectPlantilla.setEnces(false);
         processing.textFont(lletres.getFontNormal());
         processing.background(0xFFDBD9D1);
         processing.rectMode(processing.CORNER);
-        selectDrawFull.display(processing);
+        processing.rect(410, Setup.edgeV, 1010, 860, 10);
         bSizeDrawFull.display(processing);
         bColorCreateFull.display(processing);
         bErraseCreateFull.display(processing);
-        selectPlantillaFull.display(processing);
         bAddImageFull.display(processing);
         bPinFull.display(processing);
-        processing.rect(410, Setup.edgeV, 1010, 860, 10);
         bSaveCfull.display(processing);
         bMenosCreate.display(processing);
+        selectPlantillaFull.display(processing);
+        updatePlantilla(processing,selectPlantillaFull);
+        selectDrawFull.display(processing);
         processing.popStyle();
     }
 }

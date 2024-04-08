@@ -36,6 +36,9 @@ public class Canvas {
     public String getDistribucio(){
         return this.distribucio.toString();
     }
+    public PGraphics getCanvas(){
+        return this.canvas;
+    }
 
     //Añadir Imagen
     public void addImage(PApplet processing, PImage img){

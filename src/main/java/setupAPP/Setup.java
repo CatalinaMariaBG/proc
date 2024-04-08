@@ -32,8 +32,10 @@ public class Setup {
         public static int ySecondMiddle = 350;
 
         public static int colour = 0;
+        public static int colourFull = 0;
 
         public static float size = 5;
+        public static float sizeFull = 5;
         public static float red;
         public static float green;
         public static float blue;

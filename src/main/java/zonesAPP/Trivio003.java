@@ -125,6 +125,15 @@ public class Trivio003 extends PApplet {
                     gui.pinText[i].keyPressed(key, keyCode);
                 }
             }
+            gui.saveCreationName.keyPressed(key,keyCode);
+            if(gui.newProject) {
+                gui.nomProject.keyPressed(key, keyCode);
+                gui.dataProject.keyPressed(key, keyCode);
+            }
+            if(gui.listProyecto.getTextField().mouseIntoTextRect(this)) {
+                gui.listProyecto.getTextField().keyPressed(key, (int) keyCode);
+                gui.listProyecto.update(this);
+            }
         }
 
     if(gui.screenActual == GUI.SCREEN.ARCHIVE){
@@ -133,17 +142,7 @@ public class Trivio003 extends PApplet {
             gui.dataProject.keyPressed(key, keyCode);
         }
     }
-    if(gui.screenActual == GUI.SCREEN.SAVECREATION){
-        gui.saveCreationName.keyPressed(key,keyCode);
-        if(gui.newProject) {
-            gui.nomProject.keyPressed(key, keyCode);
-            gui.dataProject.keyPressed(key, keyCode);
-        }
-        if(gui.listProyecto.getTextField().mouseIntoTextRect(this)) {
-            gui.listProyecto.getTextField().keyPressed(key, (int) keyCode);
-            gui.listProyecto.update(this);
-        }
-    }
+
     }
 
     //MOUSE INTERACTION
@@ -312,80 +311,92 @@ public class Trivio003 extends PApplet {
         } else if(gui.screenActual == GUI.SCREEN.CREATE){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-            } else if(gui.bFullCreate.mouseIntoButton(this)){
-                gui.screenActual = GUI.SCREEN.CREATEFULLSCREEN;
-            } else if(gui.bSaveC.mouseIntoButton(this)){
-                gui.screenActual = GUI.SCREEN.SAVECREATION;
-            } else if(gui.selectDraw.mouseIntoSelect(this) && gui.selectDraw.ences){
-                if(!gui.selectDraw.plegat){
-                    gui.selectDraw.update(this);
-                }
-                gui.selectDraw.conmutar();
-            } else if(gui.bAddImage.mouseIntoButton(this) && gui.bAddImage.ences){
-                selectInput("Selecciona una imatge ...", "fileSelected");
-            } else if(gui.bErraseCreate.mouseIntoButton(this) && gui.bErraseCreate.ences){
-                gui.dibuix = createGraphics(770, 500);
-                gui.canvas.resetCanvas();
-                // esborrar dibuix
-                gui.pinText = new ButtonInsertText[5];
+            }  else if(gui.bSaveC.mouseIntoButton(this)){
+                gui.newCreate = false;
             }
-            else if(gui.selectPlantilla.mouseIntoSelect(this) && gui.selectPlantilla.ences){
-                if(!gui.selectPlantilla.plegat){
-                    gui.selectPlantilla.update(this);
-                }
-                gui.selectPlantilla.conmutar();
-            } else if(gui.bSizeDraw.mouseIntoSlide(this)){
-                gui.bSizeDraw.checkSlider(this);
-            } else if(gui.bColorCreate.mouseIntoButton(this)){
-                gui.paletaOpen = !gui.paletaOpen;
-            } else if(gui.paletaOpen){
-                if(gui.bColorPersonal.mouseIntoButton(this)){
+            if(gui.newCreate) {
+                if (gui.bFullCreate.mouseIntoButton(this)) {
+                    gui.screenActual = GUI.SCREEN.CREATEFULLSCREEN;
+                } else if (gui.selectDraw.mouseIntoSelect(this) && gui.selectDraw.ences) {
+                    if (!gui.selectDraw.plegat) {
+                        gui.selectDraw.update(this);
+                    }
+                    gui.selectDraw.conmutar();
+                } else if (gui.bAddImage.mouseIntoButton(this) && gui.bAddImage.ences) {
+                    selectInput("Selecciona una imatge ...", "fileSelected");
+                } else if (gui.bErraseCreate.mouseIntoButton(this) && gui.bErraseCreate.ences) {
+                    gui.dibuix = createGraphics(770, 500);
+                    gui.canvas.resetCanvas();
+                    // esborrar dibuix
+                    gui.pinText = new ButtonInsertText[5];
+                } else if (gui.selectPlantilla.mouseIntoSelect(this) && gui.selectPlantilla.ences) {
+                    if (!gui.selectPlantilla.plegat) {
+                        gui.selectPlantilla.update(this);
+                    }
+                    gui.selectPlantilla.conmutar();
+                } else if (gui.bSizeDraw.mouseIntoSlide(this)) {
+                    gui.bSizeDraw.checkSlider(this);
+                } else if (gui.bColorCreate.mouseIntoButton(this)) {
+                    gui.paletaOpen = !gui.paletaOpen;
+                } else if (gui.paletaOpen) {
+                    if (gui.bColorPersonal.mouseIntoButton(this)) {
 
-                }
-            } else if(gui.bRed.mouseIntoSlide(this) && gui.establishPersonalC){
-                gui.bRed.checkSlider(this);
-            } else if(gui.bPinCreate.mouseIntoButton(this) && gui.bPinCreate.ences){
+                    }
+                } else if (gui.bRed.mouseIntoSlide(this) && gui.establishPersonalC) {
+                    gui.bRed.checkSlider(this);
+                } else if (gui.bPinCreate.mouseIntoButton(this) && gui.bPinCreate.ences) {
                     for (int i = 0; i < gui.pinText.length; i++) {
                         if (gui.pinText[i] == null) {
                             gui.pins[i] = new Pin(this, gui.xPin, gui.yPin);
-                            gui.pinText[i] = new ButtonInsertText(this, (int) gui.xPin + (Setup.wButtonMap/2)/2 + 10, (int) gui.yPin - Setup.hButtonsMap/2, Setup.wButtonMap / 2, Setup.hButtonsMap, "", 10);
+                            gui.pinText[i] = new ButtonInsertText(this, (int) gui.xPin + (Setup.wButtonMap / 2) / 2 + 10, (int) gui.yPin - Setup.hButtonsMap / 2, Setup.wButtonMap / 2, Setup.hButtonsMap, "", 10);
                             break;
                         }
                     }
-            }
-            for(int i = 0; i<gui.pinText.length; i++){
-                if(gui.pinText[i] != null){
-                    if(gui.pinText[i].mouseIntoTextRect(this)){
-                        gui.pinText[i].pressedTrue(this);
+                }
+                for (int i = 0; i < gui.pinText.length; i++) {
+                    if (gui.pinText[i] != null) {
+                        if (gui.pinText[i].mouseIntoTextRect(this)) {
+                            gui.pinText[i].pressedTrue(this);
+                        }
                     }
                 }
+            } else if(!gui.newCreate) {
+                gui.listProyecto.getTextField().pressedTrue(this);
+                gui.listProyecto.buttonPressed(this);
+                if(gui.saveCreationName.mouseIntoTextRect(this)){
+                    gui.saveCreationName.pressedTrue(this);
+                } else if(gui.bSaveCreation.mouseIntoButton(this)){
+                    gui.saveImatgeMur(this, gui.canvas, gui.dibuix,
+                            "/iCloudDrive/Escritorio/proc-19b499587704347cdbb9944cbfedba6c8e9b93b1/data/image muro/",
+                            gui.saveCreationName.getTextoEspecial2());
+                } else if(gui.bCreateProject.mouseIntoButton(this)){
+                    gui.newProject = true;
+                } else if(gui.newProject && gui.bNoP.mouseIntoButton(this)){
+                    gui.newProject = false;
+                } else if(gui.newProject && gui.bAceptarP.mouseIntoButton(this)){
+                    db.insertProject(gui.nomProject.getTextoEspecial2(), gui.dataProject.getTextoEspecial2(), gui.bName.getTextoEspecial2());
+                    gui.newProject = false;
+                } else if(gui.newProject && gui.nomProject.mouseIntoTextRect(this)){
+                    gui.nomProject.pressedTrue(this);
+                } else if(gui.newProject && gui.dataProject.mouseIntoTextRect(this)){
+                    gui.dataProject.pressedTrue(this);
+                }
             }
-
         } else if(gui.screenActual == GUI.SCREEN.SAVECREATION){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
-            } else if(gui.bCreateProject.mouseIntoButton(this)){
-                gui.newProject = true;
-            }else if(gui.saveCreationName.mouseIntoTextRect(this)){
-                gui.saveCreationName.pressedTrue(this);
-            } else if(gui.newProject && gui.bNoP.mouseIntoButton(this)){
-                gui.newProject = false;
-            } else if(gui.newProject && gui.bAceptarP.mouseIntoButton(this)){
-                db.insertProject(gui.nomProject.getTextoEspecial2(), gui.dataProject.getTextoEspecial2(), gui.bName.getTextoEspecial2());
-                gui.newProject = false;
-            } else if(gui.newProject && gui.nomProject.mouseIntoTextRect(this)){
-                gui.nomProject.pressedTrue(this);
-            } else if(gui.newProject && gui.dataProject.mouseIntoTextRect(this)){
-                gui.dataProject.pressedTrue(this);
             }
-            gui.listProyecto.getTextField().pressedTrue(this);
-            gui.listProyecto.buttonPressed(this);
 
         } else if(gui.screenActual == GUI.SCREEN.CREATEFULLSCREEN){
             if(gui.bMenosCreate.mouseIntoButton(this)) {
                 gui.screenActual = GUI.SCREEN.CREATE;
             } else if(gui.bSaveCfull.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.SAVECREATION;
+            }else if(gui.selectPlantillaFull.mouseIntoSelect(this) && gui.selectPlantillaFull.ences) {
+                if (!gui.selectPlantillaFull.plegat) {
+                    gui.selectPlantillaFull.update(this);
+                }
+                gui.selectPlantillaFull.conmutar();
             }
 
         } else if(gui.screenActual == GUI.SCREEN.ARCHIVE){

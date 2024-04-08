@@ -453,6 +453,7 @@ try{
                 proyectos[nr][0] = rs.getString("DESCRIPCION");
                 proyectos[nr][1] = rs.getString("FECHA_FINAL");
                 proyectos[nr][2] = rs.getString("ID_PROYECTO");
+                //proyectos[nr][2] = String.valueOf(getNumMuros(rs.getInt("ID_PROYECTO")));
                 nr++;
             }
             return proyectos;
@@ -460,7 +461,25 @@ try{
             System.out.println(e);
             return null;
         }
-        //getNumMuros(rs.getInt("ID_PROYECTO"))
+    }
+
+    public String[][] getSelectProyectos(){
+        int numFiles = getNumRowsTaula("PROYECTO");
+        int numCols = 2;
+        String[][] proyectos = new String[numFiles][numCols];
+        try{
+            ResultSet rs = query.executeQuery("SELECT * FROM PROYECTO");
+            int nr = 0;
+            while(rs.next()){
+                proyectos[nr][0] = rs.getString("ID_PROYECTO");
+                proyectos[nr][1] = rs.getString("DESCRIPCION");
+                nr++;
+            }
+            return proyectos;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
     }
 
     public int getNumMuros(int idProyecto){
@@ -473,7 +492,18 @@ try{
             System.out.println(e);
             return -1;
         }
+    }
 
+    public int getNumProyectosUser(String user){
+            try{
+                String q = "SELECT COUNT(*) AS n FROM PROYECTO WHERE USUARIO = '"+user+"'";
+                ResultSet rs = query.executeQuery(q);
+                rs.next();
+                return rs.getInt("n");
+            }catch(Exception e) {
+                System.out.println(e);
+                return -1;
+            }
     }
         // INSERTS
 

@@ -55,7 +55,6 @@ public class Arxiu {
     public void display(PApplet processing, float x, float y, float w, float h){
 
         processing.pushStyle();
-        processing.textMode(processing.CORNER);
         processing.fill(200, 50); processing.stroke(0); processing.strokeWeight(3);
         processing.rect(x, y, w, h);
 
@@ -78,6 +77,7 @@ public class Arxiu {
             processing.line(xCol, y, xCol, y + h);
         }
         // Dibuixa textos
+        processing.textAlign(processing.CORNER);
         processing.fill(0); processing.textSize(24);
         for(int r = 0; r < numFiles; r++){
             xCol = x;
@@ -96,6 +96,7 @@ public class Arxiu {
         }
         // Informació de la Pàgina
         processing.fill(0);
+        processing.textAlign(processing.CENTER);
         processing.text("Pag: "+(this.numPage+1)+" / "+(this.numTotalPages+1), x + w/2, y + h + 20);
 
         processing.popStyle();
