@@ -61,11 +61,19 @@ public class ButtonInsertText {
         return this.text;
     }
     public String getTextoEspecial(){
-        return this.text.substring(1);
+        if(!this.text.isEmpty()) {
+            return this.text.substring(1);
+        } else{
+            return "";
+        }
     }
 
     public String getTextoEspecial2(){
         return this.text.substring(textoEstatico.length());
+    }
+
+    public String getTextoSolo(){
+        return this.text.replace(this.textoEstatico, "");
     }
 
     public void removeText(){

@@ -1,6 +1,7 @@
 package zonesAPP;
 
 import botonsAPP.ButtonInsertText;
+import botonsAPP.ButtonWords;
 import botonsAPP.LocationSetter;
 import processing.core.PApplet;
 import setupAPP.Setup;
@@ -312,6 +313,7 @@ public class Trivio003 extends PApplet {
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
             }  else if(gui.bSaveC.mouseIntoButton(this)){
+                //gui.screenActual = GUI.SCREEN.SAVECREATION;
                 gui.newCreate = false;
             }
             if(gui.newCreate) {
@@ -340,7 +342,8 @@ public class Trivio003 extends PApplet {
                     gui.paletaOpen = !gui.paletaOpen;
                 } else if (gui.paletaOpen) {
                     if (gui.bColorPersonal.mouseIntoButton(this)) {
-
+                        gui.paletaOpen = false;
+                        gui.personalColor = true;
                     }
                 } else if (gui.bRed.mouseIntoSlide(this) && gui.establishPersonalC) {
                     gui.bRed.checkSlider(this);
@@ -417,6 +420,16 @@ public class Trivio003 extends PApplet {
                     gui.canviarArchive();
                 }
                 gui.selectCreate.conmutar();
+            }
+            for(int i = 0; i<db.getNumProyectos(); i++){
+               ButtonWords b = gui.archivo.bProject.get(i);
+               String s = gui.archivo.tableData[i][0];
+               if(b.mouseIntoButton(this)){
+                   String[] column = new String[]{"Columna", "Proyecto", "Nombre muro de inspiración", "Más información"};
+                   gui.archivo.setHeaders(column);
+                   gui.archivo.setData(db.infoProyecto(s));
+                   break;
+               }
             }
         }
 

@@ -2,11 +2,13 @@ package botonsAPP;
 
 import processing.core.PApplet;
 
+import java.util.ArrayList;
+
 public class Arxiu {
     String[] titolColumn;   // Títols de les columnes
-    String[][] tableData;    // Dades de la taula
+    public String[][] tableData;    // Dades de la taula
     float[] columnWidths;    // Amplades de les columnes
-
+    public ArrayList<ButtonWords> bProject;
     int numCols, numFiles;  // Número de files i columnes
 
     int numPage;
@@ -17,6 +19,7 @@ public class Arxiu {
         this.numFiles = nr;
         this.numCols = nc;
         this.numPage = 0;
+        bProject = new ArrayList<ButtonWords>();
     }
 
     // Setters
@@ -40,6 +43,19 @@ public class Arxiu {
 
     public void setColumnWidths(float[] w){
         this.columnWidths = w;
+    }
+
+    public void setButtons(PApplet processing, float x, float y, float w, float h){
+        float rowHeight = h / numFiles;
+        float xCol = x;
+        for(int c = 0; c<numCols-1; c++) {
+            xCol += w * columnWidths[c] / 100;
+        }
+        for(int r = 0; r < tableData.length; r++) {
+                ButtonWords b = new ButtonWords(processing, "+", xCol, y + (r + 1) * rowHeight, (float) (w * columnWidths[3] / 100.0), rowHeight, 0, "CORNER");
+                b.setFillColor(0xFFDBD9D1);
+                bProject.add(b);
+        }
     }
 
     public void nextPage(){
@@ -84,8 +100,7 @@ public class Arxiu {
             for(int c = 0; c< numCols; c++){
                 if(r==0){
                     processing.text(titolColumn[c], xCol + 10, y + (r+1)*rowHeight - 10);
-                }
-                else{
+                } else if(c!= 3){
                     int k = (numFiles -1)*numPage + (r-1);
                     if(k<tableData.length){
                         processing.text(tableData[k][c], xCol + 10, y + (r+1)*rowHeight - 10);
@@ -94,11 +109,14 @@ public class Arxiu {
                 xCol += (float) (w*columnWidths[c]/100.0);
             }
         }
+        //Dibuixa els botons
+        for(ButtonWords b : bProject){
+            b.display(processing);
+        }
         // Informació de la Pàgina
         processing.fill(0);
         processing.textAlign(processing.CENTER);
         processing.text("Pag: "+(this.numPage+1)+" / "+(this.numTotalPages+1), x + w/2, y + h + 20);
-
         processing.popStyle();
     }
 

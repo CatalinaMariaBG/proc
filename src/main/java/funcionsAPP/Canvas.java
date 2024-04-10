@@ -5,7 +5,6 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 
 public class Canvas {
-
     int x, y, w, h; //Posición y dimensiones
     PImage[] imgs;//Array de imágenes
     int numImatge = 0;//Contador de imágenes cargadas
@@ -15,7 +14,7 @@ public class Canvas {
 
     //Distribución por defecto
     DISTRIBUCIO distribucio = DISTRIBUCIO.TRESXDOS;
-    PGraphics canvas;//Clase de Processing para dibujar fuera de una area común
+    public PGraphics canvas;//Clase de Processing para dibujar fuera de una area común
 
     //Constructor
     public Canvas(int x, int y, int w, int h){
@@ -28,6 +27,18 @@ public class Canvas {
     }
 
     //Setters
+    public void setX(int x){
+        this.x = x;
+    }
+    public void setY(int y){
+        this.y = y;
+    }
+    public void setW(int w){
+        this.w = w;
+    }
+    public void setH(int h){
+        this.h = h;
+    }
     public void setDistribucio (DISTRIBUCIO d){
         this.distribucio = d;
     }

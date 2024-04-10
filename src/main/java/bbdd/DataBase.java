@@ -447,13 +447,13 @@ try{
         int numCols = 3;
         String[][] proyectos = new String[numFiles][numCols];
         try{
+            Statement query = c.createStatement();
             ResultSet rs = query.executeQuery("SELECT * FROM PROYECTO");
             int nr = 0;
             while(rs.next()){
                 proyectos[nr][0] = rs.getString("DESCRIPCION");
                 proyectos[nr][1] = rs.getString("FECHA_FINAL");
-                proyectos[nr][2] = rs.getString("ID_PROYECTO");
-                //proyectos[nr][2] = String.valueOf(getNumMuros(rs.getInt("ID_PROYECTO")));
+                proyectos[nr][2] = String.valueOf(getNumMuros(rs.getInt("ID_PROYECTO")));
                 nr++;
             }
             return proyectos;
@@ -468,6 +468,7 @@ try{
         int numCols = 2;
         String[][] proyectos = new String[numFiles][numCols];
         try{
+            Statement query = c.createStatement();
             ResultSet rs = query.executeQuery("SELECT * FROM PROYECTO");
             int nr = 0;
             while(rs.next()){
@@ -479,6 +480,19 @@ try{
         } catch (Exception e) {
             System.out.println(e);
             return null;
+        }
+    }
+
+    public int getNumProyectos(){
+        try{
+            Statement query = c.createStatement();
+            String q = "SELECT COUNT(*) AS n FROM PROYECTO";
+            ResultSet rs = query.executeQuery(q);
+            rs.next();
+            return rs.getInt("n");
+        }catch(Exception e) {
+            System.out.println(e);
+            return -1;
         }
     }
 
@@ -504,6 +518,42 @@ try{
                 System.out.println(e);
                 return -1;
             }
+    }
+
+    public int IdProyecto(String name){
+        try{
+            Statement query = c.createStatement();
+            String q = "SELECT ID_PROYECTO FROM PROYECTO WHERE DESCRIPCION = '"+name+"'";
+            ResultSet rs = query.executeQuery(q);
+            rs.next();
+            return rs.getInt("ID_PROYECTO");
+        }catch(Exception e) {
+            System.out.println(e);
+            return -1;
+        }
+    }
+
+    public String[][] infoProyecto(String name){
+            int id = IdProyecto(name);
+        int numFiles = getNumRowsQuery("SELECT COUNT(*) AS n FROM MURO_PROYECTO WHERE PROYECTO_ID ='"+id+"'");
+        int numCols = 3;
+        String[][] proyectos = new String[numFiles][numCols];
+        try{
+            Statement query = c.createStatement();
+            ResultSet rs = query.executeQuery("SELECT ORDEN o FROM MURO_PROYECTO WHERE PROYECTO_ID = '"+id+"'");
+            int nr = 0;
+            while(rs.next()){
+                proyectos[nr][0] = String.valueOf(nr);
+                proyectos[nr][1] = name;
+                proyectos[nr][2] = rs.getString("o");
+                nr++;
+            }
+            printArray2D(proyectos);
+            return proyectos;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
     }
         // INSERTS
 
