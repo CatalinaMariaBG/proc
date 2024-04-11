@@ -4,6 +4,8 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
 
+import java.awt.*;
+
 public class Canvas {
     int x, y, w, h; //Posición y dimensiones
     PImage[] imgs;//Array de imágenes
@@ -15,15 +17,17 @@ public class Canvas {
     //Distribución por defecto
     DISTRIBUCIO distribucio = DISTRIBUCIO.TRESXDOS;
     public PGraphics canvas;//Clase de Processing para dibujar fuera de una area común
+    int c;
 
     //Constructor
-    public Canvas(int x, int y, int w, int h){
+    public Canvas(PApplet processing, int x, int y, int w, int h){
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
 
         this.imgs = new PImage[6];
+        this.c = processing.color(0xFFDBD9D1);
     }
 
     //Setters
@@ -41,6 +45,9 @@ public class Canvas {
     }
     public void setDistribucio (DISTRIBUCIO d){
         this.distribucio = d;
+    }
+    public void setColor(int color){
+        this.c = color;
     }
 
     //Getters
@@ -69,7 +76,7 @@ updateCanvas(processing, imgs, distribucio);
     public void updateCanvas(PApplet processing, PImage[] imgs, DISTRIBUCIO dist){
         canvas = processing.createGraphics(w, h);
         canvas.beginDraw();
-        canvas.background(0xFFDBD9D1);
+        canvas.background(this.c);
         for(int i = 0; i<imgs.length; i++) {
             if (imgs[i] != null){
                 if (dist == DISTRIBUCIO.UNXUN) {
@@ -110,7 +117,7 @@ updateCanvas(processing, imgs, distribucio);
     //Dibujar el Canvas
     public void display(PApplet processing){
         processing.pushStyle();
-        processing.fill(0xFFDBD9D1);
+        processing.fill(this.c);
         processing.rect(x, y, w, h, 10);
         processing.imageMode(processing.CORNER);
         if(canvas!= null){

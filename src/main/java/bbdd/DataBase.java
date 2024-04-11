@@ -163,6 +163,20 @@ public class DataBase {
         }
     }
 
+    public String getImageName(int idImage){
+        try {
+            Statement query = c.createStatement();
+            String q = "SELECT IMAGEN.NOMBRE_IMAGEN FROM IMAGEN WHERE ID_IMAGEN ='"+idImage+"'";
+            ResultSet rs = query.executeQuery(q);
+            rs.next();
+            return rs.getString("NOMBRE_IMAGEN");
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
     public String[][] getInfoMapaEdificios(){
         String qN = "SELECT COUNT(*) AS n FROM EDIFICIO ed, IMAGEN img WHERE ed.ID_EDIFICIO=img.EDIFICIO AND img.MAPA='S'";
         System.out.println(qN);
@@ -551,6 +565,20 @@ try{
             printArray2D(proyectos);
             return proyectos;
         } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public String imageCreation(String orden){
+        try {
+            Statement query = c.createStatement();
+            String q = "SELECT IMAGEN_ID FROM MURO_PROYECTO WHERE ORDEN ='"+orden+"'";
+            ResultSet rs = query.executeQuery(q);
+            rs.next();
+            return getImageName(rs.getInt("IMAGEN_ID"));
+        }
+        catch(Exception e) {
             System.out.println(e);
             return null;
         }

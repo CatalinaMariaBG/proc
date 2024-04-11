@@ -3,7 +3,9 @@ package zonesAPP;
 import botonsAPP.ButtonInsertText;
 import botonsAPP.ButtonWords;
 import botonsAPP.LocationSetter;
+import funcionsAPP.Canvas;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import setupAPP.Setup;
 import bbdd.DataBase;
 
@@ -54,7 +56,7 @@ public class Trivio003 extends PApplet {
                 break;
             case CREATE: gui.drawCreate(this);
                 break;
-            case SAVECREATION: gui.drawSaveCreation(this);
+            case CREATIONINFO: gui.drawCreationInfo(this);
                 break;
             case CREATEFULLSCREEN: gui.drawCreateFullScreen(this);
                 break;
@@ -313,12 +315,15 @@ public class Trivio003 extends PApplet {
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
             }  else if(gui.bSaveC.mouseIntoButton(this)){
-                //gui.screenActual = GUI.SCREEN.SAVECREATION;
                 gui.newCreate = false;
             }
             if(gui.newCreate) {
                 if (gui.bFullCreate.mouseIntoButton(this)) {
                     gui.screenActual = GUI.SCREEN.CREATEFULLSCREEN;
+                    gui.canvas.setX(410);
+                    gui.canvas.setY((int) Setup.edgeV);
+                    gui.canvas.setW(1010);
+                    gui.canvas.setH(860);
                 } else if (gui.selectDraw.mouseIntoSelect(this) && gui.selectDraw.ences) {
                     if (!gui.selectDraw.plegat) {
                         gui.selectDraw.update(this);
@@ -369,8 +374,8 @@ public class Trivio003 extends PApplet {
                 if(gui.saveCreationName.mouseIntoTextRect(this)){
                     gui.saveCreationName.pressedTrue(this);
                 } else if(gui.bSaveCreation.mouseIntoButton(this)){
-                    gui.saveImatgeMur(this, gui.canvas, gui.dibuix,
-                            "/iCloudDrive/Escritorio/proc-19b499587704347cdbb9944cbfedba6c8e9b93b1/data/image muro/",
+                    saveImatgeMur(this, gui.canvas, gui.dibuix,
+                            "/iCloud Drive/Escritorio/proc-19b499587704347cdbb9944cbfedba6c8e9b93b1/data/image muro/",
                             gui.saveCreationName.getTextoEspecial2());
                 } else if(gui.bCreateProject.mouseIntoButton(this)){
                     gui.newProject = true;
@@ -385,7 +390,7 @@ public class Trivio003 extends PApplet {
                     gui.dataProject.pressedTrue(this);
                 }
             }
-        } else if(gui.screenActual == GUI.SCREEN.SAVECREATION){
+        } else if(gui.screenActual == GUI.SCREEN.CREATIONINFO){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
             }
@@ -393,8 +398,17 @@ public class Trivio003 extends PApplet {
         } else if(gui.screenActual == GUI.SCREEN.CREATEFULLSCREEN){
             if(gui.bMenosCreate.mouseIntoButton(this)) {
                 gui.screenActual = GUI.SCREEN.CREATE;
+                gui.canvas.setX(Setup.xSecondMiddle);
+                gui.canvas.setY(Setup.ySecondMiddle);
+                gui.canvas.setW(770);
+                gui.canvas.setH(500);
             } else if(gui.bSaveCfull.mouseIntoButton(this)){
-                gui.screenActual = GUI.SCREEN.SAVECREATION;
+                gui.screenActual = GUI.SCREEN.CREATE;
+                gui.newCreate = false;
+                gui.canvas.setX(Setup.xSecondMiddle);
+                gui.canvas.setY(Setup.ySecondMiddle);
+                gui.canvas.setW(770);
+                gui.canvas.setH(500);
             }else if(gui.selectPlantillaFull.mouseIntoSelect(this) && gui.selectPlantillaFull.ences) {
                 if (!gui.selectPlantillaFull.plegat) {
                     gui.selectPlantillaFull.update(this);
@@ -424,11 +438,15 @@ public class Trivio003 extends PApplet {
             for(int i = 0; i<db.getNumProyectos(); i++){
                ButtonWords b = gui.archivo.bProject.get(i);
                String s = gui.archivo.tableData[i][0];
-               if(b.mouseIntoButton(this)){
+               if(b.mouseIntoButton(this) && !gui.infoProyecto){
                    String[] column = new String[]{"Columna", "Proyecto", "Nombre muro de inspiración", "Más información"};
                    gui.archivo.setHeaders(column);
                    gui.archivo.setData(db.infoProyecto(s));
+                   gui.infoProyecto = true;
                    break;
+               } else if(b.mouseIntoButton(this) && gui.infoProyecto){
+                   gui.screenActual = GUI.SCREEN.CREATIONINFO;
+                   gui.imgCreationInfo = loadImage(db.imageCreation(gui.archivo.tableData[i][2]));
                }
             }
         }
@@ -539,6 +557,20 @@ if(gui.bEnterAccount.mouseIntoButton(this) && entrar){
         gui.listEstil.setValueSelected("");
         gui.listTipologia.setValueSelected("");
         gui.listMaterial.setValueSelected("");
+    }
+
+    public void saveImatgeMur(PApplet processing, Canvas c, PGraphics dibuix, String ruta, String nomImage){
+        PGraphics imgSave = processing.createGraphics(770, 500);
+        imgSave.beginDraw();
+        processing.imageMode(processing.CORNER);
+        if(c!=null) {
+            imgSave.image(c.getCanvas(), Setup.xSecondMiddle, Setup.ySecondMiddle);
+        }
+        if(dibuix!=null) {
+            imgSave.image(dibuix, Setup.xSecondMiddle, Setup.ySecondMiddle);
+        }
+        imgSave.endDraw();
+        imgSave.save(ruta+ "/" +nomImage+ ".jpg");
     }
 
     }

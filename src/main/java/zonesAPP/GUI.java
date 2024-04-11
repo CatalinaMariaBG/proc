@@ -15,18 +15,18 @@ import funcionsAPP.Canvas;
 //mesures: 1440, 900
 public class GUI {
     Tipus_font lletres;
-    PImage imgAccount, imgFullCreate, imgMenosCreate, imgBuildInto, imgNextArxiu, imgAtrasArxiu;
+    PImage imgAccount, imgFullCreate, imgMenosCreate, imgBuildInto, imgNextArxiu, imgAtrasArxiu, imgCreationInfo;
 
     ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding,
     bInici, bNProjects, bLogOut, bAplicaMap, bAddBuild, bSaveC, bSaveCfull, bAddImage, bColorCreate, bColorPersonal, bPinCreate,
-    bErraseCreate, bSaveBuild, bDeleteBuild, bReturnMap, bSaveCreation,
-    bColorCreateFull, bErraseCreateFull, bAddImageFull, bPinFull, bAddImgNewBuild, bResetMap, bAceptarP, bNoP, bCreateProject;
+    bErraseCreate, bSaveBuild, bDeleteBuild, bReturnMap, bBorrarMuro,
+    bColorCreateFull, bErraseCreateFull, bAddImageFull, bPinFull, bAddImgNewBuild, bResetMap, bAceptarP, bNoP, bVolverArchivo, bSaveCreation, bCreateProject;
 
     ButtonPhotos bAccount, bFullCreate, bMenosCreate, bNextArxiu, bAtrasArxiu;
 
     ButtonInsertText bPassword, bName, bNameBuilding, bPosXBuilding, bPosYBuilding, saveCreationName, nomProject, dataProject;
 
-    public enum SCREEN{LOGIN, INICIAL, MYACCOUNT, MAP, BUILDING, NEWBUILDING, ARCHIVE, CREATE, SAVECREATION, CREATEFULLSCREEN};
+    public enum SCREEN{LOGIN, INICIAL, MYACCOUNT, MAP, BUILDING, NEWBUILDING, ARCHIVE, CREATE, CREATIONINFO, CREATEFULLSCREEN};
 
     public SCREEN screenActual;
 
@@ -139,25 +139,24 @@ DataBase db;
         bRed = new ButtonSlide(processing, "ROJO", Setup.xPaletaColors+100+Setup.edgeH, Setup.logoDistV+100+Setup.edgeV, 200, 80, 0, 255, 0);
         pinText = new ButtonInsertText[5];
         pins = new Pin[5];
-        canvas = new Canvas(Setup.xSecondMiddle, Setup.ySecondMiddle,770, 500);
+        canvas = new Canvas(processing, Setup.xSecondMiddle, Setup.ySecondMiddle,770, 500);
         dibuix = processing.createGraphics(770, 500);
+        bSaveCreation = new ButtonWords(processing, "GUARDAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 660, 300, 60, 10,"CORNER");
+        bCreateProject = new ButtonWords(processing, "NUEVO PROYECTO",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 750, 300, 60, 10,"CORNER");
 
         //BOTONS CREATE FULL SCREEN
         bSaveCfull = new ButtonWords(processing, "GUARDAR", Setup.edgeH, 818, Setup.ySecondMiddle, 60, 10, "CORNER");
         selectDrawFull = new ButtonSelect(tipusDibuix, Setup.edgeH, Setup.edgeV, Setup.ySecondMiddle, 60, "DIBUIXA");
-        selectDrawFull.setFillColor(processing.color(255, 255, 255));
         bSizeDrawFull = new ButtonSlide(processing, "MEDIDA",Setup.edgeH, 134, Setup.ySecondMiddle, 60, standardSize, 50, 10);
-        bSizeDrawFull.setcolor(processing.color(255, 255, 255));
         bColorCreateFull = new ButtonWords(processing, "COLOR", Setup.edgeH, 248, Setup.ySecondMiddle, 60, 10, "CORNER");
-        bColorCreateFull.setFillColor(0xFF8E8E90);
+        bColorCreateFull.setFillColor(processing.color(219, 217, 209));
         bErraseCreateFull = new ButtonWords(processing, "BORRAR",Setup.edgeH, 362, Setup.ySecondMiddle, 60, 10, "CORNER");
-        bErraseCreateFull.setFillColor(0xFF8E8E90);
+        bErraseCreateFull.setFillColor(processing.color(219, 217, 209));
         selectPlantillaFull = new ButtonSelect(tipusPlantilla, Setup.edgeH, 476, Setup.ySecondMiddle, 60, "PLANTILLA");
-        selectPlantillaFull.setFillColor(processing.color(255, 255, 255));
         bAddImageFull = new ButtonWords(processing, "AÑADIR IMAGEN", Setup.edgeH, 590, Setup.ySecondMiddle, 60, 10, "CORNER");
-        bAddImageFull.setFillColor(0xFF8E8E90);
+        bAddImageFull.setFillColor(processing.color(219, 217, 209));
         bPinFull = new ButtonWords(processing, "PIN", Setup.edgeH, 704, Setup.ySecondMiddle, 60, 10, "CORNER");
-        bPinFull.setFillColor(0xFF8E8E90);
+        bPinFull.setFillColor(processing.color(219, 217, 209));
         //canvasFull = new Canvas(410, (int)Setup.edgeV, 1010, 860);
 
         // BOTONS ACCOUNT
@@ -217,8 +216,8 @@ DataBase db;
         dataProject = new ButtonInsertText(processing, Setup.xSecondMiddle + 193, Setup.ySecondMiddle + 210, 346, Setup.hButtonsMap, "Finalización: ", 20);
 
         //BOTONS SAVE CREATION
-        bSaveCreation = new ButtonWords(processing, "GUARDAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 660, 300, 60, 10,"CORNER");
-        bCreateProject = new ButtonWords(processing, "CREAR PROYECTO",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 750, 300, 60, 10,"CORNER");
+        bBorrarMuro = new ButtonWords(processing, "GUARDAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 660, 300, 60, 10,"CORNER");
+        bVolverArchivo = new ButtonWords(processing, "ARCHIVO",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 750, 300, 60, 10,"CORNER");
         String[][] valuesProyecto = db.getSelectProyectos();
         listProyecto = new TextList(processing, valuesProyecto, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, Setup.ySecondMiddle + 30,Setup.wButtonMap, Setup.hButtonsMap);
         saveCreationName = new ButtonInsertText(processing, (int)(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250), 450 + 30, Setup.wButtonMap, Setup.hButtonsMap, "", 20);
@@ -825,9 +824,9 @@ processing.popStyle();
             processing.fill(0);
             processing.text("Proyecto: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
             processing.text("Nombre: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 450 + 30);
-            bCreateProject.display(processing);
+            bVolverArchivo.display(processing);
             saveCreationName.display(processing);
-            bSaveCreation.display(processing);
+            bBorrarMuro.display(processing);
             listProyecto.display(processing);
             if(newProject){
                 drawNewProject(processing);
@@ -877,7 +876,7 @@ selectPlantilla.setEnces(false);
         processing.popStyle();
     }
 
-    public void drawSaveCreation(PApplet processing){
+    public void drawCreationInfo(PApplet processing){
         processing.pushStyle();
         processing.background(0xFFDBD9D1);
         drawLines(processing);
@@ -885,11 +884,6 @@ selectPlantilla.setEnces(false);
         bAccount.display(processing);
         drawMiddle(processing, processing.width - 2*Setup.logoW, " ");
         drawSecondMiddle(processing, "");
-        canvas.display(processing);
-        if(dibuix!=null){
-            processing.imageMode(processing.CORNER);
-            processing.image(dibuix, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
-        }
         drawNom(processing, "NUEVA INSPO");
         processing.textFont(lletres.getFontNormal());
         bLogo.display(processing);
@@ -900,10 +894,13 @@ selectPlantilla.setEnces(false);
         processing.fill(0);
         processing.text("Proyecto: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
         processing.text("Nombre: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 450 + 30);
-        bCreateProject.display(processing);
+        bVolverArchivo.display(processing);
         saveCreationName.display(processing);
-        bSaveCreation.display(processing);
+        bBorrarMuro.display(processing);
         listProyecto.display(processing);
+        if(imgCreationInfo!=null){
+            processing.image(imgCreationInfo, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
+        }
         if(menuOpen){
             drawLateralBar(processing);
             bLogo.setEnces(false);
@@ -917,13 +914,9 @@ selectPlantilla.setEnces(false);
     public void drawCreateFullScreen(PApplet processing) {
         processing.pushStyle();
         processing.textFont(lletres.getFontNormal());
-        processing.background(0xFFDBD9D1);
+        processing.background(0xFF8E8E90);
         processing.rectMode(processing.CORNER);
         processing.rect(410, Setup.edgeV, 1010, 860, 10);
-        canvas.setX(410);
-        canvas.setY((int) Setup.edgeV);
-        canvas.setW(1010);
-        canvas.setY(860);
         canvas.display(processing);
         if(dibuix!=null){
             processing.imageMode(processing.CORNER);
@@ -942,15 +935,4 @@ selectPlantilla.setEnces(false);
         processing.popStyle();
     }
 
-    //Guardar imatge mur
-    public void saveImatgeMur(PApplet processing, Canvas c, PGraphics dibuix,
-                              String ruta, String nomImage){
-        PGraphics imgSave = processing.createGraphics(770, 500);
-        imgSave.beginDraw();
-        processing.imageMode(processing.CORNER);
-        imgSave.image(c.getCanvas(), 0, 0);
-        imgSave.image(dibuix, 0, 0);
-        imgSave.endDraw();
-        imgSave.save(ruta +"/" +nomImage+".jpg");
-    }
 }
