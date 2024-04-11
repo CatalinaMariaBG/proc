@@ -447,6 +447,8 @@ public class Trivio003 extends PApplet {
                } else if(b.mouseIntoButton(this) && gui.infoProyecto){
                    gui.screenActual = GUI.SCREEN.CREATIONINFO;
                    gui.imgCreationInfo = loadImage(db.imageCreation(gui.archivo.tableData[i][2]));
+                   gui.nombreProyectoInfo = gui.archivo.tableData[i][1];
+                   gui.nombreMuroInfo = gui.archivo.tableData[i][2];
                }
             }
         }

@@ -43,7 +43,7 @@ public class GUI {
     int standardSize = 5;
     float xPin, yPin;
 
-    String titolFoto, nomBuildingInto, nomImgBuildInto;
+    String titolFoto, nomBuildingInto, nomImgBuildInto, nombreProyectoInfo, nombreMuroInfo;
 
     ButtonSlide bSizeDraw, bRed, bGreen, bBlue, bSizeDrawFull;
     PaletaColors colorsCreate;
@@ -216,7 +216,7 @@ DataBase db;
         dataProject = new ButtonInsertText(processing, Setup.xSecondMiddle + 193, Setup.ySecondMiddle + 210, 346, Setup.hButtonsMap, "Finalización: ", 20);
 
         //BOTONS SAVE CREATION
-        bBorrarMuro = new ButtonWords(processing, "GUARDAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 660, 300, 60, 10,"CORNER");
+        bBorrarMuro = new ButtonWords(processing, "ELIMINAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 660, 300, 60, 10,"CORNER");
         bVolverArchivo = new ButtonWords(processing, "ARCHIVO",Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 750, 300, 60, 10,"CORNER");
         String[][] valuesProyecto = db.getSelectProyectos();
         listProyecto = new TextList(processing, valuesProyecto, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, Setup.ySecondMiddle + 30,Setup.wButtonMap, Setup.hButtonsMap);
@@ -824,9 +824,9 @@ processing.popStyle();
             processing.fill(0);
             processing.text("Proyecto: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
             processing.text("Nombre: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 450 + 30);
-            bVolverArchivo.display(processing);
+            bSaveCreation.display(processing);
             saveCreationName.display(processing);
-            bBorrarMuro.display(processing);
+            bCreateProject.display(processing);
             listProyecto.display(processing);
             if(newProject){
                 drawNewProject(processing);
@@ -894,10 +894,16 @@ selectPlantilla.setEnces(false);
         processing.fill(0);
         processing.text("Proyecto: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, Setup.ySecondMiddle + 30);
         processing.text("Nombre: ", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 450 + 30);
+        processing.fill(0xFFDBD9D1);
+        processing.rectMode(processing.CENTER);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, Setup.ySecondMiddle + 30,Setup.wButtonMap, Setup.hButtonsMap, 10);
+        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, 450 + 30, Setup.wButtonMap, Setup.hButtonsMap, 10);
+        processing.textAlign(processing.CENTER);
+        processing.fill(0);
+        processing.text(nombreProyectoInfo,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, Setup.ySecondMiddle + 30);
+        processing.text(nombreMuroInfo,Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, 450 + 30);
         bVolverArchivo.display(processing);
-        saveCreationName.display(processing);
         bBorrarMuro.display(processing);
-        listProyecto.display(processing);
         if(imgCreationInfo!=null){
             processing.image(imgCreationInfo, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
         }
