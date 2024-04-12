@@ -1,6 +1,7 @@
 package botonsAPP;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 
 import java.util.ArrayList;
 
@@ -9,17 +10,21 @@ public class Arxiu {
     public String[][] tableData;    // Dades de la taula
     float[] columnWidths;    // Amplades de les columnes
     public ArrayList<ButtonWords> bProject;
+    public ArrayList<ButtonPhotos> bEliminar;
     int numCols, numFiles;  // Número de files i columnes
 
     int numPage;
     int numTotalPages;
+    PImage bin;
 
     // Constructor
-    public Arxiu(int nr, int nc){
+    public Arxiu(PApplet processing, int nr, int nc){
         this.numFiles = nr;
         this.numCols = nc;
         this.numPage = 0;
         bProject = new ArrayList<ButtonWords>();
+        bEliminar = new ArrayList<ButtonPhotos>();
+        bin = processing.loadImage("bin.png");
     }
 
     // Setters
@@ -48,13 +53,22 @@ public class Arxiu {
     public void setButtons(PApplet processing, float x, float y, float w, float h){
         float rowHeight = h / numFiles;
         float xCol = x;
-        for(int c = 0; c<numCols-1; c++) {
+        float x2Col = x;
+        for(int c = 0; c<numCols-2; c++) {
             xCol += w * columnWidths[c] / 100;
+        }
+        for(int c = 0; c<numCols - 1; c++) {
+            x2Col += w * columnWidths[c] / 100;
+            if(c == numCols-2){
+                x2Col += (w*columnWidths[c]/100)/2 - 18;
+            }
         }
         for(int r = 0; r < tableData.length; r++) {
                 ButtonWords b = new ButtonWords(processing, "+", xCol, y + (r + 1) * rowHeight, (float) (w * columnWidths[3] / 100.0), rowHeight, 0, "CORNER");
                 b.setFillColor(0xFFDBD9D1);
                 bProject.add(b);
+                ButtonPhotos b2 = new ButtonPhotos(processing, this.bin, x2Col, y + (r + 1) * rowHeight + rowHeight/2, rowHeight - 20);
+                bEliminar.add(b2);
         }
     }
 
@@ -100,7 +114,7 @@ public class Arxiu {
             for(int c = 0; c< numCols; c++){
                 if(r==0){
                     processing.text(titolColumn[c], xCol + 10, y + (r+1)*rowHeight - 10);
-                } else if(c!= 3){
+                } else if(c!= 3 && c!=4){
                     int k = (numFiles -1)*numPage + (r-1);
                     if(k<tableData.length){
                         processing.text(tableData[k][c], xCol + 10, y + (r+1)*rowHeight - 10);
@@ -111,6 +125,9 @@ public class Arxiu {
         }
         //Dibuixa els botons
         for(ButtonWords b : bProject){
+            b.display(processing);
+        }
+        for(ButtonPhotos b: bEliminar){
             b.display(processing);
         }
         // Informació de la Pàgina

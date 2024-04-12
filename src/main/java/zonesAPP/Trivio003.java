@@ -1,8 +1,6 @@
 package zonesAPP;
 
-import botonsAPP.ButtonInsertText;
-import botonsAPP.ButtonWords;
-import botonsAPP.LocationSetter;
+import botonsAPP.*;
 import funcionsAPP.Canvas;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -11,8 +9,6 @@ import bbdd.DataBase;
 
 import java.io.File;
 import java.util.Objects;
-
-import botonsAPP.Pin;
 
 public class Trivio003 extends PApplet {
 
@@ -246,8 +242,6 @@ public class Trivio003 extends PApplet {
                 gui.llocsMap = new LocationSetter(this, gui.info);
             } else if(gui.bResetMap.mouseIntoButton(this)){
                 resetMap();
-                gui.info = db.getInfoMapaEdificios();
-                gui.llocsMap = new LocationSetter(this, gui.info);
             }
             gui.listEstil.getTextField().pressedTrue(this);
             gui.listEstil.buttonPressed(this);
@@ -393,6 +387,16 @@ public class Trivio003 extends PApplet {
         } else if(gui.screenActual == GUI.SCREEN.CREATIONINFO){
             if(gui.bAccount.mouseIntoButton(this)){
                 gui.screenActual = GUI.SCREEN.MYACCOUNT;
+            } else if(gui.bVolverArchivo.mouseIntoButton(this)){
+                gui.screenActual = GUI.SCREEN.ARCHIVE;
+            } else if(gui.bBorrarMuro.mouseIntoButton(this)){
+                gui.cCreationInfo.setVisible(true);
+            } else if(gui.cCreationInfo.bCancelar.mouseIntoButton(this)){
+                gui.cCreationInfo.setVisible(false);
+            } else if(gui.cCreationInfo.bAceptar.mouseIntoButton(this)){
+                db.deleteMuro(gui.nombreMuroInfo);
+                db.deleteImageMuro(gui.nombreMuroInfo);
+                gui.screenActual = GUI.SCREEN.ARCHIVE;
             }
 
         } else if(gui.screenActual == GUI.SCREEN.CREATEFULLSCREEN){
@@ -434,23 +438,34 @@ public class Trivio003 extends PApplet {
                     gui.canviarArchive();
                 }
                 gui.selectCreate.conmutar();
+            } else if(gui.bVolverAinicial.mouseIntoButton(this) && gui.infoProyecto){
+                gui.archivo.setHeaders(gui.columnesArxiu);
+                gui.archivo.setData(db.getProyectos());
+                gui.infoProyecto = false;
+            } else if(gui.bNextArxiu.mouseIntoButton(this)){
+                gui.archivo.nextPage();
+            } else if(gui.bAtrasArxiu.mouseIntoButton(this)){
+                gui.archivo.prevPage();
+            } else if(gui.cProyectoEliminar.bAceptar.mouseIntoButton(this)){
+                String[][] infoP = db.infoProyecto(gui.nombreProyectoInfo);
+                for(int i = 0; i<db.getNumMuros(gui.nombreProyectoInfo); i++){
+                    db.deleteMuro(infoP[i][2]);
+                    db.deleteImageMuro(infoP[i][2]);
+                }
+                db.deleteProyecto(gui.nombreProyectoInfo);
+                gui.cProyectoEliminar.setVisible(false);
+                gui.archivo.setData(db.getProyectos());
+            } else if(gui.cProyectoEliminar.bCancelar.mouseIntoButton(this)){
+                gui.cProyectoEliminar.setVisible(false);
+            } else if(gui.cCreationInfo.bAceptar.mouseIntoButton(this)){
+                db.deleteMuro(gui.nombreMuroInfo);
+                db.deleteImageMuro(gui.nombreMuroInfo);
+                gui.cCreationInfo.setVisible(false);
+                gui.archivo.setData(db.infoProyecto(gui.nombreProyectoInfo));
+            } else if(gui.cCreationInfo.bCancelar.mouseIntoButton(this)){
+                gui.cCreationInfo.setVisible(false);
             }
-            for(int i = 0; i<db.getNumProyectos(); i++){
-               ButtonWords b = gui.archivo.bProject.get(i);
-               String s = gui.archivo.tableData[i][0];
-               if(b.mouseIntoButton(this) && !gui.infoProyecto){
-                   String[] column = new String[]{"Columna", "Proyecto", "Nombre muro de inspiración", "Más información"};
-                   gui.archivo.setHeaders(column);
-                   gui.archivo.setData(db.infoProyecto(s));
-                   gui.infoProyecto = true;
-                   break;
-               } else if(b.mouseIntoButton(this) && gui.infoProyecto){
-                   gui.screenActual = GUI.SCREEN.CREATIONINFO;
-                   gui.imgCreationInfo = loadImage(db.imageCreation(gui.archivo.tableData[i][2]));
-                   gui.nombreProyectoInfo = gui.archivo.tableData[i][1];
-                   gui.nombreMuroInfo = gui.archivo.tableData[i][2];
-               }
-            }
+            cambioArxiu();
         }
 
             if(gui.bLogo.mouseIntoButton(this)){
@@ -556,9 +571,11 @@ if(gui.bEnterAccount.mouseIntoButton(this) && entrar){
 
     public void resetMap(){
         db.resetInfoMapa();
-        gui.listEstil.setValueSelected("");
-        gui.listTipologia.setValueSelected("");
-        gui.listMaterial.setValueSelected("");
+        gui.info = db.getInfoMapaEdificios();
+        gui.llocsMap = new LocationSetter(this, gui.info);
+        gui.listEstil.textField.text = "";
+        gui.listMaterial.textField.text = "";
+        gui.listTipologia.textField.text = "";
     }
 
     public void saveImatgeMur(PApplet processing, Canvas c, PGraphics dibuix, String ruta, String nomImage){
@@ -573,6 +590,31 @@ if(gui.bEnterAccount.mouseIntoButton(this) && entrar){
         }
         imgSave.endDraw();
         imgSave.save(ruta+ "/" +nomImage+ ".jpg");
+    }
+
+    void cambioArxiu(){
+        for(int i = 0; i<db.getNumProyectos(); i++){
+            ButtonWords b = gui.archivo.bProject.get(i);
+            ButtonPhotos bP = gui.archivo.bEliminar.get(i);
+            String s = gui.archivo.tableData[i][0];
+            if(b.mouseIntoButton(this) && !gui.infoProyecto){
+                String[] column = new String[]{"Columna", "Proyecto", "Muro de inspiración", "Más información", "Eliminar"};
+                gui.archivo.setHeaders(column);
+                gui.archivo.setData(db.infoProyecto(s));
+                gui.infoProyecto = true;
+            } else if(b.mouseIntoButton(this) && gui.infoProyecto){
+                gui.screenActual = GUI.SCREEN.CREATIONINFO;
+                gui.imgCreationInfo = loadImage(db.imageCreation(gui.archivo.tableData[i][2]));
+                gui.nombreProyectoInfo = gui.archivo.tableData[i][1];
+                gui.nombreMuroInfo = gui.archivo.tableData[i][2];
+            } else if(bP.mouseIntoButton(this) && gui.infoProyecto){
+                gui.cProyectoEliminar.setVisible(true);
+            } else if(bP.mouseIntoButton(this) && !gui.infoProyecto){
+                gui.cCreationInfo.setVisible(true);
+                gui.nombreProyectoInfo = gui.archivo.tableData[i][1];
+                gui.nombreMuroInfo = gui.archivo.tableData[i][2];
+            }
+        }
     }
 
     }

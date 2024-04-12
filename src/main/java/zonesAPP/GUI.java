@@ -20,7 +20,8 @@ public class GUI {
     ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding,
     bInici, bNProjects, bLogOut, bAplicaMap, bAddBuild, bSaveC, bSaveCfull, bAddImage, bColorCreate, bColorPersonal, bPinCreate,
     bErraseCreate, bSaveBuild, bDeleteBuild, bReturnMap, bBorrarMuro,
-    bColorCreateFull, bErraseCreateFull, bAddImageFull, bPinFull, bAddImgNewBuild, bResetMap, bAceptarP, bNoP, bVolverArchivo, bSaveCreation, bCreateProject;
+    bColorCreateFull, bErraseCreateFull, bAddImageFull, bPinFull, bAddImgNewBuild, bResetMap, bAceptarP, bNoP, bVolverArchivo, bSaveCreation, bCreateProject,
+    bVolverAinicial;
 
     ButtonPhotos bAccount, bFullCreate, bMenosCreate, bNextArxiu, bAtrasArxiu;
 
@@ -52,7 +53,7 @@ public class GUI {
     PImage lastImage, imgNewBuild, imgSaved;
     ButtonInsertText[] pinText;
     Pin[] pins;
-    Confirm cNewBuild;
+    Confirm cNewBuild, cCreationInfo, cProyectoEliminar;
     Arxiu archivo;
     float[] xPoints, yPoints, xPointsFull, yPointsFull, columnesArxiuAmplada;
     int numPoints = 0;
@@ -197,23 +198,24 @@ DataBase db;
         bReturnMap = new ButtonWords(processing, "MAPA", 310, Setup.ySecondMiddle + 450, 190, 30, 10,"CORNER");
 
         //BOTONS ARCHIVO
-        int p = db.getNumProyectos();
-        archivo = new Arxiu(7, 4);
+        archivo = new Arxiu(processing, 7, 5);
         imgNextArxiu = processing.loadImage("Next_Arrow.svg.png");
         imgAtrasArxiu = processing.loadImage("2048px-Back_Arrow.svg.png");
         bNextArxiu = new ButtonPhotos(processing, imgNextArxiu, Setup.xSecondMiddle + 770, Setup.ySecondMiddle+250, 40);
         bAtrasArxiu = new ButtonPhotos(processing, imgAtrasArxiu, Setup.xSecondMiddle,Setup.ySecondMiddle+250, 40);
-        columnesArxiu = new String[]{"Nombre","Fecha final", "Número de muros de inspiración", "Ver contenido"};
-        columnesArxiuAmplada = new float[]{25, 15, 40, 20};
+        columnesArxiu = new String[]{"Nombre","Fecha final", "Muros de inspiración", "Ver contenido", "Eliminar"};
+        columnesArxiuAmplada = new float[]{25, 15, 25, 20, 15};
         archivo.setHeaders(columnesArxiu);
         archivo.setData(db.getProyectos());
         archivo.setColumnWidths(columnesArxiuAmplada);
         tipusCreate = new String[]{"CREAR", "NUEVO EDIFICIO", "NUEVO PROYECTO", "NUEVO MURO DE INSPIRACIÓN"};
         selectCreate = new ButtonSelect(tipusCreate, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, 400, 60, "CREAR");
+        bVolverAinicial = new ButtonWords(processing, "ATRÁS", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle + 110, 400, 60, 10, "CORNER");
         nomProject = new ButtonInsertText(processing, Setup.xSecondMiddle + 193, Setup.ySecondMiddle + 110, 346, Setup.hButtonsMap,"Nombre: ",20);
         bAceptarP = new ButtonWords(processing,"CREAR",Setup.xSecondMiddle + 20, Setup.ySecondMiddle + 260, 163, 40, 10, "CORNER");
         bNoP = new ButtonWords(processing, "CANCELAR", Setup.xSecondMiddle + 203, Setup.ySecondMiddle + 260, 163, 40, 10, "CORNER");
         dataProject = new ButtonInsertText(processing, Setup.xSecondMiddle + 193, Setup.ySecondMiddle + 210, 346, Setup.hButtonsMap, "Finalización: ", 20);
+        cProyectoEliminar = new Confirm(processing, Setup.titolConfirmNewBuild, Setup.messageConfirmDeleteCreation, processing.width/2, processing.height/2, 420, 300);
 
         //BOTONS SAVE CREATION
         bBorrarMuro = new ButtonWords(processing, "ELIMINAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50 , 660, 300, 60, 10,"CORNER");
@@ -221,6 +223,7 @@ DataBase db;
         String[][] valuesProyecto = db.getSelectProyectos();
         listProyecto = new TextList(processing, valuesProyecto, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250, Setup.ySecondMiddle + 30,Setup.wButtonMap, Setup.hButtonsMap);
         saveCreationName = new ButtonInsertText(processing, (int)(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 250), 450 + 30, Setup.wButtonMap, Setup.hButtonsMap, "", 20);
+        cCreationInfo = new Confirm(processing, Setup.titolConfirmNewBuild, Setup.messageConfirmDeleteP, processing.width/2, processing.height/2, 420, 300);
     }
 
     //DIFERENTS ZONES
@@ -766,6 +769,9 @@ processing.popStyle();
         drawNom(processing, "ARCHIVO");
         processing.textFont(lletres.getFontNormal());
         bLogo.display(processing);
+        if(infoProyecto) {
+            bVolverAinicial.display(processing);
+        }
         selectCreate.display(processing);
         archivo.display(processing,Setup.xSecondMiddle, Setup.ySecondMiddle,770, 500);
         archivo.setButtons(processing,Setup.xSecondMiddle, Setup.ySecondMiddle,770, 500);
@@ -782,6 +788,8 @@ processing.popStyle();
         if(newProject){
             drawNewProject(processing);
         }
+        cCreationInfo.display(processing);
+        cProyectoEliminar.display(processing);
         processing.popStyle();
     }
 
@@ -915,6 +923,8 @@ selectPlantilla.setEnces(false);
             bLogo.setEnces(true);
             bAccount.setEnces(true);
         }
+        processing.rectMode(processing.CORNER);
+        cCreationInfo.display(processing);
         processing.popStyle();
     }
     public void drawCreateFullScreen(PApplet processing) {

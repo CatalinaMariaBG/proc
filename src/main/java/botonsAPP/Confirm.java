@@ -15,7 +15,7 @@ public class Confirm {
         this.title = title;
         this.message = message;
         this.x = x; this.y = y; this.w = w; this.h = h;
-        this.bAceptar = new ButtonWords(processing, "Acceptar", (x + w/4 - buttonW/2), (y + h - buttonH*1.5f), buttonW, buttonH, 10, "CORNER");
+        this.bAceptar = new ButtonWords(processing, "Aceptar", (x + w/4 - buttonW/2), (y + h - buttonH*1.5f), buttonW, buttonH, 10, "CORNER");
         this.bCancelar = new ButtonWords(processing, "Cancelar", (x + 3*w/4 - buttonW/2), (y + h - buttonH*1.5f), buttonW, buttonH, 10, "CORNER");
     }
     public void setTextButtons(String txt1, String txt2){
@@ -50,15 +50,15 @@ public class Confirm {
             // Rectangle
             processing.fill(0xFF8E8E90);
             processing.rect(x, y, w, h, b/2);
-processing.stroke(0); processing.strokeWeight(3);
+            processing.stroke(0); processing.strokeWeight(3);
             processing.line(x, y + 2*b , x+w, y + 2*b);
 
             // Títol
-            processing.fill(0); processing.textSize(16); processing.textAlign(processing.LEFT);
+            processing.fill(0); processing.textSize(20); processing.textAlign(processing.LEFT);
             processing.text(title, x + b, y + 1.4f*b);
 
             // Missatge
-            processing.fill(0); processing.textSize(13); processing.textAlign(processing.CENTER);
+            processing.fill(0); processing.textSize(20); processing.textAlign(processing.CENTER);
             processing.text(message, x + w/2, y + 4*b);
 
             // Botons d'Acceptar i Cancelar

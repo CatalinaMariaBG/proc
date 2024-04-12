@@ -6,7 +6,7 @@ import processing.core.PApplet;
 public class TextList {
     float x, y, w, h;
     String [][] texts;
-    ButtonInsertText textField;
+    public ButtonInsertText textField;
     int filaSelected;
     String idSelected;
     String valueSelected;

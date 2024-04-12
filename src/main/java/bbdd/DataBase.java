@@ -62,50 +62,6 @@ public class DataBase {
         }
     }
 
-        // Retorna el número de columnes d'una taula de la base de dades
-        public int getNumColsTaula(String nomTaula){
-            try {
-                String q = "SELECT count(*) as n FROM information_schema.columns WHERE table_name ='"+ nomTaula +"' AND table_schema='"+databaseName+"'";
-                System.out.println(q);
-                ResultSet rs = query.executeQuery( q);
-                rs.next();
-                int numCols = rs.getInt("n");
-                return numCols;
-            }
-            catch(Exception e) {
-                System.out.println(e);
-                return 0;
-            }
-        }
-
-        // Retorna les dades d'una taula en concret
-        public String[][] getInfoTaulaEdificio(){
-            int numFiles = getNumRowsTaula("EDIFICIO");
-            int numCols  = 8;
-            String[][] info = new String[numFiles][numCols];
-            try {
-                ResultSet rs = query.executeQuery( "SELECT * FROM EDIFICIO");
-                int nr = 0;
-                while (rs.next()) {
-                    info[nr][0] = String.valueOf(rs.getInt("ID_EDIFICIO"));
-                    info[nr][1] = rs.getString("DESCRIPCION");
-                    info[nr][2] = String.valueOf(rs.getFloat("POSX"));
-                    info[nr][3] = String.valueOf(rs.getFloat("POSY"));
-                    info[nr][4] = rs.getString("USUARIO");
-                    info[nr][5] = String.valueOf(rs.getInt("ESTILO"));
-                    info[nr][6] = String.valueOf(rs.getInt("MATERIAL"));
-                    info[nr][7] = String.valueOf(rs.getInt("TIPOLOGIA"));
-                    nr++;
-                }
-                return info;
-            }
-            catch(Exception e) {
-                System.out.println(e);
-                return null;
-            }
-        }
-
-
     public String[] getInfoTotalEdificios(String nom){
         int llargaria = 8;
         String[] info = new String[llargaria];
@@ -177,6 +133,20 @@ public class DataBase {
         }
     }
 
+    public int getImageMuro(String name){
+        try {
+            Statement query = c.createStatement();
+            String q = "SELECT IMAGEN_ID FROM MURO_PROYECTO WHERE ORDEN ='"+name+"'";
+            ResultSet rs = query.executeQuery(q);
+            rs.next();
+            return rs.getInt("IMAGEN_ID");
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            return -1;
+        }
+    }
+
     public String[][] getInfoMapaEdificios(){
         String qN = "SELECT COUNT(*) AS n FROM EDIFICIO ed, IMAGEN img WHERE ed.ID_EDIFICIO=img.EDIFICIO AND img.MAPA='S'";
         System.out.println(qN);
@@ -204,47 +174,6 @@ public class DataBase {
             System.out.println(e);
             return null;
         }
-    }
-
-    public String[][] getQualitiesEdificios(String nomEdificio){
-        int numFiles = 1;
-        int numCols  = 3;
-        String[][] info = new String[numFiles][numCols];
-        try {
-            ResultSet rs = query.executeQuery( "SELECT * FROM EDIFICIO WHERE DESCRIPCION = '"+nomEdificio+"'");
-            int nr = 0;
-            while (rs.next()) {
-                info[nr][0] = String.valueOf(rs.getInt("ESTILO"));
-                info[nr][1] = String.valueOf(rs.getInt("MATERIAL"));
-                info[nr][2] = String.valueOf(rs.getInt("TIPOLOGIA"));
-                nr++;
-            }
-            return info;
-        }
-        catch(Exception e) {
-            System.out.println(e);
-            return null;
-        }
-    }
-
-
-    public String[] getImagenesEdificio(String idEDIFICIO){
-        int numFiles = getNumRowsQuery("SELECT COUNT(*) AS n FROM IMAGEN img, EDIFICIO ed WHERE img.EDIFICIO=ed.ID_EDIFICIO AND ed.ID_EDIFICIO = '"+idEDIFICIO+"'");
-        String[] info = new String[numFiles];
-        try {
-            ResultSet rs = query.executeQuery( "SELECT img.NOMBRE_IMAGEN AS IMAGEN FROM IMAGEN img, EDIFICIO ed WHERE img.EDIFICIO=ed.ID_EDIFICIO AND ed.ID_EDIFICIO = '"+idEDIFICIO+"'");
-            int nr = 0;
-            while (rs.next()) {
-                info[nr]= rs.getString("IMAGEN");
-                nr++;
-            }
-            return info;
-        }
-        catch(Exception e) {
-            System.out.println(e);
-            return null;
-        }
-
     }
 
         public String[][] getEstilosEdificios(){
@@ -324,39 +253,6 @@ try{
             return null;
         }
     }
-
-        // Retorna les dades de la columna NOM de la taula UNITAT
-        public String[] getColumnaNomTaulaUnitat(){
-            int numFiles = getNumRowsTaula("unitat");
-            String[] info = new String[numFiles];
-            try {
-                ResultSet rs = query.executeQuery( "SELECT nom FROM unitat ORDER BY nom ASC");
-                int nr = 0;
-                while (rs.next()) {
-                    info[nr] = rs.getString("nom");
-                    nr++;
-                }
-                return info;
-            }
-            catch(Exception e) {
-                System.out.println(e);
-                return null;
-            }
-        }
-
-        // Retorna el valor de la Columna NUMERO de la taula UNITAT per aquella fila amb NOM
-        public String getNumeroFromTaulaUnitat(String nom)  {
-            try {
-                ResultSet rs = query.executeQuery( "SELECT numero FROM unitat WHERE nom = '"+nom+"'");
-                rs.next();
-                return String.valueOf(rs.getInt("numero"));
-            }
-            catch(Exception e) {
-                System.out.println(e);
-                return null;
-            }
-        }
-
         public int getIDEstil(String nomEstil){
             try{
                 ResultSet rs = query.executeQuery("SELECT ID_ESTILO FROM ESTILO WHERE ESTILO.NOMBRE_ESTILO = '"+nomEstil+"'");
@@ -467,13 +363,26 @@ try{
             while(rs.next()){
                 proyectos[nr][0] = rs.getString("DESCRIPCION");
                 proyectos[nr][1] = rs.getString("FECHA_FINAL");
-                proyectos[nr][2] = String.valueOf(getNumMuros(rs.getInt("ID_PROYECTO")));
+                proyectos[nr][2] = String.valueOf(getNumMuros(rs.getString("DESCRIPCION")));
                 nr++;
             }
             return proyectos;
         } catch (Exception e) {
             System.out.println(e);
             return null;
+        }
+    }
+
+    public int getIDproyecto(String name){
+        try{
+            Statement query = c.createStatement();
+            String q = "SELECT ID_PROYECTO FROM PROYECTO WHERE DESCRIPCION = '"+name+"'";
+            ResultSet rs = query.executeQuery(q);
+            rs.next();
+            return rs.getInt("ID_PROYECTO");
+        }catch(Exception e) {
+            System.out.println(e);
+            return -1;
         }
     }
 
@@ -510,7 +419,8 @@ try{
         }
     }
 
-    public int getNumMuros(int idProyecto){
+    public int getNumMuros(String proyecto){
+            int idProyecto = getIDproyecto(proyecto);
         try{
             String q = "SELECT COUNT(*) AS n FROM MURO_PROYECTO m, PROYECTO p WHERE m.PROYECTO_ID=p.ID_PROYECTO AND p.ID_PROYECTO = '"+idProyecto+"'";
             ResultSet rs = query.executeQuery(q);
@@ -534,21 +444,8 @@ try{
             }
     }
 
-    public int IdProyecto(String name){
-        try{
-            Statement query = c.createStatement();
-            String q = "SELECT ID_PROYECTO FROM PROYECTO WHERE DESCRIPCION = '"+name+"'";
-            ResultSet rs = query.executeQuery(q);
-            rs.next();
-            return rs.getInt("ID_PROYECTO");
-        }catch(Exception e) {
-            System.out.println(e);
-            return -1;
-        }
-    }
-
     public String[][] infoProyecto(String name){
-            int id = IdProyecto(name);
+            int id = getIDproyecto(name);
         int numFiles = getNumRowsQuery("SELECT COUNT(*) AS n FROM MURO_PROYECTO WHERE PROYECTO_ID ='"+id+"'");
         int numCols = 3;
         String[][] proyectos = new String[numFiles][numCols];
@@ -562,7 +459,6 @@ try{
                 proyectos[nr][2] = rs.getString("o");
                 nr++;
             }
-            printArray2D(proyectos);
             return proyectos;
         } catch (Exception e) {
             System.out.println(e);
@@ -584,19 +480,6 @@ try{
         }
     }
         // INSERTS
-
-        // Inserta les dades a la taula Unitat
-        void insertInfoTaulaUnitat(String num, String nom){
-            try {
-                String sNom = nom.replace("\'", "\\'");
-                String q = "INSERT INTO unitat (numero, nom) VALUES ('" + num + "','" + sNom + "')";
-                System.out.println(q);
-                query.execute(q);
-            }
-            catch(Exception e) {
-                System.out.println(e);
-            }
-        }
 
         public void insertProject(String nom, String date, String user){
             int c = getNumRowsTaula("PROYECTO") +1;
@@ -637,20 +520,6 @@ try{
 
 
         // UPDATES
-
-        // Actualitza les dades a la taula Unitat
-
-        void updateInfoTaulaUnitat(String id, String num, String nom){
-            try {
-                String q = "UPDATE unitat SET numero='"+num+"', nom='"+nom+"' WHERE numero='"+id+"'";
-                System.out.println(q);
-                query.execute(q);
-            }
-            catch(Exception e) {
-                System.out.println(e);
-            }
-        }
-
         public void updateinfoMapa(int ed){
             try {
                 String q = "UPDATE IMAGEN SET MAPA ='N' WHERE EDIFICIO ='"+ed+"'";
@@ -663,7 +532,7 @@ try{
 
         public void resetInfoMapa(){
             try {
-                String q = "UPDATE IMAGEN SET MAPA = 'S'";
+                String q = "UPDATE IMAGEN SET MAPA = 'S' WHERE EDIFICIO != 5";
                 query.execute(q);
             }
             catch(Exception e) {
@@ -672,18 +541,6 @@ try{
         }
 
         // DELETES
-
-        // Esborra la fila de la taula Unitat amb el número concret
-        void deleteInfoTaulaUnitat(String id){
-            try {
-                String q = "DELETE FROM unitat WHERE numero='"+id+"'";
-                System.out.println(q);
-                query.execute(q);
-            }
-            catch(Exception e) {
-                System.out.println(e);
-            }
-        }
 
         public void deleteEdificio(String nom){
             try {
@@ -708,8 +565,51 @@ try{
             }
         }
 
+        public void deleteMuro(String name){
+            try {
+                Statement query = c.createStatement();
+                String q = "DELETE FROM MURO_PROYECTO WHERE ORDEN ='"+name+"'";
+                query.execute(q);
+            }
+            catch(Exception e) {
+                System.out.println(e);
+            }
+        }
 
+        public void deleteImageMuro(String name){
+            int id = getImageMuro(name);
+            try {
+                Statement query = c.createStatement();
+                String q = "DELETE FROM IMAGEN WHERE ID_IMAGEN ='"+id+"'";
+                query.execute(q);
+            }
+            catch(Exception e) {
+                System.out.println(e);
+            }
+        }
 
+        public void deleteProyecto(String name){
+            try {
+                Statement query = c.createStatement();
+                String q = "DELETE FROM PROYECTO WHERE DESCRIPCION ='"+name+"'";
+                query.execute(q);
+            }
+            catch(Exception e) {
+                System.out.println(e);
+            }
+        }
+
+        public void deleteMurosProyecto(String p){
+            int id = getIDproyecto(p);
+            try {
+                Statement query = c.createStatement();
+                String q = "DELETE FROM MURO_PROYECTO WHERE PROYECTO_ID ='"+id+"'";
+                query.execute(q);
+            }
+            catch(Exception e) {
+                System.out.println(e);
+            }
+        }
         public void printArray2D(String[][] info){
             for(int f=0; f<info.length; f++){
                 for(int c=0; c<info[f].length; c++){
@@ -719,4 +619,3 @@ try{
             }
         }
     }
-

@@ -41,6 +41,8 @@ public class Setup {
         public static float blue;
         public static String edificio;
 
-        public static String titolConfirmNewBuild = "CONFIRMA L'ACCIÓ";
-        public static String messageConfirmNewBuild = "VOLS AFEGIR AQUEST NOU EDIFICI AL MAPA?";
+        public static String titolConfirmNewBuild = "CONFIRMA LA ACCIÓN";
+        public static String messageConfirmNewBuild = "QUIERES AÑADIR ESTE NUEVO EDIFICIO AL MAPA?";
+        public static String messageConfirmDeleteCreation = "QUIERES ELIMINAR ESTE MURO DE INSPIRACIÓN?";
+        public static String messageConfirmDeleteP = "QUIERES ELIMINAR ESTE PROYECTO?";
 }
