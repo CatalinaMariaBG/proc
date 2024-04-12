@@ -540,11 +540,11 @@ public class Trivio003 extends PApplet {
                     break;
                 }
         }
-if(gui.bEnterAccount.mouseIntoButton(this) && entrar){
-    gui.screenActual = GUI.SCREEN.INICIAL;
-    gui.menuOpen = false;
-    gui.carrouselFoto.setStart(this);
-}
+        if(gui.bEnterAccount.mouseIntoButton(this) && entrar){
+        gui.screenActual = GUI.SCREEN.INICIAL;
+        gui.menuOpen = false;
+        gui.carrouselFoto.setStart(this);
+        }
     }
 
 
