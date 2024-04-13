@@ -6,7 +6,7 @@ import static processing.core.PConstants.BACKSPACE;
 
 public class ButtonInsertText {
     int x, y, w, h;
-    int colorRect, colorText, colorSelected, colorBorder;
+    public int colorRect, colorText, colorSelected, colorBorder;
     int weightBorder = 1;
     public String text = "";
     public String textoEstatico;

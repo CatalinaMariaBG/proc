@@ -27,7 +27,7 @@ public class PaletaColors {
 
     public void createSelectColorRect(PApplet processing){
         colorW = (w)/numColumns;
-        colorH = (h-60)/numFiles;
+        colorH = (h)/numFiles;
 
         int numColor = 0;
         for(int nf = 0; nf<numFiles; nf++){

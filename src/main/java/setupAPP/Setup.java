@@ -20,7 +20,8 @@ public class Setup {
 
         public static int wButtonCreate = 400;
         public static int xPaletaColors = 570;
-        public static int sizePaletaColors = 800;
+        public static int wPaletaColors = 800;
+        public static int hPaletaColors = 760;
         public static int wButtonsNewBuild = 300;
         public static int wButtonMap = 300;
         public static int hButtonsMap = 60;

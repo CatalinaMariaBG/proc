@@ -18,14 +18,14 @@ public class GUI {
     PImage imgAccount, imgFullCreate, imgMenosCreate, imgBuildInto, imgNextArxiu, imgAtrasArxiu, imgCreationInfo;
 
     ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding,
-    bInici, bNProjects, bLogOut, bAplicaMap, bAddBuild, bSaveC, bSaveCfull, bAddImage, bColorCreate, bColorPersonal, bPinCreate,
+    bInici, bNProjects, bLogOut, bAplicaMap, bAddBuild, bSaveC, bSaveCfull, bAddImage, bColorCreate, bPinCreate,
     bErraseCreate, bSaveBuild, bDeleteBuild, bReturnMap, bBorrarMuro,
     bColorCreateFull, bErraseCreateFull, bAddImageFull, bPinFull, bAddImgNewBuild, bResetMap, bAceptarP, bNoP, bVolverArchivo, bSaveCreation, bCreateProject,
-    bVolverAinicial;
+    bVolverAinicial, crearPin;
 
     ButtonPhotos bAccount, bFullCreate, bMenosCreate, bNextArxiu, bAtrasArxiu;
 
-    ButtonInsertText bPassword, bName, bNameBuilding, bPosXBuilding, bPosYBuilding, saveCreationName, nomProject, dataProject;
+    ButtonInsertText bPassword, bName, bNameBuilding, bPosXBuilding, bPosYBuilding, saveCreationName, nomProject, dataProject, pinText;
 
     public enum SCREEN{LOGIN, INICIAL, MYACCOUNT, MAP, BUILDING, NEWBUILDING, ARCHIVE, CREATE, CREATIONINFO, CREATEFULLSCREEN};
 
@@ -51,11 +51,10 @@ public class GUI {
     Canvas canvas;
     PGraphics dibuix;
     PImage lastImage, imgNewBuild, imgSaved;
-    ButtonInsertText[] pinText;
     Pin[] pins;
     Confirm cNewBuild, cCreationInfo, cProyectoEliminar;
     Arxiu archivo;
-    float[] xPoints, yPoints, xPointsFull, yPointsFull, columnesArxiuAmplada;
+    float[] xPoints, yPoints, columnesArxiuAmplada;
     int numPoints = 0;
     int numPointsFull = 0;
 
@@ -64,8 +63,8 @@ boolean paletaOpen = false;
 boolean establishPersonalC = false;
 boolean newProject = false;
 boolean newCreate = true;
-boolean personalColor = false;
 boolean infoProyecto = false;
+boolean pinWrite = false;
 DataBase db;
 
     public GUI(PApplet processing, DataBase db){
@@ -98,9 +97,6 @@ DataBase db;
         bEnterAccount = new ButtonWords(processing, "LOG IN", processing.width/2 - 150, processing.height/2 + 225, 300, 60, 10, "CORNER");
             bEnterAccount.setFillColor(0xFFF4562A);
             bEnterAccount.mouseIntoButton(processing);
-            // processing.rectMode(processing.CORNER);
-        //        processing.fill(67, 83, 96);
-        //        processing.rect(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle,100, Setup.hButtonsMap, 10);
         bName = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 50, 450, Setup.hButtonsMap, "Nombre: ", 16);
         bPassword = new ButtonInsertText(processing, processing.width/2, processing.height/2 + 150, 450, Setup.hButtonsMap, "Clave: ", 16);
 
@@ -122,7 +118,7 @@ DataBase db;
         bMenosCreate.setColors(255, 0,0xFFDBD9D1);
         bSaveC = new ButtonWords(processing, "GUARDAR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 50, 820, 300, 30, 10, "CORNER");
         tipusDibuix = new String[]{"DIBUJAR","CÍRCULO", "CUADRADO", "LÍNEA"};
-        selectDraw = new ButtonSelect(tipusDibuix, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, (float)192.5, 60, "DIBUJA");
+        selectDraw = new ButtonSelect(tipusDibuix, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, Setup.ySecondMiddle, (float)192.5, 60, "DIBUJAR");
         bAddImage = new ButtonWords(processing, "AÑADIR IMAGEN", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 632, Setup.wButtonCreate, 60, 10, "CORNER");
         bAddImage.setFillColor(processing.color(219, 217, 209));
         bErraseCreate = new ButtonWords(processing, "BORRAR",(float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), 444F, (float)192.5, 60, 10, "CORNER");
@@ -132,13 +128,12 @@ DataBase db;
         tipusPlantilla = new String[]{"UNA CASILLA","DOS CASILLAS", "CUATRO CASILLAS", "SEIS CASILLAS"};
         selectPlantilla = new ButtonSelect(tipusPlantilla, Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 538, Setup.wButtonCreate, 60, "PLANTILLA");
         bSizeDraw = new ButtonSlide(processing, "MEDIDA", (float) (Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + 207.5), Setup.ySecondMiddle, (float)192.5, 60F, standardSize, 50,10);
-        colorsCreate = new PaletaColors(processing, Setup.xPaletaColors, (int)Setup.logoDistV, Setup.sizePaletaColors, Setup.sizePaletaColors, 5, 4);
+        colorsCreate = new PaletaColors(processing, Setup.xPaletaColors, (int)Setup.logoDistV, Setup.wPaletaColors, Setup.wPaletaColors, 5, 4);
         bColorCreate = new ButtonWords(processing, "COLOR", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 444, (float)192.5, 60, 10, "CORNER");
         bColorCreate.setFillColor(processing.color(219, 217, 209));
-        bColorPersonal = new ButtonWords(processing, "PERSONALIZAR", Setup.xPaletaColors + Setup.sizePaletaColors/2, Setup.logoDistV + Setup.sizePaletaColors - 30, 400, 40, 10, "CENTER");
-        bColorPersonal.setFillColor(0xFF8E8E90);
         bRed = new ButtonSlide(processing, "ROJO", Setup.xPaletaColors+100+Setup.edgeH, Setup.logoDistV+100+Setup.edgeV, 200, 80, 0, 255, 0);
-        pinText = new ButtonInsertText[5];
+        pinText = new ButtonInsertText(processing, (int)(Setup.logoDistH + Setup.logoW/2 + Setup.edgeH + Setup.wButtonCreate/2), Setup.ySecondMiddle + Setup.hButtonsMap/2, Setup.wButtonCreate, Setup.hButtonsMap, "TEXTO COMENTARIO: ", 16);
+        crearPin = new ButtonWords(processing, "CREAR COMENTARIO", Setup.logoDistH + Setup.logoW/2 + Setup.edgeH, 444, Setup.wButtonCreate, Setup.hButtonsMap, 10, "CORNER");
         pins = new Pin[5];
         canvas = new Canvas(processing, Setup.xSecondMiddle, Setup.ySecondMiddle,770, 500);
         dibuix = processing.createGraphics(770, 500);
@@ -147,7 +142,7 @@ DataBase db;
 
         //BOTONS CREATE FULL SCREEN
         bSaveCfull = new ButtonWords(processing, "GUARDAR", Setup.edgeH, 818, Setup.ySecondMiddle, 60, 10, "CORNER");
-        selectDrawFull = new ButtonSelect(tipusDibuix, Setup.edgeH, Setup.edgeV, Setup.ySecondMiddle, 60, "DIBUIXA");
+        selectDrawFull = new ButtonSelect(tipusDibuix, Setup.edgeH, Setup.edgeV, Setup.ySecondMiddle, 60, "DIBUJAR");
         bSizeDrawFull = new ButtonSlide(processing, "MEDIDA",Setup.edgeH, 134, Setup.ySecondMiddle, 60, standardSize, 50, 10);
         bColorCreateFull = new ButtonWords(processing, "COLOR", Setup.edgeH, 248, Setup.ySecondMiddle, 60, 10, "CORNER");
         bColorCreateFull.setFillColor(processing.color(219, 217, 209));
@@ -381,7 +376,7 @@ processing.popStyle();
         processing.pushStyle();
         processing.fill(0xFF8E8E90);
         processing.rectMode(processing.CENTER);
-        processing.rect(Setup.xSecondMiddle+770/2, Setup.ySecondMiddle +250, Setup.sizePaletaColors/2, 490, 10);
+        processing.rect(Setup.xSecondMiddle+770/2, Setup.ySecondMiddle +250, Setup.wPaletaColors /2, 490, 10);
         bRed.display(processing);
         processing.fill(Setup.red, Setup.green, Setup.blue);
         processing.rect(Setup.xSecondMiddle+770, Setup.ySecondMiddle + 250, 150, 150, 10);
@@ -394,13 +389,26 @@ processing.popStyle();
         dibuix.beginDraw();
         if(mouseIntoCreate(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500) && processing.mousePressed && screenActual == SCREEN.CREATE){ //Coordenades del SecondMiddle
             if(b.valorSelected.equals("CÍRCULO")){
-                cercle(dibuix, processing);
+                cercle(dibuix, processing, Setup.xSecondMiddle, Setup.ySecondMiddle);
                 bFullCreate.setEnces(false);
             }  else if(b.valorSelected.equals("CUADRADO")){
-                quadrat(dibuix, processing);
+                quadrat(dibuix, processing, Setup.xSecondMiddle, Setup.ySecondMiddle);
                 bFullCreate.setEnces(false);
             } else if(b.valorSelected.equals("LÍNEA")){
-                line(dibuix);
+                line(dibuix, Setup.xSecondMiddle, Setup.ySecondMiddle);
+                bFullCreate.setEnces(false);
+            } else{
+                bFullCreate.setEnces(true);
+            }
+        } else if(mouseIntoCreate(processing, 410, Setup.edgeV, 1010, 860) && processing.mousePressed && screenActual == SCREEN.CREATEFULLSCREEN){
+            if(b.valorSelected.equals("CÍRCULO")){
+                cercle(dibuix, processing, 410, Setup.edgeV);
+                bFullCreate.setEnces(false);
+            }  else if(b.valorSelected.equals("CUADRADO")){
+                quadrat(dibuix, processing, 410, Setup.edgeV);
+                bFullCreate.setEnces(false);
+            } else if(b.valorSelected.equals("LÍNEA")){
+                line(dibuix, 410, Setup.edgeV);
                 bFullCreate.setEnces(false);
             } else{
                 bFullCreate.setEnces(true);
@@ -427,47 +435,40 @@ processing.popStyle();
         }
         dibuixFull.endDraw();
     }*/
-    public void cercle(PGraphics dibuix, PApplet processing){
+    public void cercle(PGraphics dibuix, PApplet processing, int x, float y){
         dibuix.pushStyle();
         dibuix.noStroke();
-        if(screenActual == SCREEN.CREATE) {
-            dibuix.fill(Setup.colour);
-            dibuix.ellipse(processing.mouseX - Setup.xSecondMiddle, processing.mouseY - Setup.ySecondMiddle, Setup.size, Setup.size);
-        }else if(screenActual == SCREEN.CREATEFULLSCREEN){
-            //410, Setup.edgeV, 1010, 860, 10
-            dibuix.fill(Setup.colourFull);
-            dibuix.ellipse(processing.mouseX - 410, processing.mouseY - Setup.edgeV, Setup.sizeFull, Setup.sizeFull);
-        }
+        dibuix.fill(Setup.colour);
+        dibuix.ellipse(processing.mouseX - x, processing.mouseY - y, Setup.size, Setup.size);
         dibuix.popStyle();
     }
-    public void quadrat(PGraphics dibuix, PApplet processing){
+    public void quadrat(PGraphics dibuix, PApplet processing, int x, float y){
         dibuix.pushStyle();
         dibuix.noStroke();
-        if(screenActual == SCREEN.CREATE) {
-            dibuix.fill(Setup.colour);
-            dibuix.rect(processing.mouseX - Setup.xSecondMiddle, processing.mouseY - Setup.ySecondMiddle, Setup.size, Setup.size);
-        } else if(screenActual == SCREEN.CREATEFULLSCREEN){
-            dibuix.fill(Setup.colour);
-            dibuix.rect(processing.mouseX - 410, processing.mouseY - Setup.edgeV, Setup.sizeFull, Setup.sizeFull);
-        }
+        dibuix.fill(Setup.colour);
+        dibuix.rect(processing.mouseX - x, processing.mouseY - y, Setup.size, Setup.size);
         dibuix.popStyle();
     }
-    public void line(PGraphics dibuix){
-        if(numPoints==2 && screenActual == SCREEN.CREATE) {
+    public void line(PGraphics dibuix, int x, float y){
+        if(numPoints==2) {
             dibuix.pushStyle();
             dibuix.fill(Setup.colour);
             dibuix.stroke(Setup.colour);
             dibuix.strokeWeight(Setup.size);
-            dibuix.line(xPoints[0] - Setup.xSecondMiddle, yPoints[0] - Setup.ySecondMiddle, xPoints[1] - Setup.xSecondMiddle, yPoints[1] - Setup.ySecondMiddle);
-            dibuix.popStyle();
-        } else if(numPointsFull == 2 && screenActual == SCREEN.CREATEFULLSCREEN){
-            dibuix.pushStyle();
-            dibuix.fill(Setup.colourFull);
-            dibuix.stroke(Setup.colourFull);
-            dibuix.strokeWeight(Setup.sizeFull);
-            dibuix.line(xPointsFull[0] - 410, yPointsFull[0] - Setup.edgeV, xPointsFull[1] - 410, yPointsFull[1] - Setup.edgeV);
+            dibuix.line(xPoints[0] - x, yPoints[0] - y, xPoints[1] - x, yPoints[1] - y);
             dibuix.popStyle();
         }
+    }
+
+    public void comentario(){
+        dibuix.beginDraw();
+            for(int i = 0; i<pins.length; i++){
+                if(pins[i]!=null){
+                    pins[i].display(dibuix);
+                    System.out.println(pins[i].x +"\n"+ pins[i].y +"\n"+pins[i].text);
+                }
+            }
+        dibuix.endDraw();
     }
 
     public boolean mouseIntoCreate(PApplet processing, float x, float y, float w, float h){
@@ -518,7 +519,11 @@ processing.popStyle();
 
     //CANVIAR MIDA DIBUIXOS
     public void updateSizeDraw(){
-        Setup.size = bSizeDraw.getValue();
+        if(screenActual == SCREEN.CREATE) {
+            Setup.size = bSizeDraw.getValue();
+        } else if(screenActual == SCREEN.CREATEFULLSCREEN){
+            Setup.size = bSizeDrawFull.getValue();
+        }
     }
 
     public void updateRed(){
@@ -810,7 +815,7 @@ processing.popStyle();
             processing.imageMode(processing.CORNER);
             processing.image(dibuix, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
         }
-        if(newCreate) {
+        if(newCreate && !pinWrite) {
             bFullCreate.display(processing);
             bSaveC.display(processing);
             processing.rectMode(processing.CORNER);
@@ -842,6 +847,9 @@ processing.popStyle();
             /*if(imgSaved!=null){
                 processing.image(imgSaved, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
             }*/
+        } else if(pinWrite) {
+            pinText.display(processing);
+            crearPin.display(processing);
         }
         if(menuOpen){
             drawLateralBar(processing);
@@ -877,9 +885,6 @@ selectPlantilla.setEnces(false);
 
         if(paletaOpen){
             colorsCreate.display(processing);
-            bColorPersonal.display(processing);
-        } else if(personalColor){
-            drawPersonalColor(processing);
         }
         processing.popStyle();
     }
@@ -939,6 +944,7 @@ selectPlantilla.setEnces(false);
             processing.image(dibuix, 410, Setup.edgeV, 1010, 860);
         }
         bSizeDrawFull.display(processing);
+        updateSizeDraw();
         bColorCreateFull.display(processing);
         bErraseCreateFull.display(processing);
         bAddImageFull.display(processing);
@@ -948,6 +954,9 @@ selectPlantilla.setEnces(false);
         selectPlantillaFull.display(processing);
         updatePlantilla(processing,selectPlantillaFull);
         selectDrawFull.display(processing);
+        if(paletaOpen){
+            colorsCreate.display(processing);
+        }
         processing.popStyle();
     }
 
