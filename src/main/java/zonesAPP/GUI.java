@@ -14,7 +14,7 @@ import funcionsAPP.Canvas;
 
 //mesures: 1440, 900
 public class GUI {
-    Tipus_font lletres;
+    public Tipus_font lletres;
     PImage imgAccount, imgFullCreate, imgMenosCreate, imgBuildInto, imgNextArxiu, imgAtrasArxiu, imgCreationInfo;
 
     ButtonWords b1, b2, b3, b4, bLogo, bEnterAccount, bLateralBar, bCreate, bMap, bArchive, bNewBuilding,
@@ -39,24 +39,23 @@ public class GUI {
 
     LocationSetter llocsMap;
     Edifici selectedLloc;
-    String[][] info, imageEdificio;
+    String[][] info;
 
     int standardSize = 5;
     float xPin, yPin;
 
     String titolFoto, nomBuildingInto, nomImgBuildInto, nombreProyectoInfo, nombreMuroInfo;
 
-    ButtonSlide bSizeDraw, bRed, bGreen, bBlue, bSizeDrawFull;
+    ButtonSlide bSizeDraw, bRed, bSizeDrawFull;
     PaletaColors colorsCreate;
     Canvas canvas;
     PGraphics dibuix;
-    PImage lastImage, imgNewBuild, imgSaved;
+    PImage lastImage, imgNewBuild;
     Pin[] pins;
     Confirm cNewBuild, cCreationInfo, cProyectoEliminar;
     Arxiu archivo;
     float[] xPoints, yPoints, columnesArxiuAmplada;
     int numPoints = 0;
-    int numPointsFull = 0;
 
 boolean menuOpen = false;
 boolean paletaOpen = false;
@@ -387,7 +386,7 @@ processing.popStyle();
     //CREATE FUNCIÓ DE DIBUIXAR LÍNIES...
     public void updateDraw(PApplet processing, ButtonSelect b){
         dibuix.beginDraw();
-        if(mouseIntoCreate(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500) && processing.mousePressed && screenActual == SCREEN.CREATE){ //Coordenades del SecondMiddle
+        if(screenActual == SCREEN.CREATE && processing.mousePressed && mouseIntoCreate(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500)){ //Coordenades del SecondMiddle
             if(b.valorSelected.equals("CÍRCULO")){
                 cercle(dibuix, processing, Setup.xSecondMiddle, Setup.ySecondMiddle);
                 bFullCreate.setEnces(false);
@@ -400,9 +399,9 @@ processing.popStyle();
             } else{
                 bFullCreate.setEnces(true);
             }
-        } else if(mouseIntoCreate(processing, 410, Setup.edgeV, 1010, 860) && processing.mousePressed && screenActual == SCREEN.CREATEFULLSCREEN){
+        } else if(screenActual == SCREEN.CREATEFULLSCREEN && processing.mousePressed && mouseIntoCreate(processing, 410, Setup.edgeV, 1010, 860)){
             if(b.valorSelected.equals("CÍRCULO")){
-                cercle(dibuix, processing, 410, Setup.edgeV);
+                cercle(dibuix, processing, 410, 100);
                 bFullCreate.setEnces(false);
             }  else if(b.valorSelected.equals("CUADRADO")){
                 quadrat(dibuix, processing, 410, Setup.edgeV);
@@ -416,30 +415,11 @@ processing.popStyle();
         }
         dibuix.endDraw();
     }
-
-   /* public void updateDrawFull(PApplet processing, ButtonSelect b){
-        dibuixFull.beginDraw();
-        if(mouseIntoCreate(processing, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500) && processing.mousePressed && screenActual == SCREEN.CREATE){ //Coordenades del SecondMiddle
-            if(b.valorSelected.equals("CÍRCULO")){
-                cercle(dibuixFull, processing);
-                bFullCreate.setEnces(false);
-            }  else if(b.valorSelected.equals("CUADRADO")){
-                quadrat(dibuixFull, processing);
-                bFullCreate.setEnces(false);
-            } else if(b.valorSelected.equals("LÍNEA")){
-                line(dibuixFull);
-                bFullCreate.setEnces(false);
-            } else{
-                bFullCreate.setEnces(true);
-            }
-        }
-        dibuixFull.endDraw();
-    }*/
     public void cercle(PGraphics dibuix, PApplet processing, int x, float y){
         dibuix.pushStyle();
         dibuix.noStroke();
         dibuix.fill(Setup.colour);
-        dibuix.ellipse(processing.mouseX - x, processing.mouseY - y, Setup.size, Setup.size);
+        dibuix.ellipse(processing.mouseX - x, processing.mouseY -y, Setup.size, Setup.size);
         dibuix.popStyle();
     }
     public void quadrat(PGraphics dibuix, PApplet processing, int x, float y){
@@ -458,17 +438,6 @@ processing.popStyle();
             dibuix.line(xPoints[0] - x, yPoints[0] - y, xPoints[1] - x, yPoints[1] - y);
             dibuix.popStyle();
         }
-    }
-
-    public void comentario(){
-        dibuix.beginDraw();
-            for(int i = 0; i<pins.length; i++){
-                if(pins[i]!=null){
-                    pins[i].display(dibuix);
-                    System.out.println(pins[i].x +"\n"+ pins[i].y +"\n"+pins[i].text);
-                }
-            }
-        dibuix.endDraw();
     }
 
     public boolean mouseIntoCreate(PApplet processing, float x, float y, float w, float h){
@@ -813,6 +782,13 @@ processing.popStyle();
         canvas.display(processing);
         if(dibuix!=null){
             processing.imageMode(processing.CORNER);
+            dibuix.beginDraw();
+            for(int i = 0; i<pins.length; i++){
+                if(pins[i]!=null){
+                    pins[i].display(dibuix, lletres);
+                }
+            }
+            dibuix.endDraw();
             processing.image(dibuix, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
         }
         if(newCreate && !pinWrite) {
@@ -844,9 +820,6 @@ processing.popStyle();
             if(newProject){
                 drawNewProject(processing);
             }
-            /*if(imgSaved!=null){
-                processing.image(imgSaved, Setup.xSecondMiddle, Setup.ySecondMiddle, 770, 500);
-            }*/
         } else if(pinWrite) {
             pinText.display(processing);
             crearPin.display(processing);

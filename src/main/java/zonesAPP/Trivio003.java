@@ -8,6 +8,7 @@ import setupAPP.Setup;
 import bbdd.DataBase;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 
 public class Trivio003 extends PApplet {
@@ -62,8 +63,6 @@ public class Trivio003 extends PApplet {
             if(!gui.carrouselFoto.checkKey(this) || !gui.carrouselFoto.chekButtons(this)){
                 gui.carrouselFoto.checkTimer(this);
             }
-        } else if(gui.screenActual == GUI.SCREEN.CREATE){
-            gui.comentario();
         }
     }
 
@@ -312,6 +311,7 @@ public class Trivio003 extends PApplet {
                 } else if (gui.bAddImage.mouseIntoButton(this) && gui.bAddImage.ences) {
                     selectInput("Selecciona una imatge ...", "fileSelected");
                 } else if (gui.bErraseCreate.mouseIntoButton(this) && gui.bErraseCreate.ences) {
+                    gui.pins = new Pin[5];
                     gui.dibuix = createGraphics(770, 500);
                     gui.canvas.resetCanvas();
                 } else if (gui.selectPlantilla.mouseIntoSelect(this) && gui.selectPlantilla.ences) {
@@ -332,9 +332,11 @@ public class Trivio003 extends PApplet {
                 if(gui.saveCreationName.mouseIntoTextRect(this)){
                     gui.saveCreationName.pressedTrue(this);
                 } else if(gui.bSaveCreation.mouseIntoButton(this)){
-                    saveImatgeMur(this, gui.canvas, gui.dibuix,
-                            "/iCloud Drive/Escritorio/proc-19b499587704347cdbb9944cbfedba6c8e9b93b1/data/image muro/",
+                    saveImatgeMur(this, gui.canvas, gui.dibuix, gui.pins,
+                            "data/image muro/",
                             gui.saveCreationName.getTextoEspecial2());
+                    gui.archivo.setData(db.getProyectos());
+                    gui.screenActual = GUI.SCREEN.ARCHIVE;
                 } else if(gui.bCreateProject.mouseIntoButton(this)){
                     gui.newProject = true;
                 } else if(gui.newProject && gui.bNoP.mouseIntoButton(this)){
@@ -354,7 +356,7 @@ public class Trivio003 extends PApplet {
                     for (int i = 0; i < gui.pins.length; i++) {
                         if (gui.pins[i] == null) {
                             String textPin = gui.pinText.getTextoEspecial2();
-                            gui.pins[i] = new Pin(gui.xPin, gui.yPin, textPin);
+                            gui.pins[i] = new Pin(gui.xPin - Setup.xSecondMiddle, gui.yPin - Setup.ySecondMiddle, textPin);
                             break;
                         }
                     }
@@ -438,6 +440,7 @@ public class Trivio003 extends PApplet {
             } else if(gui.bVolverAinicial.mouseIntoButton(this) && gui.infoProyecto){
                 gui.archivo.setHeaders(gui.columnesArxiu);
                 gui.archivo.setData(db.getProyectos());
+                gui.archivo.setButtons(this, Setup.xSecondMiddle, Setup.ySecondMiddle,770, 500);
                 gui.infoProyecto = false;
             } else if(gui.bNextArxiu.mouseIntoButton(this)){
                 gui.archivo.nextPage();
@@ -578,43 +581,50 @@ public class Trivio003 extends PApplet {
         gui.listTipologia.textField.text = "";
     }
 
-    public void saveImatgeMur(PApplet processing, Canvas c, PGraphics dibuix, String ruta, String nomImage){
+    public void saveImatgeMur(PApplet processing, Canvas c, PGraphics dibuix, Pin[] pins, String ruta, String nomImage){
         PGraphics imgSave = processing.createGraphics(770, 500);
         imgSave.beginDraw();
         processing.imageMode(processing.CORNER);
         if(c!=null) {
-            imgSave.image(c.getCanvas(), Setup.xSecondMiddle, Setup.ySecondMiddle);
+            imgSave.image(c.getCanvas(), 0, 0);
         }
         if(dibuix!=null) {
-            imgSave.image(dibuix, Setup.xSecondMiddle, Setup.ySecondMiddle);
+            imgSave.image(dibuix, 0, 0);
+        }
+        for(int i = 0; i<pins.length; i++){
+            if(pins[i]!=null){
+                pins[i].display(imgSave, gui.lletres);
+            }
         }
         imgSave.endDraw();
-        imgSave.save(ruta+ "/" +nomImage+ ".jpg");
+        imgSave.save(ruta + nomImage+ ".jpg");
+        db.insertImageMuro(nomImage+".jpg");
+        db.insertMuro(gui.listProyecto.getTextField().text, gui.saveCreationName.text);
+        gui.archivo.setData(db.getProyectos());
     }
 
     void cambioArxiu(){
-        for(int i = 0; i<db.getNumProyectos(); i++){
-            ButtonWords b = gui.archivo.bProject.get(i);
-            ButtonPhotos bP = gui.archivo.bEliminar.get(i);
-            String s = gui.archivo.tableData[i][0];
-            if(b.mouseIntoButton(this) && !gui.infoProyecto){
-                String[] column = new String[]{"Columna", "Proyecto", "Muro de inspiración", "Más información", "Eliminar"};
-                gui.archivo.setHeaders(column);
-                gui.archivo.setData(db.infoProyecto(s));
-                gui.infoProyecto = true;
-            } else if(b.mouseIntoButton(this) && gui.infoProyecto){
-                gui.screenActual = GUI.SCREEN.CREATIONINFO;
-                gui.imgCreationInfo = loadImage(db.imageCreation(gui.archivo.tableData[i][2]));
-                gui.nombreProyectoInfo = gui.archivo.tableData[i][1];
-                gui.nombreMuroInfo = gui.archivo.tableData[i][2];
-            } else if(bP.mouseIntoButton(this) && gui.infoProyecto){
-                gui.cProyectoEliminar.setVisible(true);
-            } else if(bP.mouseIntoButton(this) && !gui.infoProyecto){
-                gui.cCreationInfo.setVisible(true);
-                gui.nombreProyectoInfo = gui.archivo.tableData[i][1];
-                gui.nombreMuroInfo = gui.archivo.tableData[i][2];
+            for (int i = 0; i < db.getNumProyectos(); i++) {
+                ButtonWords b = gui.archivo.bProject.get(i);
+                ButtonPhotos bP = gui.archivo.bEliminar.get(i);
+                String s = gui.archivo.tableData[i][0];
+                if (b.mouseIntoButton(this) && !gui.infoProyecto) {
+                    String[] column = new String[]{"Columna", "Proyecto", "Muro de inspiración", "Más información", "Eliminar"};
+                    gui.archivo.setHeaders(column);
+                    gui.archivo.setData(db.infoProyecto(s));
+                    gui.infoProyecto = true;
+                } else if (b.mouseIntoButton(this) && gui.infoProyecto) {
+                    gui.screenActual = GUI.SCREEN.CREATIONINFO;
+                    gui.imgCreationInfo = loadImage(db.imageCreation(gui.archivo.tableData[i][2]));
+                    gui.nombreProyectoInfo = gui.archivo.tableData[i][1];
+                    gui.nombreMuroInfo = gui.archivo.tableData[i][2];
+                } else if (bP.mouseIntoButton(this) && gui.infoProyecto) {
+                    gui.cProyectoEliminar.setVisible(true);
+                }else if (bP.mouseIntoButton(this) && !gui.infoProyecto) {
+                    gui.cCreationInfo.setVisible(true);
+                    gui.nombreProyectoInfo = gui.archivo.tableData[i][1];
+                    gui.nombreMuroInfo = gui.archivo.tableData[i][2];
+                }
             }
-        }
     }
-
     }

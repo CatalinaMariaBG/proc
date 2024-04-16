@@ -419,6 +419,19 @@ try{
         }
     }
 
+    public int getNumMurosArxiu(){
+        try{
+            Statement query = c.createStatement();
+            String q = "SELECT COUNT(*) AS n FROM MURO_PROYECTO";
+            ResultSet rs = query.executeQuery(q);
+            rs.next();
+            return rs.getInt("n");
+        }catch(Exception e) {
+            System.out.println(e);
+            return -1;
+        }
+    }
+
     public int getNumMuros(String proyecto){
             int idProyecto = getIDproyecto(proyecto);
         try{
@@ -481,6 +494,28 @@ try{
     }
         // INSERTS
 
+
+    public void insertMuro(String proyecto, String nom){
+            int p = getIDproyecto(proyecto);
+            int i = getNumRowsTaula("IMAGEN");
+        try{
+            Statement query = c.createStatement();
+            String q = "INSERT INTO MURO_PROYECTO (PROYECTO_ID, IMAGEN_ID, ORDEN) VALUES('"+p+"','"+i+"','"+nom+"')";
+            query.execute(q);
+        }catch(Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public void insertImageMuro(String nom){
+        int c = getNumRowsTaula("IMAGEN") +1;
+        try{
+            String q = "INSERT INTO IMAGEN (ID_IMAGEN, NOMBRE_IMAGEN, EDIFICIO, MAPA) VALUES('"+c+"','"+nom+"','5','N')";
+            query.execute(q);
+        }catch(Exception e) {
+            System.out.println(e);
+        }
+    }
         public void insertProject(String nom, String date, String user){
             int c = getNumRowsTaula("PROYECTO") +1;
             try{

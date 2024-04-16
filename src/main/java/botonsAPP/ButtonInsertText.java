@@ -51,9 +51,17 @@ public class ButtonInsertText {
                 removeText();
             } else if (keyCode == 32){ //32 és l'espai
                 addText(' '); // espai
-            } else {
+            } else if(keyCode == 16){
+                addText2("");
+            }else {
                 addText(key);
             }
+        }
+    }
+
+    public void addText2(String c){
+        if(this.text.length()<w){
+            this.text = this.text + c;
         }
     }
 
